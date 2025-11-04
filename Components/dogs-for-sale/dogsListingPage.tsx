@@ -492,19 +492,19 @@ export default function PetListingPage() {
             <div className="space-y-3 text-gray-700 text-sm">
               {genderOptions.map((opt, idx) => (
                 <div key={opt}>
-                  <label className="flex items-center gap-2 font-semibold cursor-pointer">
+                  <label className="flex items-center gap-2 font-semibold cursor-pointer active:text-[#8957E9]">
                     <input
                       type="radio"
                       name="gender"
                       value={opt}
-                      className="accent-[#8957E9] w-4 h-4"
+                      className="accent-[#8957E9] w-4 h-4 mb-2 "
                       checked={selectedGender === opt}
                       onChange={() => setSelectedGender(opt)}
                     />
                     {opt}
                   </label>
                   {idx < genderOptions.length - 1 && (
-                    <hr className="border-gray-200" />
+                    <hr className="border-gray-200 my-1.5" />
                   )}
                 </div>
               ))}
@@ -522,7 +522,7 @@ export default function PetListingPage() {
             <div className="space-y-3 text-gray-700 text-sm">
               {featureOptions.map((opt, idx) => (
                 <div key={opt}>
-                  <label className="flex items-center gap-2 font-semibold cursor-pointer">
+                  <label className="flex items-center gap-2 font-semibold cursor-pointer mb-2">
                     <input
                       type="radio"
                       name="feature"
@@ -534,7 +534,7 @@ export default function PetListingPage() {
                     {opt}
                   </label>
                   {idx < featureOptions.length - 1 && (
-                    <hr className="border-gray-200" />
+                    <hr className="border-gray-200 my-1.5" />
                   )}
                 </div>
               ))}
@@ -551,10 +551,14 @@ export default function PetListingPage() {
               max="1000000"
               value={budget}
               onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full accent-[#CFC5E2] bg-white"
+              className="w-full appearance-none h-2 bg-gray-200 rounded-lg accent-[#8957E9] cursor-pointer outline-none"
             />
+            <div className="flex justify-between font-semibold">
+              <p>0</p>
+              <p>10L</p>
+            </div>
             <p className="text-sm text-gray-600 mt-2">
-              Selected: <span className="font-semibold">PKR {budget}</span>
+              Your Budget: <span className="font-semibold">₹: {budget}</span>
             </p>
           </div>
 
@@ -565,14 +569,19 @@ export default function PetListingPage() {
             <FaFire /> Popular Breeds
           </h3>
           <div className="space-y-2 text-gray-700">
-            {popularBreeds.map((breed, i) => (
-              <div
-                key={i}
-                className="hover:text-purple-600 cursor-pointer text-sm"
-              >
-                {breed}
-              </div>
-            ))}
+            {popularBreeds.map((breed, i) => {
+              const breedCount = pets.filter((p) => p.breed === breed).length;
+              return (
+                <div
+                  key={i}
+                  onClick={() => setSelectedBreed(breed)}
+                  className="hover:text-purple-600 cursor-pointer text-sm flex gap-2"
+                >
+                  <span>{breed}</span>
+                  <span className="text-gray-500">({breedCount})</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 

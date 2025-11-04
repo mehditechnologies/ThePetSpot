@@ -59,7 +59,10 @@ export default function Footer() {
                 "Shipping Policy",
                 "Grievance Policy",
               ].map((item) => (
-                <li key={item} className="hover:text-[#7B3AED] cursor-pointer mb-4">
+                <li
+                  key={item}
+                  className="hover:text-[#7B3AED] cursor-pointer mb-4"
+                >
                   {item}
                 </li>
               ))}
@@ -79,7 +82,10 @@ export default function Footer() {
                 "Pet Mating",
                 "Blog",
               ].map((item) => (
-                <li key={item} className="hover:text-[#7B3AED] cursor-pointer mb-4">
+                <li
+                  key={item}
+                  className="hover:text-[#7B3AED] cursor-pointer mb-4"
+                >
                   {item}
                 </li>
               ))}
@@ -122,12 +128,20 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div>
-        <span className="font-semibold text-[#333] block">Join Us as a</span> &nbsp;
-        <span className="text-gray-600">
-          Breeder | Sitter | Dog Trainer | Dog Walker | Dog Groomer |
-          Veterinarian
+      <div className="flex flex-wrap justify-start gap-x-10 text-gray-600">
+        <span className="font-semibold text-[#333] w-full mb-3 text-xl">
+          Join Us as a
         </span>
+        <span>Breeder</span>
+
+        <span>Sitter</span>
+        <span>Dog Trainer</span>
+
+        <span>Dog Walker</span>
+
+        <span>Dog Groomer</span>
+
+        <span>Veterinarian</span>
       </div>
 
       {/* Bottom Section */}
