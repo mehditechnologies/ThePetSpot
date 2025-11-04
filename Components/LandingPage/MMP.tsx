@@ -50,7 +50,7 @@ export default function WhyMMP() {
   ];
 
   // Track which card is expanded
-  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   return (
     <section className="py-16 bg-white px-44">
@@ -124,7 +124,7 @@ export default function WhyMMP() {
               {/* Toggle Button */}
               <button
                 onClick={() => setExpandedIndex(isExpanded ? null : idx)}
-                className="text-[#1E7E8F] text-xs inline text-sm font-medium hover:underline mt-2"
+                className="text-[#1E7E8F] text-xs inline  font-medium hover:underline mt-2"
               >
                 {isExpanded ? "View Less" : "View More"}
               </button>
