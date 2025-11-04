@@ -6,9 +6,9 @@
 import { useState } from "react";
 
 export default function FAQPage() {
-  const [open, setOpen] = useState({});
+  const [open, setOpen] = useState<Record<number, boolean>>({});
 
-  const toggle = (i) => {
+  const toggle = (i: number) => {
     setOpen((prev) => ({ ...prev, [i]: !prev[i] }));
   };
 
