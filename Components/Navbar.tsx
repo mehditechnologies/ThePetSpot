@@ -129,10 +129,10 @@ export default function Navbar() {
             </button>
             {openMenu === "login" && (
               <div className="absolute flex text-sm left-0 mt-2 w-40  bg-white text-gray-700 rounded-md shadow-lg px-3  py-1.5">
-                <a href="#" className={dropdownLinkClassesLogin}>
+                <a href="/login" className={dropdownLinkClassesLogin}>
                   Login
                 </a>
-                <a href="#" className={dropdownLinkClassesLogin}>
+                <a href="/sign-up" className={dropdownLinkClassesLogin}>
                   Signup
                 </a>
               </div>
