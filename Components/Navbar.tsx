@@ -11,6 +11,9 @@ export default function Navbar() {
   const dropdownLinkClasses =
     "block px-6 py-3 border-b text-[#202020]  border-transparent transition-colors " +
     "hover:bg-[#FFAC0D]  hover:border-gray-300 border-b-gray-300";
+  const dropdownLinkClassesLogin =
+    "block px-3 py-1.5 border-b text-[#202020]  border-transparent transition-colors " +
+    "bg-[#FFAC0D]  border-gray-300 border-r-gray-300 ";
 
   return (
     <header className="w-full bg-transparent absolute top-0 left-0 z-30">
@@ -39,10 +42,10 @@ export default function Navbar() {
             </button>
             {openMenu === "pets" && (
               <div className="absolute  left-0 mt-2 w-40 bg-white text-sm text-gray-700 rounded-md shadow-lg">
-                <a href="#" className={dropdownLinkClasses}>
+                <a href="/dogs-for-sale" className={dropdownLinkClasses}>
                   Dog
                 </a>
-                <a href="#" className={dropdownLinkClasses}>
+                <a href="/cat-for-sale" className={dropdownLinkClasses}>
                   Cat
                 </a>
                 <a href="#" className={dropdownLinkClasses}>
@@ -125,11 +128,11 @@ export default function Navbar() {
               </svg>
             </button>
             {openMenu === "login" && (
-              <div className="absolute left-0 mt-2 w-32 bg-white text-gray-700 rounded-md shadow-lg">
-                <a href="#" className={dropdownLinkClasses}>
+              <div className="absolute flex text-sm left-0 mt-2 w-40  bg-white text-gray-700 rounded-md shadow-lg px-3  py-1.5">
+                <a href="#" className={dropdownLinkClassesLogin}>
                   Login
                 </a>
-                <a href="#" className={dropdownLinkClasses}>
+                <a href="#" className={dropdownLinkClassesLogin}>
                   Signup
                 </a>
               </div>
