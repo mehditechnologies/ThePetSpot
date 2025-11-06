@@ -11,14 +11,15 @@ import Clients from "@/Components/LandingPage/Clients";
 export default function Home() {
   return (
     <main className="font-sans">
-      <Navbar />
+      {/* <Navbar /> */}
       <HeroSection />
       <AvailablePets />
       <MMP />
       <ServicesSection />
       <PetWebsite />
       <Clients />
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }
+  

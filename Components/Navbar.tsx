@@ -104,7 +104,7 @@ export default function Navbar() {
               </svg>
             </button>
             {openMenu === "breeds" && (
-              <div className="absolute left-0 mt-2 w-40 bg-white text-gray-700 rounded-md shadow-lg">
+              <div className="absolute right-0 mt-2 w-40 bg-white text-gray-700 rounded-md shadow-lg">
                 <a href="#" className={dropdownLinkClasses}>
                   Dog Breeds
                 </a>
@@ -114,14 +114,33 @@ export default function Navbar() {
               </div>
             )}
           </div>
+          {/* Blog */}
+          <div className="relative">
+            <button
+              onClick={() => toggleMenu("blog")}
+              className="flex items-center gap-2 hover:opacity-90 cursor-pointer"
+            >
+              <span>Blog</span>
+              <svg
+                className="w-4 h-4 mb-0.5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M5.25 7.5L10 12.25 14.75 7.5z" />
+              </svg>
+            </button>
 
-          {/* Simple Links */}
-          <a href="#" className="hover:opacity-90">
-            Blog
-          </a>
-          <a href="#" className="hover:opacity-90">
-            List Your Pet
-          </a>
+            {openMenu === "blog" && (
+              <div className="absolute left-0 mt-2 w-40 bg-white text-gray-700 rounded-md shadow-lg">
+                <a href="/blog/dog-care" className={dropdownLinkClasses}>
+                  Dog Care
+                </a>
+                <a href="/blog/cat-care" className={dropdownLinkClasses}>
+                  Cat Care
+                </a>
+              </div>
+            )}
+          </div>
 
           {/* Login Dropdown */}
           <div className="relative">

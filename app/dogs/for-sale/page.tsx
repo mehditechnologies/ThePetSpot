@@ -15,7 +15,7 @@ import Navbar from "@/Components/Navbar";
 export default function DogsForSalePage() {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <HeroSection />
       <PetListingPage />
       <NotFoundPets />
@@ -27,7 +27,7 @@ export default function DogsForSalePage() {
       <Feedback />
       <FAQSection />
       <BlogSection />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

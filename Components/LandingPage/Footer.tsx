@@ -22,7 +22,7 @@ export default function Footer() {
     { name: "Grievance Policy", href: "/grievance-policy" },
   ];
   return (
-    <footer className="bg-[#F8FAFC]  text-[#333] pt-12 pb-6 border-t border-gray-200 px-44">
+    <footer className="bg-[#F7F9FB]  text-[#333] pt-12 pb-6 border-t border-gray-200 px-44">
       <div className="flex gap-20">
         <div>
           <img

@@ -5,7 +5,6 @@ import { FaDog, FaFire } from "react-icons/fa";
 import { pets, breeds, popularBreeds, statesWithCities } from "./data"; // adjust path if needed
 
 export default function DogsPage() {
-  console.log("Hello from pets", pets);
   // Core states
   const [budget, setBudget] = useState<number>(500000);
   const [selectedBreed, setSelectedBreed] = useState<string>("");

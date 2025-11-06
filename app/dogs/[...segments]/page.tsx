@@ -8,12 +8,12 @@ import Footer from "@/Components/LandingPage/Footer";
 export default function DogSegmentsPage() {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <HeroSection />
       <DogsCatchAllPage />
       <NotFoundPets />
       <BlogSection />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
