@@ -1,11 +1,19 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { FiMapPin, FiPlus, FiDollarSign } from "react-icons/fi";
 import { FaDog, FaFire } from "react-icons/fa";
-import { pets, breeds, popularBreeds, statesWithCities } from "./data"; // adjust path if needed
+import {
+  pets,
+  breeds,
+  popularBreeds,
+  statesWithCities,
+} from "@/Components/dogs-for-sale/data";
 
-export default function DogsPage() {
-  console.log("Hello from pets", pets);
+export default function DogsCatchAllPage() {
+  const pathname = usePathname();
+  const router = useRouter();
+
   // Core states
   const [budget, setBudget] = useState<number>(500000);
   const [selectedBreed, setSelectedBreed] = useState<string>("");
@@ -23,7 +31,6 @@ export default function DogsPage() {
   const [lookingFor, setLookingFor] = useState<string>("Buying");
   const [sortBy, setSortBy] = useState<string>("");
   const [filteredPetsList, setFilteredPetsList] = useState(pets);
-
   const [selectedGender, setSelectedGender] = useState<string>("");
   const [selectedFeature, setSelectedFeature] = useState<string>("");
 
@@ -38,48 +45,20 @@ export default function DogsPage() {
 
   const searchRef = useRef<HTMLDivElement | null>(null);
 
-  // ---------- Utility helpers ----------
-  const slugify = (s?: string) => {
-    if (!s) return "";
-    return encodeURIComponent(
-      s
-        .toString()
-        .trim()
-        .toLowerCase()
-        .replace(/&/g, "and")
-        .replace(/[\s\_]+/g, "-")
-        .replace(/[^\w\-]+/g, "")
-        .replace(/\-\-+/g, "-")
-    );
-  };
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setShowBreeds(false);
+        setShowStates(false);
+        setShowCities(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  // Convert slug back to human readable (german-shepherd -> German Shepherd)
-  const unSlug = (s?: string) => {
-    if (!s) return "";
-    try {
-      const dec = decodeURIComponent(s);
-      const words = dec
-        .replace(/-/g, " ")
-        .replace(/_/g, " ")
-        .trim()
-        .split(/\s+/)
-        .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w));
-      return words.join(" ");
-    } catch {
-      return s.replace(/-/g, " ");
-    }
-  };
-
-  const findStateForCity = (cityName: string) => {
-    if (!cityName) return "";
-    for (const [state, cities] of Object.entries(statesWithCities)) {
-      if (cities.map((c) => c.toLowerCase()).includes(cityName.toLowerCase()))
-        return state;
-    }
-    return "";
-  };
-
-  // ---------- Layout helpers ----------
+  // Dropdown direction
   useEffect(() => {
     const checkPosition = () => {
       if (!searchRef.current) return;
@@ -95,79 +74,135 @@ export default function DogsPage() {
     };
   }, []);
 
-  // ---------- Filtering logic (same as yours) ----------
+  // Slug helpers
+  const slugify = (s?: string) => {
+    if (!s) return "";
+    return encodeURIComponent(
+      s
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/[\s\_]+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+    );
+  };
+
+  const unSlug = (s?: string) => {
+    if (!s) return "";
+    try {
+      const dec = decodeURIComponent(s);
+      return dec
+        .replace(/-/g, " ")
+        .replace(/_/g, " ")
+        .trim()
+        .split(/\s+/)
+        .map((w) => w[0].toUpperCase() + w.slice(1))
+        .join(" ");
+    } catch {
+      return s.replace(/-/g, " ");
+    }
+  };
+
+  const findStateForCity = (cityName: string) => {
+    if (!cityName) return "";
+    for (const [state, cities] of Object.entries(statesWithCities)) {
+      if (
+        cities
+          .map((c: string) => c.toLowerCase())
+          .includes(cityName.toLowerCase())
+      )
+        return state;
+    }
+    return "";
+  };
+
+  // Parse URL on mount & popstate
+  useEffect(() => {
+    const parsePath = () => {
+      if (!pathname) return;
+      const parts = pathname.split("/").filter(Boolean);
+
+      if (parts[0] !== "dogs") return;
+
+      let breed = "";
+      let city = "";
+      const inIdx = parts.indexOf("in");
+
+      if (
+        parts.length > 1 &&
+        parts[1] !== "for-sale" &&
+        !parts.includes("in", 1)
+      ) {
+        breed = unSlug(parts[1]);
+      }
+      if (inIdx !== -1 && parts[inIdx + 1]) {
+        city = unSlug(parts[inIdx + 1]);
+      }
+
+      setSelectedBreed(breed);
+      setSelectedCity(city);
+      if (city) {
+        const state = findStateForCity(city);
+        if (state) setSelectedState(state);
+      } else {
+        setSelectedState("");
+      }
+    };
+
+    parsePath();
+    window.addEventListener("popstate", parsePath);
+    return () => window.removeEventListener("popstate", parsePath);
+  }, [pathname]);
+
+  // Apply filters
   const applyFilters = () => {
     let result = pets.slice();
     setCurrentPage(1);
 
-    // Breed / name search
-    if (selectedBreed && selectedBreed.trim() !== "") {
-      const q = selectedBreed.trim().toLowerCase();
+    if (selectedBreed) {
+      const q = selectedBreed.toLowerCase();
       result = result.filter(
         (p) =>
           p.breed.toLowerCase().includes(q) || p.name.toLowerCase().includes(q)
       );
     }
 
-    // City / State filter
     if (selectedCity) {
       result = result.filter((p) => p.city === selectedCity);
     } else if (selectedState) {
-      const cities = statesWithCities[selectedState as keyof typeof statesWithCities] || [];
-      if (cities.length > 0) {
-        result = result.filter(
-          (p) => cities.includes(p.city) || p.city === selectedState
-        );
-      } else {
-        result = result.filter((p) => p.city === selectedState);
-      }
+      const cities = statesWithCities[selectedState] || [];
+      result = result.filter(
+        (p) => cities.includes(p.city) || p.city === selectedState
+      );
     }
 
-    // Budget filter
-    if (budget !== undefined && budget !== null) {
-      result = result.filter((p) => p.price <= budget);
-    }
-
-    // Gender
-    if (selectedGender) {
+    if (budget) result = result.filter((p) => p.price <= budget);
+    if (selectedGender)
       result = result.filter((p) => p.gender === selectedGender);
-    }
-
-    // Feature: implement "Puppy Quality" as <= 8 weeks
     if (selectedFeature === "Puppy Quality") {
       result = result.filter((p) => {
-        const weeks = parseInt(String(p.age || "0"), 10) || 0;
+        const weeks = parseInt(p.age || "0") || 0;
         return weeks <= 8;
       });
     }
 
     // Sorting
-    if (sortBy === "priceLowHigh") {
-      result.sort((a, b) => a.price - b.price);
-    } else if (sortBy === "priceHighLow") {
+    if (sortBy === "priceLowHigh") result.sort((a, b) => a.price - b.price);
+    else if (sortBy === "priceHighLow")
       result.sort((a, b) => b.price - a.price);
-    } else if (sortBy === "ageLowHigh") {
-      result.sort((a, b) => {
-        const aa = parseInt(String(a.age || "0"), 10) || 0;
-        const bb = parseInt(String(b.age || "0"), 10) || 0;
-        return aa - bb;
-      });
-    } else if (sortBy === "ageHighLow") {
-      result.sort((a, b) => {
-        const aa = parseInt(String(a.age || "0"), 10) || 0;
-        const bb = parseInt(String(b.age || "0"), 10) || 0;
-        return bb - aa;
-      });
-    } else if (sortBy === "newest") {
-      result.sort((a, b) => b.id - a.id);
-    }
+    else if (sortBy === "ageLowHigh")
+      result.sort((a, b) => (parseInt(a.age) || 0) - (parseInt(b.age) || 0));
+    else if (sortBy === "ageHighLow")
+      result.sort((a, b) => (parseInt(b.age) || 0) - (parseInt(a.age) || 0));
+    else if (sortBy === "newest") result.sort((a, b) => b.id - a.id);
 
     setFilteredPetsList(result);
   };
 
   useEffect(() => {
     applyFilters();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedBreed,
     selectedState,
@@ -176,136 +211,48 @@ export default function DogsPage() {
     selectedGender,
     selectedFeature,
     sortBy,
-    petCategory,
-    lookingFor,
   ]);
 
-  const dropdownClass = `absolute z-20 left-0 w-full bg-white border border-gray-200  rounded-md max-h-48 overflow-y-auto `;
+  const dropdownClass = `absolute z-20 left-0 w-full bg-white border border-gray-200 rounded-md max-h-48 overflow-y-auto`;
 
-  // ---------- URL push (client-side only) ----------
-  const pushUrlClientSide = () => {
+  const handleSearch = () => {
     applyFilters();
-
     const breedSlug = slugify(selectedBreed);
     const citySlug = slugify(selectedCity);
 
-    let path = "/dogs/for-sale"; // default
-    if (breedSlug && citySlug) {
+    let path = "/dogs/for-sale";
+    if (breedSlug && citySlug)
       path = `/dogs/${breedSlug}/for-sale/in/${citySlug}`;
-    } else if (breedSlug) {
-      path = `/dogs/${breedSlug}/for-sale`;
-    } else if (citySlug) {
-      path = `/dogs/for-sale/in/${citySlug}`;
-    }
+    else if (breedSlug) path = `/dogs/${breedSlug}/for-sale`;
+    else if (citySlug) path = `/dogs/for-sale/in/${citySlug}`;
 
-    if (typeof window !== "undefined") {
-      // push a new history entry
-      window.history.pushState({}, "", path);
-
-      // optional: change title to something helpful
-      const prettyTitle = selectedBreed
-        ? `${selectedBreed} for sale${
-            selectedCity ? " in " + selectedCity : ""
-          }`
-        : "Dogs for sale";
-      document.title = prettyTitle;
-    }
-
-    // UI is already updated via state.
+    router.push(path);
+    setShowBreeds(false);
+    setShowStates(false);
+    setShowCities(false);
   };
 
-  // ---------- popstate handler: update UI when user presses back/forward ----------
-  useEffect(() => {
-    const onPop = () => {
-      const parts = window.location.pathname.split("/").filter(Boolean);
-      if (parts[0] !== "dogs") return;
-
-      // parse breed & city
-      const inIdx = parts.indexOf("in");
-      const forSaleIdx = parts.indexOf("for-sale");
-
-      let breed = "";
-      let city = "";
-
-      if (parts[1] && parts[1] !== "for-sale") {
-        // candidate breed (parts[1])
-        breed = unSlug(parts[1]);
-      }
-
-      if (inIdx !== -1 && parts.length > inIdx + 1) {
-        city = unSlug(parts[inIdx + 1]);
-      } else if (forSaleIdx !== -1 && parts.length > forSaleIdx + 1) {
-        // uncommon structure, ignore
-      }
-
-      setSelectedBreed(breed || "");
-      setSelectedCity(city || "");
-      if (city) {
-        const stateFound = findStateForCity(city);
-        if (stateFound) setSelectedState(stateFound);
-        else setSelectedState("");
-      } else {
-        // If city empty, keep existing selectedState or clear it if you prefer:
-        // setSelectedState("");
-      }
-      // applyFilters is triggered by the watch useEffect
-    };
-
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Optionally parse initial location when component mounts so if user landed on /dogs it works,
-  // but remember direct refresh on /dogs/german-shepherd/... will 404 unless you created route.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const parts = window.location.pathname.split("/").filter(Boolean);
-    if (parts[0] !== "dogs") return;
-
-    const inIdx = parts.indexOf("in");
-    const forSaleIdx = parts.indexOf("for-sale");
-
-    let breed = "";
-    let city = "";
-
-    if (parts[1] && parts[1] !== "for-sale") breed = unSlug(parts[1]);
-    if (inIdx !== -1 && parts.length > inIdx + 1)
-      city = unSlug(parts[inIdx + 1]);
-
-    if (breed) setSelectedBreed(breed);
-    if (city) {
-      setSelectedCity(city);
-      const stateFound = findStateForCity(city);
-      if (stateFound) setSelectedState(stateFound);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // ---------- Render ----------
   return (
-    <div className="min-h-screen  font-raleway p-6 px-44">
-      {/* 🔍 Integrated Search Bar */}
+    <div className="min-h-screen font-raleway p-6 px-44">
+      {/* Search Bar */}
       <div
         ref={searchRef}
-        className="w-full max-w-6xl mx-auto bg-white border border-gray-200 
-        rounded-xl flex items-center justify-between gap-3 
-        px-4 sm:px-6 lg:px-8 py-4 mb-10"
+        className="w-full max-w-6xl mx-auto bg-white border border-gray-200 rounded-xl flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-4 mb-10"
       >
-        {/* 🐶 Breed Input */}
+        {/* Breed */}
         <div className="relative flex items-center bg-white border border-gray-200 rounded-md px-3 py-2 w-full">
           <FaDog className="text-gray-400 text-lg mr-2" />
           <input
             type="text"
             placeholder="Breed"
             value={selectedBreed}
-            readOnly
+            onChange={(e) => setSelectedBreed(e.target.value)}
             onFocus={() => {
-              setShowBreeds(!showBreeds); // toggle like state input
+              setShowBreeds(true);
               setShowStates(false);
               setShowCities(false);
             }}
-            className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400 cursor-pointer"
+            className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
           />
           {showBreeds && (
             <ul
@@ -313,23 +260,27 @@ export default function DogsPage() {
                 openUp ? "bottom-full mb-1" : "top-full mt-1"
               }`}
             >
-              {breeds.map((breed) => (
-                <li
-                  key={breed}
-                  onClick={() => {
-                    setSelectedBreed(breed);
-                    setShowBreeds(false);
-                  }}
-                  className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
-                >
-                  {breed}
-                </li>
-              ))}
+              {breeds
+                .filter((b) =>
+                  b.toLowerCase().includes(selectedBreed.toLowerCase())
+                )
+                .map((breed) => (
+                  <li
+                    key={breed}
+                    onClick={() => {
+                      setSelectedBreed(breed);
+                      setShowBreeds(false);
+                    }}
+                    className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
+                  >
+                    {breed}
+                  </li>
+                ))}
             </ul>
           )}
         </div>
 
-        {/* 📍 State Input */}
+        {/* State */}
         <div className="relative flex items-center bg-white border border-gray-200 rounded-md px-3 py-2 w-full">
           <FiMapPin className="text-gray-400 text-lg mr-2" />
           <input
@@ -337,7 +288,7 @@ export default function DogsPage() {
             placeholder="State"
             value={selectedState}
             readOnly
-            onFocus={() => {
+            onClick={() => {
               setShowStates(!showStates);
               setShowBreeds(false);
               setShowCities(false);
@@ -367,7 +318,7 @@ export default function DogsPage() {
           )}
         </div>
 
-        {/* 🏙️ City Input */}
+        {/* City */}
         <div className="relative flex items-center bg-white border border-gray-200 rounded-md px-3 py-2 w-full">
           <FiMapPin className="text-gray-400 text-lg mr-2" />
           <input
@@ -375,13 +326,7 @@ export default function DogsPage() {
             placeholder="City"
             value={selectedCity}
             readOnly
-            onFocus={() => {
-              if (selectedState) {
-                setShowCities(!showCities);
-                setShowBreeds(false);
-                setShowStates(false);
-              }
-            }}
+            onClick={() => selectedState && setShowCities(!showCities)}
             className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400 cursor-pointer"
           />
           {showCities && selectedState && (
@@ -406,32 +351,26 @@ export default function DogsPage() {
           )}
         </div>
 
-        {/* 🔍 Search Button */}
         <button
-          onClick={() => pushUrlClientSide()}
-          className="bg-[#8957E9] hover:bg-[#8b3ffd] text-white font-medium 
-            rounded-md px-18 py-2 flex items-center justify-center gap-2 
-            transition-all duration-200"
+          onClick={handleSearch}
+          className="bg-[#8957E9] hover:bg-[#8b3ffd] text-white font-medium rounded-md px-18 py-2 transition-all duration-200"
         >
           Search
         </button>
       </div>
 
-      {/* 🔽 Main Layout (Sidebar + Content) */}
+      {/* Main Layout */}
       <div className="max-w-7xl mx-auto flex gap-4">
-        {/* 🧭 Sidebar */}
-        <div className="w-60 ">
-          {/* Header */}
+        {/* FULL SIDEBAR - 100% YOUR ORIGINAL */}
+        <div className="w-60">
           <div className="bg-[#F9F6FF] px-5 py-5 shadow">
-            <div className="  text-[#8957E9] rounded-lg  p flex items-center justify-between ">
+            <div className="text-[#8957E9] rounded-lg p flex items-center justify-between">
               <h3 className="font-semibold text-base flex items-center gap-2">
                 Add Pet
               </h3>
               <FiPlus className="text-lg font-extrabold cursor-pointer hover:scale-110 transition" />
             </div>
             <hr className="my-1.5 border-gray-200" />
-
-            {/* Pet Type Section */}
             <div className="space-y-0 text-gray-700 text-sm">
               <div className="hover:text-purple-600 cursor-pointer text-sm font-semibold my-2">
                 For Sale
@@ -447,19 +386,18 @@ export default function DogsPage() {
             </div>
           </div>
 
-          {/* Filters */}
           <h3 className="text-purple-600 font-medium text-xl flex items-center gap-2 my-6">
             Filters
           </h3>
-          {/* i Am Looking */}
-          <div className=" px-5 py-5 shadow my-3">
-            <div className="  text-[#8957E9] rounded-lg  p flex items-center justify-between ">
+
+          {/* I am Looking */}
+          <div className="px-5 py-5 shadow my-3">
+            <div className="text-[#8957E9] rounded-lg p flex items-center justify-between">
               <h3 className="font-semibold text-base flex items-center gap-2">
                 I am Looking
               </h3>
             </div>
             <hr className="my-1.5 border-gray-200 mb-4" />
-
             <div className="space-y-0 text-gray-700 text-sm mt-2">
               <label className="flex items-center gap-2 font-semibold cursor-pointer">
                 <input
@@ -506,9 +444,7 @@ export default function DogsPage() {
                 Pet Category
               </h3>
             </div>
-
             <hr className="my-2 border-gray-200 mb-4" />
-
             <div className="space-y-3 text-gray-700 text-sm">
               <label className="flex items-center gap-2 font-semibold cursor-pointer">
                 <input
@@ -518,7 +454,7 @@ export default function DogsPage() {
                   className="accent-[#8957E9] w-4 h-4"
                   checked={petCategory === "Dogs"}
                   onChange={() => setPetCategory("Dogs")}
-                />
+                />{" "}
                 Dogs
               </label>
               <hr className="border-gray-200" />
@@ -530,7 +466,7 @@ export default function DogsPage() {
                   className="accent-[#8957E9] w-4 h-4"
                   checked={petCategory === "Cats"}
                   onChange={() => setPetCategory("Cats")}
-                />
+                />{" "}
                 Cats
               </label>
               <hr className="border-gray-200" />
@@ -542,22 +478,20 @@ export default function DogsPage() {
                   className="accent-[#8957E9] w-4 h-4"
                   checked={petCategory === "Small Pets"}
                   onChange={() => setPetCategory("Small Pets")}
-                />
+                />{" "}
                 Small Pets
               </label>
             </div>
           </div>
 
-          {/* Sorted By */}
+          {/* Sort By */}
           <div className="px-5 py-5 shadow rounded-lg bg-white my-3">
             <div className="text-[#8957E9] flex items-center justify-between">
               <h3 className="font-semibold text-base flex items-center gap-2">
                 Sort By
               </h3>
             </div>
-
             <hr className="my-2 border-gray-200 mb-4" />
-
             <div className="space-y-3 text-gray-700 text-sm">
               <label className="flex items-center gap-2 font-semibold cursor-pointer">
                 <input
@@ -567,7 +501,7 @@ export default function DogsPage() {
                   className="accent-[#8957E9] w-4 h-4"
                   checked={sortBy === "priceLowHigh"}
                   onChange={() => setSortBy("priceLowHigh")}
-                />
+                />{" "}
                 Price Low to High
               </label>
               <hr className="border-gray-200" />
@@ -579,7 +513,7 @@ export default function DogsPage() {
                   className="accent-[#8957E9] w-4 h-4"
                   checked={sortBy === "priceHighLow"}
                   onChange={() => setSortBy("priceHighLow")}
-                />
+                />{" "}
                 Price High to Low
               </label>
               <hr className="border-gray-200" />
@@ -591,7 +525,7 @@ export default function DogsPage() {
                   className="accent-[#8957E9] w-4 h-4"
                   checked={sortBy === "ageLowHigh"}
                   onChange={() => setSortBy("ageLowHigh")}
-                />
+                />{" "}
                 Age Low to High
               </label>
               <hr className="border-gray-200" />
@@ -603,7 +537,7 @@ export default function DogsPage() {
                   className="accent-[#8957E9] w-4 h-4"
                   checked={sortBy === "ageHighLow"}
                   onChange={() => setSortBy("ageHighLow")}
-                />
+                />{" "}
                 Age High to Low
               </label>
               <hr className="border-gray-200" />
@@ -615,11 +549,13 @@ export default function DogsPage() {
                   className="accent-[#8957E9] w-4 h-4"
                   checked={sortBy === "newest"}
                   onChange={() => setSortBy("newest")}
-                />
+                />{" "}
                 Whats New
               </label>
             </div>
           </div>
+
+          {/* Gender */}
           <div className="px-5 py-5 shadow rounded-lg bg-white my-3">
             <div className="text-[#8957E9] flex items-center justify-between">
               <h3 className="font-semibold text-base flex items-center gap-2">
@@ -630,12 +566,12 @@ export default function DogsPage() {
             <div className="space-y-3 text-gray-700 text-sm">
               {genderOptions.map((opt, idx) => (
                 <div key={opt}>
-                  <label className="flex items-center gap-2 font-semibold cursor-pointer active:text-[#8957E9]">
+                  <label className="flex items-center gap-2 font-semibold cursor-pointer">
                     <input
                       type="radio"
                       name="gender"
                       value={opt}
-                      className="accent-[#8957E9] w-4 h-4 mb-2 "
+                      className="accent-[#8957E9] w-4 h-4 mb-2"
                       checked={selectedGender === opt}
                       onChange={() => setSelectedGender(opt)}
                     />
@@ -649,7 +585,7 @@ export default function DogsPage() {
             </div>
           </div>
 
-          {/* Pet Features Section */}
+          {/* Pet Features */}
           <div className="px-5 py-5 shadow rounded-lg bg-white my-3">
             <div className="text-[#8957E9] flex items-center justify-between">
               <h3 className="font-semibold text-base flex items-center gap-2">
@@ -678,7 +614,8 @@ export default function DogsPage() {
               ))}
             </div>
           </div>
-          {/* 💰 Budget Range */}
+
+          {/* Budget */}
           <div className="mb-5">
             <h3 className="text-purple-600 font-semibold flex items-center gap-2 mb-3">
               <FiDollarSign /> Budget
@@ -702,7 +639,7 @@ export default function DogsPage() {
 
           <hr className="my-5 border-gray-300" />
 
-          {/* 🔥 Popular Breeds */}
+          {/* Popular Breeds */}
           <h3 className="text-purple-600 font-semibold flex items-center gap-2 mb-3">
             <FaFire /> Popular Breeds
           </h3>
@@ -723,9 +660,9 @@ export default function DogsPage() {
           </div>
         </div>
 
-        {/* 🐶 Pets Grid */}
+        {/* Pets Grid + Pagination */}
         <div className="flex-1">
-          <div className="bg-white p-6 rounded-xl  mb-6">
+          <div className="bg-white p-6 rounded-xl mb-6">
             <p className="text-sm text-gray-500">
               Home &gt; <span className="text-purple-600">Dogs</span> &gt;
               {selectedBreed
@@ -735,10 +672,7 @@ export default function DogsPage() {
             <h2 className="text-2xl font-bold mt-2">
               {selectedBreed ? `${selectedBreed} For Sale` : "Dogs For Sale"}
             </h2>
-            <h4>
-              {selectedBreed ? `${selectedBreed.length} ` : "${pets.length}"}
-              Result Found
-            </h4>
+            <h4>{filteredPetsList.length} Result Found</h4>
             <p className="text-gray-600 mt-3 leading-relaxed">
               <span className="font-semibold">Pets in Pakistan:</span> Find pets
               near you.
@@ -749,23 +683,13 @@ export default function DogsPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {(() => {
-              const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-              const endIdx = startIdx + ITEMS_PER_PAGE;
-              const paginatedList = filteredPetsList.slice(startIdx, endIdx);
-              const totalPages = Math.ceil(
-                filteredPetsList.length / ITEMS_PER_PAGE
-              );
-
-              if (paginatedList.length === 0) {
-                return (
-                  <div className="col-span-3 text-center text-gray-500">
-                    No pets found for the current filters.
-                  </div>
-                );
-              }
-              return paginatedList.map((pet) => (
-                <div key={pet.id} className="bg-white rounded-xl ">
+            {filteredPetsList
+              .slice(
+                (currentPage - 1) * ITEMS_PER_PAGE,
+                currentPage * ITEMS_PER_PAGE
+              )
+              .map((pet) => (
+                <div key={pet.id} className="bg-white rounded-xl">
                   <div className="relative">
                     <img
                       src={pet.img}
@@ -779,7 +703,6 @@ export default function DogsPage() {
                       View Price
                     </div>
                   </div>
-
                   <div className="p-4 space-y-2 text-xs text-gray-700">
                     <h3 className="text-purple-700 font-semibold text-sm mb-2">
                       {pet.name}
@@ -789,20 +712,17 @@ export default function DogsPage() {
                       {pet.breed}
                     </p>
                     <p className="flex items-center gap-1">
-                      <span className="font-medium">Gender:</span>
-                      {pet.gender}
+                      <span className="font-medium">Gender:</span> {pet.gender}
                       <span className="ml-3">
                         <span className="font-medium">Age:</span> {pet.age}
                       </span>
                     </p>
-
                     <p>
                       <span className="font-medium">City:</span>{" "}
                       <span className="text-purple-600 cursor-pointer hover:underline">
                         {pet.city}
                       </span>
                     </p>
-
                     <div>
                       <button className="px-4 py-1.5 mr-1.5 text-black border-gray-100 font-medium border hover:bg-[#9461F7] hover:text-white rounded">
                         Call
@@ -814,54 +734,61 @@ export default function DogsPage() {
                         Details
                       </button>
                     </div>
-
                     <button className="hover:bg-[#9361f7d4] text-white w-full py-1.5 bg-[#9461F7] font-medium text-sm">
                       Book Now
                     </button>
                   </div>
                 </div>
-              ));
-            })()}
+              ))}
+            {filteredPetsList.length === 0 && (
+              <div className="col-span-3 text-center text-gray-500">
+                No pets found for the current filters.
+              </div>
+            )}
           </div>
 
-          {/* Pagination */}
-          {(() => {
-            const totalPages = Math.ceil(
-              filteredPetsList.length / ITEMS_PER_PAGE
-            );
-            if (totalPages <= 1) return null;
-            return (
-              <div className="mt-8 flex items-center justify-between">
-                <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className={`px-4 py-2 text-sm font-medium rounded ${
-                    currentPage === 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-purple-100 text-purple-600 hover:bg-purple-200"
-                  }`}
-                >
-                  Previous Page
-                </button>
-                <div className="text-sm text-gray-700">
-                  Page {currentPage} of {totalPages}
-                </div>
-                <button
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(totalPages, p + 1))
-                  }
-                  disabled={currentPage >= totalPages}
-                  className={`px-4 py-2 text-sm font-medium rounded ${
-                    currentPage >= totalPages
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-purple-100 text-purple-600 hover:bg-purple-200"
-                  }`}
-                >
-                  Next Page
-                </button>
+          {/* FULL PAGINATION */}
+          {filteredPetsList.length > ITEMS_PER_PAGE && (
+            <div className="mt-8 flex items-center justify-between">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 text-sm font-medium rounded ${
+                  currentPage === 1
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                }`}
+              >
+                Previous Page
+              </button>
+              <div className="text-sm text-gray-700">
+                Page {currentPage} of{" "}
+                {Math.ceil(filteredPetsList.length / ITEMS_PER_PAGE)}
               </div>
-            );
-          })()}
+              <button
+                onClick={() =>
+                  setCurrentPage((p) =>
+                    Math.min(
+                      Math.ceil(filteredPetsList.length / ITEMS_PER_PAGE),
+                      p + 1
+                    )
+                  )
+                }
+                disabled={
+                  currentPage >=
+                  Math.ceil(filteredPetsList.length / ITEMS_PER_PAGE)
+                }
+                className={`px-4 py-2 text-sm font-medium rounded ${
+                  currentPage >=
+                  Math.ceil(filteredPetsList.length / ITEMS_PER_PAGE)
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                }`}
+              >
+                Next Page
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

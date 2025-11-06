@@ -1,8 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const router = useRouter();
 
   const toggleMenu = (menu: string) => {
     setOpenMenu(openMenu === menu ? null : menu);
@@ -19,12 +21,17 @@ export default function Navbar() {
     <header className="w-full bg-transparent absolute top-0 left-0 z-30">
       <div className="mx-auto px-52 py-6 flex items-center  justify-between relative">
         {/* Logo */}
-        <div className="flex items-center gap-3">
+        <div
+          className="flex items-center gap-3"
+          onClick={() => {
+            router.push("/");
+          }}
+        >
           <img src="/petlogo.svg" alt="logo" className="h-8 w-auto" />
         </div>
 
         {/* Navigation */}
-        <nav className="hidden lg:flex gap-10 items-center text-[#fff] text-base font-semibold relative">
+        <nav className="hidden lg:flex gap-10 items-center text-[#ffffff] text-base font-semibold relative">
           {/* Pets Dropdown */}
           <div className="relative">
             <button
@@ -42,10 +49,10 @@ export default function Navbar() {
             </button>
             {openMenu === "pets" && (
               <div className="absolute  left-0 mt-2 w-40 bg-white text-sm text-gray-700 rounded-md shadow-lg">
-                <a href="/dogs-for-sale" className={dropdownLinkClasses}>
+                <a href="/dogs/for-sale" className={dropdownLinkClasses}>
                   Dog
                 </a>
-                <a href="/cat-for-sale" className={dropdownLinkClasses}>
+                <a href="/cat/for-sale" className={dropdownLinkClasses}>
                   Cat
                 </a>
                 <a href="#" className={dropdownLinkClasses}>

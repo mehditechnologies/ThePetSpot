@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import {
   FaFacebookF,
   FaInstagram,
@@ -10,6 +11,16 @@ import {
 } from "react-icons/fa";
 
 export default function Footer() {
+  const links = [
+    { name: "About us", href: "/about-us" },
+    { name: "Contact us", href: "/contact-us" },
+    { name: "Terms & Conditions", href: "/terms" },
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Term of Use", href: "/terms-of-use" },
+    { name: "Refund Policy", href: "/refund-policy" },
+    { name: "Shipping Policy", href: "/shipping-policy" },
+    { name: "Grievance Policy", href: "/grievance-policy" },
+  ];
   return (
     <footer className="bg-[#F8FAFC]  text-[#333] pt-12 pb-6 border-t border-gray-200 px-44">
       <div className="flex gap-20">
@@ -49,21 +60,14 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-lg mb-4">Our Company</h4>
             <ul className="space-y-2 text-sm">
-              {[
-                "About us",
-                "Contact us",
-                "Terms & Conditions",
-                "Privacy Policy",
-                "Term of Use",
-                "Refund Policy",
-                "Shipping Policy",
-                "Grievance Policy",
-              ].map((item) => (
-                <li
-                  key={item}
-                  className="hover:text-[#7B3AED] cursor-pointer mb-4"
-                >
-                  {item}
+              {links.map((item) => (
+                <li key={item.name} className="mb-4">
+                  <Link
+                    href={item.href}
+                    className="hover:text-[#7B3AED] transition-colors cursor-pointer"
+                  >
+                    {item.name}
+                  </Link>
                 </li>
               ))}
             </ul>
