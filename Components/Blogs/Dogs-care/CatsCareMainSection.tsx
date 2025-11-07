@@ -3,7 +3,7 @@ import Image from "next/image";
 import BlogSidebar from "../BlogSidebar";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useState } from "react";
-
+import { dogsBlogData } from "@/Data/dogsData";
 export default function DogsCareMainSection() {
   const [index, setIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,88 +18,12 @@ export default function DogsCareMainSection() {
   const prevSlide = () =>
     setIndex((prev) => (prev - 1 + IMAGES.length) % IMAGES.length);
 
-  const blogs = [
-    {
-      title: "Winter Care for Dogs: Keep Your Pup Warm and Healthy",
-      img: "https://images.unsplash.com/photo-1619983081563-430f63602796",
-      category: "Dog Care",
-      desc: "Learn how to protect your dog from the cold and ensure their comfort during winter.",
-    },
-    {
-      title:
-        "Essential Winter Foods for Dogs: Nutrition Tips for the Cold Season",
-      img: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee",
-      category: "Dog Health",
-      desc: "Discover nutritious winter foods to keep your dog energetic and healthy.",
-    },
-    {
-      title: "Dog Grooming in Winter: Avoid Common Mistakes",
-      img: "https://images.unsplash.com/photo-1601758123927-1965c88c9b92",
-      category: "Dog Grooming",
-      desc: "Find out how to manage your dog's coat during winter for comfort and hygiene.",
-    },
-    {
-      title: "Indoor Games for Dogs: Keep Them Active When It’s Cold Outside",
-      img: "https://images.unsplash.com/photo-1517849845537-4d257902454a",
-      category: "Dog Lifestyle",
-      desc: "Fun and safe ways to keep your dog entertained indoors during freezing days.",
-    },
-    {
-      title: "Dog Behavior Changes in Winter: What to Watch For",
-      img: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b",
-      category: "Dog Behavior",
-      desc: "Understand why dogs may act differently in colder months and how to help them adjust.",
-    },
-    {
-      title: "How to Protect Your Dog’s Paws from Ice and Snow",
-      img: "https://images.unsplash.com/photo-1601758062853-0a84b1f3d6f3",
-      category: "Dog Health",
-      desc: "Tips to protect your dog’s paws from harsh winter conditions and frostbite.",
-    },
-    {
-      title: "Winter Jackets for Dogs: Do They Really Need One?",
-      img: "https://images.unsplash.com/photo-1619983081563-430f63602796",
-      category: "Dog Lifestyle",
-      desc: "Find out when your dog might benefit from extra layers and how to pick the right one.",
-    },
-    {
-      title: "Bathing Dogs in Cold Weather: Dos and Don’ts",
-      img: "https://images.unsplash.com/photo-1601758174902-76f5c03b5b1e",
-      category: "Dog Grooming",
-      desc: "Learn the right way to bathe your dog safely in winter without making them sick.",
-    },
-    {
-      title: "Understanding Your Dog’s Winter Sleep Patterns",
-      img: "https://images.unsplash.com/photo-1560807707-8cc77767d783",
-      category: "Dog Behavior",
-      desc: "Dogs tend to sleep more in winter — here’s why and how to ensure healthy rest.",
-    },
-    {
-      title: "Winter Exercise Tips for Dogs: Keep Them Fit and Safe",
-      img: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
-      category: "Dog Fitness",
-      desc: "Cold weather shouldn’t stop playtime — here’s how to keep walks fun and safe.",
-    },
-    {
-      title: "Common Winter Illnesses in Dogs and How to Prevent Them",
-      img: "https://images.unsplash.com/photo-1601758174888-3729b23d23e3",
-      category: "Dog Health",
-      desc: "Recognize early signs of seasonal sickness and keep your dog healthy year-round.",
-    },
-    {
-      title: "Homemade Dog Treats: Cozy Winter Recipes",
-      img: "https://images.unsplash.com/photo-1557976608-6d16d7a6d5b4",
-      category: "Dog Food",
-      desc: "Warm, homemade treats to make your furry friend’s winter even more special.",
-    },
-  ];
-
   // PAGINATION LOGIC
   const ITEMS_PER_PAGE = 12;
-  const totalPages = Math.ceil(blogs.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(dogsBlogData.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentBlogs = blogs.slice(startIndex, endIndex);
+  const currentBlogs = dogsBlogData.slice(startIndex, endIndex);
 
   return (
     <section className="max-w-6xl mx-auto py-10 flex flex-col lg:flex-row gap-10">

@@ -1,35 +1,12 @@
 "use client";
 import Image from "next/image";
 import { FaRegCalendarAlt } from "react-icons/fa";
-
+import { popularPosts } from "@/Data/dogsData";
 export default function BlogSidebar() {
   const categories = [
     { name: "Dog Care", count: 285 },
     { name: "Cat Care", count: 46 },
     { name: "Small Pets", count: 16 },
-  ];
-
-  const popularPosts = [
-    {
-      title: "Behavioural Changes in Dogs During Cold Weather",
-      date: "October 2025",
-      img: "https://www.superscoopers.com/wp-content/uploads/2021/12/c-perret-OLe2nMNyC3k-unsplash-scaled.jpg",
-    },
-    {
-      title: "Winter Food Guide for Cats: Keep Them Warm",
-      date: "October 2025",
-      img: "https://www.zooplus.nl/magazine/wp-content/uploads/2021/12/slapende-kat-in-een-mandje.jpeg",
-    },
-    {
-      title: "Can a Cat Get Sick from Cold Weather?",
-      date: "October 2025",
-      img: "https://petshun.com/images/resources/can-cats-get-sick-from-cold-weather_20230830105240.webp",
-    },
-    {
-      title: "Common Winter Illnesses in Dogs",
-      date: "October 2025",
-      img: "https://pawfactsnguide.com/wp-content/uploads/2023/12/dog-hypothermia.jpg",
-    },
   ];
 
   return (

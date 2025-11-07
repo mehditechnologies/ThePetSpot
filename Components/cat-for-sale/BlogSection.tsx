@@ -1,6 +1,3 @@
-// Next.js + Tailwind 'News & Blog' section clone
-// Drop this into your Next.js + Tailwind project as a separate component or page.
-// It closely matches the screenshot: three blog cards with shadows, images, titles, date, description, and 'Read More' / 'View All Blogs' links.
 
 import Image from "next/image";
 

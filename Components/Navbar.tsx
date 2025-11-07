@@ -105,10 +105,10 @@ export default function Navbar() {
             </button>
             {openMenu === "breeds" && (
               <div className="absolute right-0 mt-2 w-40 bg-white text-gray-700 rounded-md shadow-lg">
-                <a href="#" className={dropdownLinkClasses}>
+                <a href="/dog-breed" className={dropdownLinkClasses}>
                   Dog Breeds
                 </a>
-                <a href="#" className={dropdownLinkClasses}>
+                <a href="/cat-breed" className={dropdownLinkClasses}>
                   Cat Breeds
                 </a>
               </div>

@@ -14,12 +14,12 @@ export default function Footer() {
   const links = [
     { name: "About us", href: "/about-us" },
     { name: "Contact us", href: "/contact-us" },
-    { name: "Terms & Conditions", href: "/terms" },
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Term of Use", href: "/terms-of-use" },
-    { name: "Refund Policy", href: "/refund-policy" },
+    { name: "Terms & Conditions", href: "/terms-and-conditions" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Term of Use", href: "/term-of-use" },
+    { name: "Refund Policy", href: "/return-and-refund-policy" },
     { name: "Shipping Policy", href: "/shipping-policy" },
-    { name: "Grievance Policy", href: "/grievance-policy" },
+    { name: "Grievance Policy", href: "/grievance-redressal-policy" },
   ];
   return (
     <footer className="bg-[#F7F9FB]  text-[#333] pt-12 pb-6 border-t border-gray-200 px-44">

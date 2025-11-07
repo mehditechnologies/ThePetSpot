@@ -3,6 +3,7 @@ import Image from "next/image";
 import BlogSidebar from "../BlogSidebar";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useState } from "react";
+import { CatsBlogData } from "@/Data/catsData";
 
 export default function CatsCareMainSection() {
   const [index, setIndex] = useState(0);
@@ -18,145 +19,14 @@ export default function CatsCareMainSection() {
   const prevSlide = () =>
     setIndex((prev) => (prev - 1 + IMAGES.length) % IMAGES.length);
 
-  const blogs = [
-    {
-      title: "Winter Food Guide for Cats: Keep Your Feline Warm and Well-Fed",
-      img: "https://images.unsplash.com/photo-1574158622682-e40e69881006",
-      category: "Cat Care",
-      desc: "Help your cat stay cozy and healthy during cold weather.",
-    },
-    {
-      title:
-        "12 Winter Care Tips for Cats: Keeping Them Warm, Cozy and Comfortable",
-      img: "https://images.unsplash.com/photo-1618828665341-7a5b14aeb0a2",
-      category: "Cat Care",
-      desc: "Everything you need to know for safe and happy winter cats.",
-    },
-    {
-      title: "Winter Grooming for Cats: Why It Matters More Than You Think",
-      img: "https://images.unsplash.com/photo-1607551735704-9d3cd0fbb94f",
-      category: "Cat Care",
-      desc: "Keep your feline’s coat healthy with simple winter grooming tips.",
-    },
-    {
-      title: "Best Indoor Games for Cats During Cold Days",
-      img: "https://images.unsplash.com/photo-1587300003388-59208cc962cb",
-      category: "Cat Lifestyle",
-      desc: "Fun and engaging activities to keep your cat active indoors.",
-    },
-    {
-      title: "How to Keep Cats Warm During Freezing Nights",
-      img: "https://images.unsplash.com/photo-1618828665341-7a5b14aeb0a2",
-      category: "Cat Health",
-      desc: "Warm bedding ideas and safe heating tips for cat owners.",
-    },
-    {
-      title: "Why Cats Sleep More in Winter: Expert Insights",
-      img: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
-      category: "Cat Behavior",
-      desc: "Understand your cat’s sleeping habits during the winter season.",
-    },
-    {
-      title: "Winter Food Guide for Cats: Keep Your Feline Warm and Well-Fed",
-      img: "https://images.unsplash.com/photo-1574158622682-e40e69881006",
-      category: "Cat Care",
-      desc: "Help your cat stay cozy and healthy during cold weather.",
-    },
-    {
-      title:
-        "12 Winter Care Tips for Cats: Keeping Them Warm, Cozy and Comfortable",
-      img: "https://images.unsplash.com/photo-1618828665341-7a5b14aeb0a2",
-      category: "Cat Care",
-      desc: "Everything you need to know for safe and happy winter cats.",
-    },
-    {
-      title: "Winter Grooming for Cats: Why It Matters More Than You Think",
-      img: "https://images.unsplash.com/photo-1607551735704-9d3cd0fbb94f",
-      category: "Cat Care",
-      desc: "Keep your feline’s coat healthy with simple winter grooming tips.",
-    },
-    {
-      title: "Best Indoor Games for Cats During Cold Days",
-      img: "https://images.unsplash.com/photo-1587300003388-59208cc962cb",
-      category: "Cat Lifestyle",
-      desc: "Fun and engaging activities to keep your cat active indoors.",
-    },
-    {
-      title: "How to Keep Cats Warm During Freezing Nights",
-      img: "https://images.unsplash.com/photo-1618828665341-7a5b14aeb0a2",
-      category: "Cat Health",
-      desc: "Warm bedding ideas and safe heating tips for cat owners.",
-    },
-    {
-      title: "Winter Food Guide for Cats: Keep Your Feline Warm and Well-Fed",
-      img: "https://images.unsplash.com/photo-1574158622682-e40e69881006",
-      category: "Cat Care",
-      desc: "Help your cat stay cozy and healthy during cold weather.",
-    },
-    {
-      title:
-        "12 Winter Care Tips for Cats: Keeping Them Warm, Cozy and Comfortable",
-      img: "https://images.unsplash.com/photo-1618828665341-7a5b14aeb0a2",
-      category: "Cat Care",
-      desc: "Everything you need to know for safe and happy winter cats.",
-    },
-    {
-      title: "Winter Grooming for Cats: Why It Matters More Than You Think",
-      img: "https://images.unsplash.com/photo-1607551735704-9d3cd0fbb94f",
-      category: "Cat Care",
-      desc: "Keep your feline’s coat healthy with simple winter grooming tips.",
-    },
-    {
-      title: "Best Indoor Games for Cats During Cold Days",
-      img: "https://images.unsplash.com/photo-1587300003388-59208cc962cb",
-      category: "Cat Lifestyle",
-      desc: "Fun and engaging activities to keep your cat active indoors.",
-    },
-    {
-      title: "How to Keep Cats Warm During Freezing Nights",
-      img: "https://images.unsplash.com/photo-1618828665341-7a5b14aeb0a2",
-      category: "Cat Health",
-      desc: "Warm bedding ideas and safe heating tips for cat owners.",
-    },
-    {
-      title: "Winter Food Guide for Cats: Keep Your Feline Warm and Well-Fed",
-      img: "https://images.unsplash.com/photo-1574158622682-e40e69881006",
-      category: "Cat Care",
-      desc: "Help your cat stay cozy and healthy during cold weather.",
-    },
-    {
-      title:
-        "12 Winter Care Tips for Cats: Keeping Them Warm, Cozy and Comfortable",
-      img: "https://images.unsplash.com/photo-1618828665341-7a5b14aeb0a2",
-      category: "Cat Care",
-      desc: "Everything you need to know for safe and happy winter cats.",
-    },
-    {
-      title: "Winter Grooming for Cats: Why It Matters More Than You Think",
-      img: "https://images.unsplash.com/photo-1607551735704-9d3cd0fbb94f",
-      category: "Cat Care",
-      desc: "Keep your feline’s coat healthy with simple winter grooming tips.",
-    },
-    {
-      title: "Best Indoor Games for Cats During Cold Days",
-      img: "https://images.unsplash.com/photo-1587300003388-59208cc962cb",
-      category: "Cat Lifestyle",
-      desc: "Fun and engaging activities to keep your cat active indoors.",
-    },
-    {
-      title: "How to Keep Cats Warm During Freezing Nights",
-      img: "https://images.unsplash.com/photo-1618828665341-7a5b14aeb0a2",
-      category: "Cat Health",
-      desc: "Warm bedding ideas and safe heating tips for cat owners.",
-    },
-  ];
+  
 
   // PAGINATION LOGIC
   const ITEMS_PER_PAGE = 12;
-  const totalPages = Math.ceil(blogs.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(CatsBlogData.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentBlogs = blogs.slice(startIndex, endIndex);
+  const currentBlogs = CatsBlogData.slice(startIndex, endIndex);
 
   return (
     <section className="max-w-6xl mx-auto py-10 flex flex-col lg:flex-row gap-10">
