@@ -9,8 +9,7 @@ import BlogSection from "@/Components/dogs-for-sale/BlogSection";
 import FAQSection from "@/Components/dogs-for-sale/FAQSection";
 import Feedback from "@/Components/dogs-for-sale/feedback";
 import HeroSection from "@/Components/dogs-for-sale/HeroSection";
-import Footer from "@/Components/LandingPage/Footer";
-import Navbar from "@/Components/Navbar";
+
 
 export default function DogsForSalePage() {
   return (

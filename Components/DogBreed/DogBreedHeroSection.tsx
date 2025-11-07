@@ -1,5 +1,5 @@
 "use client";
-import {  useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaAngleRight } from "react-icons/fa";
@@ -42,7 +42,7 @@ export default function DogBreedHeroSection() {
       selectedPet === "Dogs"
         ? `/dog-breed/${breedSlug}`
         : selectedPet === "Cats"
-        ? `/cats/${breedSlug}`
+        ? `/cat-breed/${breedSlug}`
         : "/";
 
     router.push(route);
@@ -85,14 +85,14 @@ export default function DogBreedHeroSection() {
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
             }`}
           >
-            <option value="">
+            <option value="">Select Breed</option>
+
             {selectedPet &&
               breeds[selectedPet as PetType].map((breed) => (
                 <option key={breed} value={breed}>
                   {breed}
                 </option>
               ))}
-                </option>
           </select>
 
           {/* Search Button */}

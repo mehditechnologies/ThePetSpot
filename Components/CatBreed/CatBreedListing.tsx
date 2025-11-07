@@ -11,36 +11,83 @@ import {
   FaUserTie,
   FaShieldAlt,
 } from "react-icons/fa";
-import { breeds } from "@/Data/dogsData";
 import { useRouter } from "next/navigation";
 
-const dogBreeds = [
-  "Afghan Hound",
-  "Akita",
-  "Alaskan Malamute",
-  "Basset Hound",
-  "Beagle",
-  "Bichon Frise",
-  "Border Collie",
-  "Boxer",
-  "Bull Terrier",
+// 🐱 Sample Cat Breed Data (replace with your real data later)
+const catBreeds = [
+  {
+    id: 1,
+    name: "Persian",
+    image:
+      "https://www.pexels.com/photo/white-persian-cat-lying-on-floor-1056251/",
+    maxWeight: "7 kg",
+    maxHeight: "25 cm",
+    maxLife: "15 years",
+    suitableFor: ["Family", "Kids", "New Owner"],
+  },
+  {
+    id: 2,
+    name: "Maine Coon",
+    image:
+      "https://www.istockphoto.com/photo/maine-coon-cat-sitting-on-white-background-gm1138453450-303798164",
+    maxWeight: "11 kg",
+    maxHeight: "40 cm",
+    maxLife: "13 years",
+    suitableFor: ["Family", "Couple"],
+  },
+  {
+    id: 3,
+    name: "Bengal",
+    image: "https://unsplash.com/photos/bengal-cat-on-window-sill-4qf1vZf8z5o",
+    maxWeight: "8 kg",
+    maxHeight: "35 cm",
+    maxLife: "16 years",
+    suitableFor: ["Couple", "Citizen", "Security"],
+  },
+  {
+    id: 4,
+    name: "Siamese",
+    image:
+      "https://www.pexels.com/photo/siamese-cat-sitting-on-white-surface-326875/",
+    maxWeight: "6 kg",
+    maxHeight: "30 cm",
+    maxLife: "14 years",
+    suitableFor: ["Family", "New Owner", "Kids"],
+  },
+  {
+    id: 5,
+    name: "Ragdoll",
+    image:
+      "https://www.gettyimages.com/detail/photo/ragdoll-cat-royalty-free-image/1280729986",
+    maxWeight: "9 kg",
+    maxHeight: "38 cm",
+    maxLife: "17 years",
+    suitableFor: ["Couple", "Family"],
+  },
+  {
+    id: 6,
+    name: "Sphynx",
+    image:
+      "https://unsplash.com/photos/gray-sphynx-cat-on-white-textile-4qf1vZf8z5o",
+    maxWeight: "6 kg",
+    maxHeight: "25 cm",
+    maxLife: "14 years",
+    suitableFor: ["Citizen", "Couple"],
+  },
 ];
 
-export default function BreedListing() {
-  const [selectedPetType, setSelectedPetType] = useState<string>("Dog");
+export default function CatBreedListing() {
+  const [selectedPetType, setSelectedPetType] = useState<string>("Cat");
+
   const [selectedBreed, setSelectedBreed] = useState<string>("");
   const router = useRouter();
 
   const handleBreedClick = (breed: string) => {
     setSelectedBreed(breed);
-    // Slugify breed name for URL
     const slug = breed.toLowerCase().replace(/ /g, "-");
-    router.push(`/dog-breed/${slug}`);
+    router.push(`/cat-breed/${slug}`);
   };
-  const handleCardClick = (breed: string) => {
-    const slug = breed.toLowerCase().replace(/ /g, "-");
-    router.push(`/dog-breed/${slug}`);
-  };
+
   const getSuitableIcon = (type: string) => {
     switch (type) {
       case "Couple":
@@ -59,6 +106,7 @@ export default function BreedListing() {
         return null;
     }
   };
+
   const handlePetTypeClick = (pet: string) => {
     setSelectedPetType(pet);
 
@@ -83,7 +131,6 @@ export default function BreedListing() {
       <div className="max-w-7xl mx-auto flex gap-6">
         {/* Sidebar */}
         <div className="w-80 bg-white rounded-lg shadow-sm p-6 h-fit sticky top-6">
-          {/* Choose Pet Type */}
           <div className="mb-8">
             <h3 className="text-cyan-500 font-semibold text-lg mb-4">
               Choose Pet Type
@@ -102,49 +149,49 @@ export default function BreedListing() {
               ))}
             </div>
           </div>
+          <h3 className="text-cyan-500 font-semibold text-lg mb-4">
+            Choose Your Breed
+          </h3>
 
-          {/* Choose Your Breed */}
-          <div>
-            <h3 className="text-cyan-500 font-semibold text-lg mb-4">
-              Choose Your Breed
-            </h3>
-            <input
-              type="text"
-              value={selectedBreed}
-              onChange={(e) => setSelectedBreed(e.target.value)}
-              placeholder="Search breed..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            />
-            <div className="space-y-1 max-h-96 overflow-y-auto border-l-4 border-yellow-400 pl-4">
-              {dogBreeds
-                .filter((breed) =>
-                  breed.toLowerCase().includes(selectedBreed.toLowerCase())
-                )
-                .map((breed) => (
-                  <div
-                    key={breed}
-                    onClick={() => handleBreedClick(breed)}
-                    className={`px-3 py-2 cursor-pointer rounded ${
-                      selectedBreed === breed
-                        ? "bg-gray-100 font-medium"
-                        : "hover:bg-gray-50"
-                    }`}
-                  >
-                    {breed}
-                  </div>
-                ))}
-            </div>
+          {/* Search bar */}
+          <input
+            type="text"
+            value={selectedBreed}
+            onChange={(e) => setSelectedBreed(e.target.value)}
+            placeholder="Search breed..."
+            className="w-full px-4 py-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          />
+
+          {/* Filtered List */}
+          <div className="space-y-1 max-h-96 overflow-y-auto border-l-4 border-yellow-400 pl-4">
+            {catBreeds
+              .filter((breed) =>
+                breed.name.toLowerCase().includes(selectedBreed.toLowerCase())
+              )
+              .map((breed) => (
+                <div
+                  key={breed.id}
+                  onClick={() => handleBreedClick(breed.name)}
+                  className={`px-3 py-2 cursor-pointer rounded ${
+                    selectedBreed === breed.name
+                      ? "bg-gray-100 font-medium"
+                      : "hover:bg-gray-50"
+                  }`}
+                >
+                  {breed.name}
+                </div>
+              ))}
           </div>
         </div>
 
-        {/* Main Content - Breed Cards */}
+        {/* Breed Cards */}
         <div className="flex-1">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {breeds.map((breed) => (
+            {catBreeds.map((breed) => (
               <div
                 key={breed.id}
-                onClick={() => handleCardClick(breed.name)}
-                className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow"
+                onClick={() => handleBreedClick(breed.name)}
+                className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
               >
                 {/* Image */}
                 <div className="relative h-56 bg-gradient-to-br from-pink-100 to-blue-100">
@@ -157,14 +204,12 @@ export default function BreedListing() {
 
                 {/* Content */}
                 <div className="p-5">
-                  {/* Breed Name */}
                   <h3 className="text-cyan-600 font-semibold text-lg mb-4">
                     {breed.name}
                   </h3>
 
                   {/* Stats */}
                   <div className="grid grid-cols-3 gap-3 mb-4">
-                    {/* Weight */}
                     <div className="flex items-start gap-2">
                       <div className="w-6 h-6 bg-cyan-500 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
                         <FaWeight className="text-white text-xs" />
@@ -177,7 +222,6 @@ export default function BreedListing() {
                       </div>
                     </div>
 
-                    {/* Height */}
                     <div className="flex items-start gap-2">
                       <div className="w-6 h-6 bg-cyan-500 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
                         <FaRulerVertical className="text-white text-xs" />
@@ -190,14 +234,13 @@ export default function BreedListing() {
                       </div>
                     </div>
 
-                    {/* Life */}
                     <div className="flex items-start gap-2">
                       <div className="w-6 h-6 bg-cyan-500 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
                         <FaClock className="text-white text-xs" />
                       </div>
                       <div className="text-xs">
                         <div className="text-cyan-600 font-medium">
-                          Max-life
+                          Max-Life
                         </div>
                         <div className="text-gray-700">{breed.maxLife}</div>
                       </div>

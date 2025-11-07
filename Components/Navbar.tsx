@@ -18,7 +18,7 @@ export default function Navbar() {
     "bg-[#FFAC0D]  border-gray-300 border-r-gray-300 ";
 
   return (
-    <header className="w-full bg-transparent absolute top-0 left-0 z-30">
+    <header className="w-full bg-transparent absolute top-0 right-0 z-30">
       <div className="mx-auto px-52 py-6 flex items-center  justify-between relative">
         {/* Logo */}
         <div
@@ -48,11 +48,11 @@ export default function Navbar() {
               </svg>
             </button>
             {openMenu === "pets" && (
-              <div className="absolute  left-0 mt-2 w-40 bg-white text-sm text-gray-700 rounded-md shadow-lg">
+              <div className="absolute  right-0 mt-2 w-40 bg-white text-sm text-gray-700 rounded-md shadow-lg">
                 <a href="/dogs/for-sale" className={dropdownLinkClasses}>
                   Dog
                 </a>
-                <a href="/cat/for-sale" className={dropdownLinkClasses}>
+                <a href="/cats/for-sale" className={dropdownLinkClasses}>
                   Cat
                 </a>
                 <a href="#" className={dropdownLinkClasses}>
@@ -78,7 +78,7 @@ export default function Navbar() {
               </svg>
             </button>
             {openMenu === "services" && (
-              <div className="absolute left-0 mt-2 w-40 bg-white  text-gray-700 rounded-md shadow-lg">
+              <div className="absolute right-0 mt-2 w-40 bg-white  text-gray-700 rounded-md shadow-lg">
                 <a href="#" className={dropdownLinkClasses}>
                   Grooming
                 </a>
@@ -99,7 +99,11 @@ export default function Navbar() {
               className="flex items-center gap-2 hover:opacity-90 cursor-pointer"
             >
               <span>Breeds</span>
-              <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+              <svg
+                className="w-4 h-4 mb-0.5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
                 <path d="M5.25 7.5L10 12.25 14.75 7.5z" />
               </svg>
             </button>
@@ -110,6 +114,33 @@ export default function Navbar() {
                 </a>
                 <a href="/cat-breed" className={dropdownLinkClasses}>
                   Cat Breeds
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Breeds Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => toggleMenu("food")}
+              className="flex items-center gap-2 hover:opacity-90 cursor-pointer"
+            >
+              <span>Food</span>
+              <svg
+                className="w-4 h-4 mb-0.5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M5.25 7.5L10 12.25 14.75 7.5z" />
+              </svg>
+            </button>
+            {openMenu === "food" && (
+              <div className="absolute right-0 mt-2 w-40 bg-white text-gray-700 rounded-md shadow-lg">
+                <a href="/dog-food" className={dropdownLinkClasses}>
+                  Dog food
+                </a>
+                <a href="/cat-food" className={dropdownLinkClasses}>
+                  Cat food
                 </a>
               </div>
             )}
@@ -131,7 +162,7 @@ export default function Navbar() {
             </button>
 
             {openMenu === "blog" && (
-              <div className="absolute left-0 mt-2 w-40 bg-white text-gray-700 rounded-md shadow-lg">
+              <div className="absolute right-0 mt-2 w-40 bg-white text-gray-700 rounded-md shadow-lg">
                 <a href="/blog/dog-care" className={dropdownLinkClasses}>
                   Dog Care
                 </a>
@@ -149,12 +180,16 @@ export default function Navbar() {
               className="flex items-center gap-1 hover:opacity-90 cursor-pointer"
             >
               <span>Login</span>
-              <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+              <svg
+                className="w-4 h-4 mb-0.5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
                 <path d="M5.25 7.5L10 12.25 14.75 7.5z" />
               </svg>
             </button>
             {openMenu === "login" && (
-              <div className="absolute flex text-sm left-0 mt-2 w-40  bg-white text-gray-700 rounded-md shadow-lg px-3  py-1.5">
+              <div className="absolute flex text-sm right-0 mt-2 w-40  bg-white text-gray-700 rounded-md shadow-lg px-3  py-1.5">
                 <a href="/login" className={dropdownLinkClassesLogin}>
                   Login
                 </a>
