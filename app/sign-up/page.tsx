@@ -3,11 +3,15 @@ import Image from "next/image";
 import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { toast } from "react-hot-toast";
+import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [phone, setPhone] = useState("");
   const [formData, setFormData] = useState({
-    fullName: "",
+    name: "",
     email: "",
     password: "",
     gender: "",
@@ -15,15 +19,27 @@ export default function SignUpPage() {
     isPetParent: "",
   });
 
+  // Get signup function and loading state from zustand
+  const { signup, isSigningUp } = authStore();
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Sign Up Data:", { ...formData, phone });
+
+    // Combine formData with phone
+    const data = { ...formData, phone };
+
+    try {
+      await signup(data); // ✅ call zustand signup
+      router.push("/"); // ✅ navigate after signup
+    } catch (err) {
+      toast.error("Signup failed!");
+    }
   };
 
   return (
@@ -72,15 +88,15 @@ export default function SignUpPage() {
             {/* Full Name */}
             <input
               type="text"
-              name="fullName"
+              name="name"
               placeholder="Full Name"
-              value={formData.fullName}
+              value={formData.name}
               onChange={handleChange}
               className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
               required
             />
 
-            {/* Phone Input with Flags */}
+            {/* Phone Input */}
             <PhoneInput
               country={"in"}
               value={phone}
@@ -117,9 +133,7 @@ export default function SignUpPage() {
                 height: "45px",
                 fontSize: "14px",
               }}
-              dropdownStyle={{
-                maxHeight: "250px",
-              }}
+              dropdownStyle={{ maxHeight: "250px" }}
             />
 
             {/* Email */}
@@ -200,9 +214,14 @@ export default function SignUpPage() {
 
             <button
               type="submit"
-              className="w-full py-2 bg-[#04A4C3] text-white rounded-md font-medium hover:bg-[#118196] transition"
+              disabled={isSigningUp} // ✅ disable while signing up
+              className={`w-full py-2 rounded-md font-medium text-white transition ${
+                isSigningUp
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#04A4C3] hover:bg-[#118196]"
+              }`}
             >
-              Create an account
+              {isSigningUp ? "Signing Up..." : "Create an account"}
             </button>
           </form>
 

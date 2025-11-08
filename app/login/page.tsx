@@ -1,17 +1,40 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
 
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<"password" | "otp">("password");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
-  const [mobileOrEmail, setMobileOrEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [mobileOtp, setMobileOtp] = useState("");
 
+  const router = useRouter();
+  const { login, isLoggingIn } = authStore();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    let formData;
+    if (activeTab === "password") {
+      formData = { email, password };
+    } else {
+      formData = { mobile: mobileOtp };
+    }
+
+    const success = await login(formData);
+
+    if (success) {
+      router.push("/"); // navigate after login
+    }
+  };
+
   return (
-    <div className="min-h-screen flex  justify-center bg-[#fdf3f3] py-5 pb-10">
-      <div className="w-full max-w-5xl bg-white  shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+    <div className="min-h-screen flex justify-center bg-[#fdf3f3] py-5 pb-10">
+      <div className="w-full max-w-5xl bg-white shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden">
         {/* Left Section */}
         <div className="relative flex flex-col justify-center items-center text-white px-10 py-16">
           <Image
@@ -21,7 +44,6 @@ export default function LoginPage() {
             className="object-cover z-0"
           />
           <div className="absolute inset-0 bg-[#169bb6]/70 z-10" />
-
           <div className="relative z-20 text-center max-w-sm">
             <Image
               src="/petlogo.svg"
@@ -37,7 +59,6 @@ export default function LoginPage() {
               with our open <br /> Heart and Paws!
             </p>
           </div>
-
           <Image
             src="/taddy.png"
             alt="pets"
@@ -89,15 +110,16 @@ export default function LoginPage() {
           <hr className="mb-4 font-light text-gray-200" />
 
           {/* Form */}
-          <form className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-5">
             {activeTab === "password" ? (
               <>
                 <input
                   type="text"
-                  placeholder="Mobile No. / Email Id"
-                  value={mobileOrEmail}
-                  onChange={(e) => setMobileOrEmail(e.target.value)}
-                  className="w-full p-3  bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                  placeholder="Enter Your Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                  required
                 />
                 <div className="relative">
                   <input
@@ -105,7 +127,8 @@ export default function LoginPage() {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full p-3  bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                    className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                    required
                   />
                   <span
                     onClick={() => setShowPassword((v) => !v)}
@@ -113,25 +136,30 @@ export default function LoginPage() {
                       showPassword ? "fa-eye-slash" : "fa-eye"
                     }`}
                     style={{ fontSize: 20 }}
-                  ></span>
+                  />
                 </div>
               </>
             ) : (
-              <>
-                <input
-                  type="text"
-                  placeholder="Mobile No."
-                  value={mobileOtp}
-                  onChange={(e) => setMobileOtp(e.target.value)}
-                  className="w-full p-3  bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
-                />
-              </>
+              <input
+                type="text"
+                placeholder="Mobile No."
+                value={mobileOtp}
+                onChange={(e) => setMobileOtp(e.target.value)}
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                required
+              />
             )}
+
             <button
               type="submit"
-              className="w-full py-2 bg-[#04A4C3] text-white rounded-md font-medium hover:bg-[#118196] transition"
+              disabled={isLoggingIn}
+              className={`w-full py-2 rounded-md font-medium text-white transition ${
+                isLoggingIn
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#04A4C3] hover:bg-[#118196]"
+              }`}
             >
-              Log in
+              {isLoggingIn ? "Logging in..." : "Log in"}
             </button>
           </form>
         </div>

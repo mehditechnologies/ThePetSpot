@@ -112,7 +112,8 @@ export default function DogsPage() {
     if (selectedCity) {
       result = result.filter((p) => p.city === selectedCity);
     } else if (selectedState) {
-      const cities = statesWithCities[selectedState as keyof typeof statesWithCities] || [];
+      const cities =
+        statesWithCities[selectedState as keyof typeof statesWithCities] || [];
       if (cities.length > 0) {
         result = result.filter(
           (p) => cities.includes(p.city) || p.city === selectedState
@@ -724,30 +725,41 @@ export default function DogsPage() {
 
         {/* 🐶 Pets Grid */}
         <div className="flex-1">
-          <div className="bg-white p-6 rounded-xl  mb-6">
-            <p className="text-sm text-gray-500">
-              Home &gt; <span className="text-purple-600">Dogs</span> &gt;
-              {selectedBreed
-                ? ` ${selectedBreed} for Sale`
-                : " All Dogs for Sale"}
-            </p>
-            <h2 className="text-2xl font-bold mt-2">
-              {selectedBreed ? `${selectedBreed} For Sale` : "Dogs For Sale"}
-            </h2>
-            <h4>
-              {selectedBreed ? `${selectedBreed.length} ` : "${pets.length}"}
-              Result Found
-            </h4>
-            <p className="text-gray-600 mt-3 leading-relaxed">
-              <span className="font-semibold">Pets in Pakistan:</span> Find pets
-              near you.
-            </p>
-            <button className="mt-3 text-sm bg-purple-100 text-purple-600 px-4 py-1 rounded-md">
-              Read More
-            </button>
+          <div className="mb-8">
+            <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+              <span className="hover:text-purple-600 cursor-pointer transition-colors">
+                Home
+              </span>
+              <span>→</span>
+              <span className="hover:text-purple-600 cursor-pointer transition-colors">
+                Dogs
+              </span>
+              <span>→</span>
+              <span className="text-purple-600 font-medium">
+                {selectedBreed
+                  ? `${selectedBreed} for Sale`
+                  : "All Dogs for Sale"}
+              </span>
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                  {selectedBreed
+                    ? `${selectedBreed} For Sale`
+                    : "Dogs For Sale"}
+                </h1>
+                <p className="text-gray-600 flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-600 font-semibold text-sm">
+                    {filteredPetsList.length}
+                  </span>
+                  Premium pets available near you
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {(() => {
               const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
               const endIdx = startIdx + ITEMS_PER_PAGE;
@@ -758,63 +770,76 @@ export default function DogsPage() {
 
               if (paginatedList.length === 0) {
                 return (
-                  <div className="col-span-3 text-center text-gray-500">
-                    No pets found for the current filters.
+                  <div className="col-span-3 text-center py-20">
+                    <div className="text-6xl mb-4">🐕</div>
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                      No pets found
+                    </h3>
+                    <p className="text-gray-500">Try adjusting your filters</p>
                   </div>
                 );
               }
+
               return paginatedList.map((pet) => (
-                <div key={pet.id} className="bg-white rounded-xl ">
-                  <div className="relative">
+                <div
+                  key={pet.id}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className="relative overflow-hidden">
                     <img
                       src={pet.img}
                       alt={pet.name}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <span className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-3 py-1 rounded-full">
-                      Pet Quality
-                    </span>
-                    <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent text-white px-3 py-2 text-sm font-semibold">
-                      View Price
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    <div className="absolute top-3 left-3">
+                      <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-purple-600 text-xs font-semibold rounded-full shadow-lg">
+                        ⭐ Premium
+                      </span>
                     </div>
                   </div>
 
-                  <div className="p-4 space-y-2 text-xs text-gray-700">
-                    <h3 className="text-purple-700 font-semibold text-sm mb-2">
+                  <div className="p-5">
+                    <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors">
                       {pet.name}
                     </h3>
-                    <p>
-                      <span className="font-medium mr-1">Breed:</span>{" "}
-                      {pet.breed}
-                    </p>
-                    <p className="flex items-center gap-1">
-                      <span className="font-medium">Gender:</span>
-                      {pet.gender}
-                      <span className="ml-3">
-                        <span className="font-medium">Age:</span> {pet.age}
-                      </span>
-                    </p>
 
-                    <p>
-                      <span className="font-medium">City:</span>{" "}
-                      <span className="text-purple-600 cursor-pointer hover:underline">
-                        {pet.city}
-                      </span>
-                    </p>
+                    <div className="space-y-2.5 mb-4">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Breed</span>
+                        <span className="font-semibold text-gray-800">
+                          {pet.breed}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Gender & Age</span>
+                        <span className="font-semibold text-gray-800">
+                          {pet.gender}, {pet.age}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Location</span>
+                        <span className="font-semibold text-purple-600">
+                          {pet.city}
+                        </span>
+                      </div>
+                    </div>
 
-                    <div>
-                      <button className="px-4 py-1.5 mr-1.5 text-black border-gray-100 font-medium border hover:bg-[#9461F7] hover:text-white rounded">
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                      <button className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium">
                         Call
                       </button>
-                      <button className="px-2 py-1.5 mr-1.5 text-black border-gray-100 font-medium border hover:bg-[#9461F7] hover:text-white rounded">
-                        Whatsapp
+                      <button className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
+                        Chat
                       </button>
-                      <button className="px-4 py-1.5 border-gray-100 text-black font-medium border hover:bg-[#9461F7] hover:text-white rounded">
-                        Details
+                      <button className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium">
+                        Info
                       </button>
                     </div>
 
-                    <button className="hover:bg-[#9361f7d4] text-white w-full py-1.5 bg-[#9461F7] font-medium text-sm">
+                    <button className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
                       Book Now
                     </button>
                   </div>
@@ -830,33 +855,49 @@ export default function DogsPage() {
             );
             if (totalPages <= 1) return null;
             return (
-              <div className="mt-8 flex items-center justify-between">
+              <div className="mt-12 flex items-center justify-center gap-4">
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className={`px-4 py-2 text-sm font-medium rounded ${
+                  className={`px-6 py-2.5 rounded-full font-medium transition-all duration-200 ${
                     currentPage === 1
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                      : "bg-white text-purple-600 hover:bg-purple-50 shadow-sm hover:shadow-md hover:scale-105"
                   }`}
                 >
-                  Previous Page
+                  Previous
                 </button>
-                <div className="text-sm text-gray-700">
-                  Page {currentPage} of {totalPages}
+
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-10 h-10 rounded-full font-semibold transition-all duration-200 ${
+                          currentPage === page
+                            ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-110"
+                            : "bg-white text-gray-600 hover:bg-purple-50 hover:text-purple-600"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
                 </div>
+
                 <button
                   onClick={() =>
                     setCurrentPage((p) => Math.min(totalPages, p + 1))
                   }
                   disabled={currentPage >= totalPages}
-                  className={`px-4 py-2 text-sm font-medium rounded ${
+                  className={`px-6 py-2.5 rounded-full font-medium transition-all duration-200 ${
                     currentPage >= totalPages
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                      : "bg-white text-purple-600 hover:bg-purple-50 shadow-sm hover:shadow-md hover:scale-105"
                   }`}
                 >
-                  Next Page
+                  Next
                 </button>
               </div>
             );
