@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
 
+interface AuthStore {
+  login: (formData: any) => Promise<boolean>;
+  isLoggingIn: boolean;
+}
+
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<"password" | "otp">("password");
   const [showPassword, setShowPassword] = useState(false);
@@ -13,7 +18,8 @@ export default function LoginPage() {
   const [mobileOtp, setMobileOtp] = useState("");
 
   const router = useRouter();
-  const { login, isLoggingIn } = authStore();
+  const store = authStore() as AuthStore;
+  const { login, isLoggingIn } = store;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +34,7 @@ export default function LoginPage() {
     const success = await login(formData);
 
     if (success) {
-      router.push("/"); // navigate after login
+      router.push("/dashboard"); // navigate to dashboard after login
     }
   };
 

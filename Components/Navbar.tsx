@@ -3,10 +3,30 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
 
+interface AuthUser {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+interface AuthStore {
+  authUser: AuthUser | null;
+  isSigningUp: boolean;
+  isLoggingIn: boolean;
+  isUpdatingProfile: boolean;
+  isCheckingAuth: boolean;
+  signup: (data: any) => Promise<void>;
+  login: (formData: any) => Promise<boolean>;
+  logout: () => Promise<boolean>;
+  checkAuth: () => Promise<void>;
+}
+
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const router = useRouter();
-  const { authUser, logout } = authStore(); // ✅ get authUser from zustand
+  const store = authStore() as AuthStore;
+  const { authUser, logout } = store;
   console.log("Hello authUser", authUser);
   const toggleMenu = (menu: string) => {
     setOpenMenu(openMenu === menu ? null : menu);
@@ -17,8 +37,8 @@ export default function Navbar() {
   const dropdownLinkClassesLogin =
     "block px-3 py-1.5 border-b text-[#202020] border-transparent transition-colors bg-[#FFAC0D] border-gray-300 border-r-gray-300";
 
-  const handleLogout = () => {
-    logout({ authUser: null });
+  const handleLogout = async () => {
+    await logout();
     router.push("/");
   };
 
@@ -222,11 +242,11 @@ export default function Navbar() {
                   Profile
                 </a>
                 <a
-                  href="/post-your-ads"
+                  href="/dashboard"
                   className={dropdownLinkClasses}
                   onClick={() => setOpenMenu(null)}
                 >
-                  Post Your Ads
+                  Dashboard
                 </a>
                 <button
                   className={`text-start ${dropdownLinkClasses} `}

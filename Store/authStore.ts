@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const Base_URL = "https://pet-spot-backend.vercel.app";
+const Base_URL = "http://localhost:8000";
 const jsonHeaders = { "Content-Type": "application/json" };
 
 export const authStore = create(
