@@ -20,7 +20,13 @@ export default function SignUpPage() {
   });
 
   // Get signup function and loading state from zustand
-  const { signup, isSigningUp } = authStore();
+  // Define the type for your authStore state
+  type AuthStoreType = {
+    signup: (data: any) => Promise<void>;
+    isSigningUp: boolean;
+  };
+  
+    const { signup, isSigningUp } = authStore() as AuthStoreType;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

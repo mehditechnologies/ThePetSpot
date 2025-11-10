@@ -9,6 +9,7 @@ export default function DogSegmentsPage() {
   return (
     <div>
       {/* <Navbar /> */}
+
       <HeroSection />
       <DogsCatchAllPage />
       <NotFoundPets />
