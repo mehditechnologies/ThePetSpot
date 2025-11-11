@@ -13,13 +13,6 @@ interface AuthStore {
   checkAuth: () => Promise<void>;
 }
 
-// Define the type for your auth store state
-type AuthStoreType = {
-  login: (formData: any) => Promise<boolean>;
-  isLoggingIn: boolean;
-  // add other properties/methods if needed
-};
-
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<"password" | "otp">("password");
   const [showPassword, setShowPassword] = useState(false);
@@ -41,11 +34,8 @@ export default function LoginPage() {
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (isCheckingAuth) return;
-
-    if (authUser) {
+    if (!isCheckingAuth && authUser) {
       router.push('/dashboard');
-      return;
     }
   }, [authUser, isCheckingAuth, router]);
 
@@ -79,7 +69,7 @@ export default function LoginPage() {
     const success = await login(formData);
 
     if (success) {
-      router.push("/"); 
+      router.push("/dashboard"); 
     }
   };
 

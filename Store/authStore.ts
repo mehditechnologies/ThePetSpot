@@ -67,10 +67,20 @@ export const authStore = create(
             withCredentials: true,
           });
           console.log("api Called response", res.data);
+          
+          // Immediately clear user state
           set({ authUser: null });
+          
+          // Clear any local storage persistence
+          localStorage.removeItem('auth-storage');
+          
           toast.success("Logged out successfully");
           return true;
         } catch (error) {
+          // Even if logout API fails, clear local state
+          set({ authUser: null });
+          localStorage.removeItem('auth-storage');
+          
           if (axios.isAxiosError(error)) {
             console.error("Logout error:", error);
             toast.error("Logout failed");
