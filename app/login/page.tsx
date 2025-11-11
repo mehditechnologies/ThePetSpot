@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
 
+// Define the type for your auth store state
+type AuthStoreType = {
+  login: (formData: any) => Promise<boolean>;
+  isLoggingIn: boolean;
+  // add other properties/methods if needed
+};
+
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<"password" | "otp">("password");
   const [showPassword, setShowPassword] = useState(false);
@@ -13,7 +20,7 @@ export default function LoginPage() {
   const [mobileOtp, setMobileOtp] = useState("");
 
   const router = useRouter();
-  const { login, isLoggingIn } = authStore();
+  const { login, isLoggingIn } = authStore() as AuthStoreType;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

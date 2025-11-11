@@ -3,12 +3,35 @@ import { persist } from "zustand/middleware";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+interface AuthUser {
+  name?: string;
+  userName?: string;
+  // Add other user properties as needed
+}
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+interface AuthState {
+  isSigningUp: boolean;
+  authUser: AuthUser | null;
+  isLoggingIn: boolean;
+  isUpdatingProfile: boolean;
+  isCheckingAuth: boolean;
+  signup: (data: any) => Promise<void>;
+  login: (formData: LoginFormData) => Promise<boolean>;
+  logout: () => Promise<boolean>;
+  checkAuth: () => Promise<void>;
+}
+
 const Base_URL = "https://pet-spot-backend.vercel.app";
 const jsonHeaders = { "Content-Type": "application/json" };
 
-export const authStore = create(
+export const authStore = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       isSigningUp: false,
       authUser: null,
       isLoggingIn: false,
@@ -16,7 +39,7 @@ export const authStore = create(
       isCheckingAuth: true,
 
       // ✅ Signup
-      signup: async (data) => {
+      signup: async (data: LoginFormData) => {
         set({ isSigningUp: true });
         try {
           const res = await axios.post(`${Base_URL}/api/users/register`, data, {
@@ -26,14 +49,18 @@ export const authStore = create(
           set({ authUser: res.data.user });
           toast.success(res.data.message || "Signup successful");
         } catch (error) {
-          toast.error(error.response?.data?.message || "Signup failed");
+          if (axios.isAxiosError(error)) {
+            toast.error(error.response?.data?.message || "Signup failed");
+          } else {
+            toast.error("Signup failed");
+          }
         } finally {
           set({ isSigningUp: false });
         }
       },
 
       // ✅ Login
-      login: async (formData) => {
+      login: async (formData: LoginFormData) => {
         set({ isLoggingIn: true });
         try {
           const res = await axios.post(
@@ -50,7 +77,11 @@ export const authStore = create(
           );
           return true;
         } catch (error) {
-          toast.error(error.response?.data?.message || "Login failed");
+          if (axios.isAxiosError(error)) {
+            toast.error(error.response?.data?.message || "Login failed");
+          } else {
+            toast.error("Login failed");
+          }
           return false;
         } finally {
           set({ isLoggingIn: false });
@@ -66,8 +97,12 @@ export const authStore = create(
           toast.success("Logged out successfully");
           return true;
         } catch (error) {
-          console.error("Logout error:", error);
-          toast.error("Logout failed");
+          if (axios.isAxiosError(error)) {
+            console.error("Logout error:", error);
+            toast.error("Logout failed");
+          } else {
+            toast.error("Logout failed");
+          }
           return false;
         }
       },
@@ -82,7 +117,9 @@ export const authStore = create(
           console.log("additional Api Call");
           set({ authUser: res.data.user });
         } catch (error) {
-          set({ authUser: null });
+          if (axios.isAxiosError(error)) {
+            set({ authUser: null });
+          }
         } finally {
           set({ isCheckingAuth: false });
         }
@@ -90,7 +127,7 @@ export const authStore = create(
     }),
     {
       name: "auth-storage", // persisted in localStorage
-      partialize: (state) => ({ authUser: state.authUser }), // only persist authUser
+      partialize: (state: AuthState) => ({ authUser: state.authUser }), // only persist authUser
     }
   )
 );

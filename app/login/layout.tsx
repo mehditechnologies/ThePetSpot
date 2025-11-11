@@ -1,32 +1,33 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign Up | Mr n Mrs Pet",
+  title: "Login | Mr n Mrs Pet",
   description:
-    "Create your free account on Mr n Mrs Pet to book grooming, training, and pet care services. Join our trusted community of pet parents and professionals today.",
+    "Login to your Mr n Mrs Pet account to explore verified pets for sale, adoption, grooming, and more. Manage your profile and enjoy personalized pet care services.",
   keywords: [
-    "Mr n Mrs Pet signup",
-    "create pet account",
-    "join Mr n Mrs Pet",
-    "pet parent registration",
-    "pet grooming booking",
-    "pet care login",
+    "login",
+    "Mr n Mrs Pet",
+    "pet store login",
+    "pet adoption India",
+    "buy pets online",
+    "pet marketplace account",
+    "pet care services",
   ],
   authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
   creator: "Mr n Mrs Pet",
   publisher: "Mr n Mrs Pet",
   openGraph: {
-    title: "Sign Up | Mr n Mrs Pet",
+    title: "Login | Mr n Mrs Pet",
     description:
-      "Join Mr n Mrs Pet – India’s trusted pet platform for adoption, grooming, training, and more. Create your account today and start your pet journey.",
-    url: "https://www.mrnmrspet.com/signup",
+      "Access your Mr n Mrs Pet account — your trusted platform for buying, adopting, and caring for pets.",
+    url: "https://www.mrnmrspet.com/login",
     siteName: "Mr n Mrs Pet",
     images: [
       {
         url: "/signup-bg.webp",
         width: 1200,
         height: 630,
-        alt: "Sign Up - Mr n Mrs Pet",
+        alt: "Login - Mr n Mrs Pet",
       },
     ],
     locale: "en_IN",
@@ -34,14 +35,14 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sign Up | Mr n Mrs Pet",
+    title: "Login | Mr n Mrs Pet",
     description:
-      "Join Mr n Mrs Pet – your one-stop platform for pet adoption, grooming, and care services across India.",
+      "Login to your Mr n Mrs Pet account and discover thousands of verified pets and services near you.",
     images: ["/signup-bg.webp"],
     creator: "@mrnmrspet",
   },
   alternates: {
-    canonical: "https://www.mrnmrspet.com/signup",
+    canonical: "https://www.mrnmrspet.com/login",
   },
   robots: {
     index: true,
@@ -49,15 +50,15 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-       "max-snippet": -1,
+      "max-snippet": -1,
       "max-image-preview": "large",
       "max-video-preview": -1,
     },
   },
-  category: "Pet Services",
+  category: "Pet Marketplace",
 };
 
-export default function SignUpLayout({
+export default function LoginLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -65,15 +66,10 @@ export default function SignUpLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Sign Up | Mr n Mrs Pet",
-    url: "https://www.mrnmrspet.com/signup",
+    name: "Login | Mr n Mrs Pet",
+    url: "https://www.mrnmrspet.com/login",
     description:
-      "User registration page for Mr n Mrs Pet – where pet lovers and service providers can join our growing community.",
-    potentialAction: {
-      "@type": "RegisterAction",
-      target: "https://www.mrnmrspet.com/signup",
-      name: "Sign Up",
-    },
+      "Login securely to your Mr n Mrs Pet account to manage your pets, explore services, and connect with verified breeders and pet parents.",
     publisher: {
       "@type": "Organization",
       name: "Mr n Mrs Pet",
@@ -85,11 +81,14 @@ export default function SignUpLayout({
     },
     mainEntity: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Mr n Mrs Pet User Account",
+      description:
+        "Registered users can access pet listings, manage their profiles, and post pet ads on Mr n Mrs Pet.",
+      url: "https://www.mrnmrspet.com/login",
       sameAs: [
         "https://www.facebook.com/mrnmrspet",
         "https://www.instagram.com/mrnmrspet",
-        "https://twitter.com/mrnmrspet",
+        "https://x.com/mrnmrspet",
       ],
     },
   };

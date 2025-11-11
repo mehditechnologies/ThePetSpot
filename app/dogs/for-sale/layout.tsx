@@ -1,34 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pets for Sale | Mr n Mrs Pet",
+  title: "Dogs for Sale | Mr n Mrs Pet",
   description:
-    "Find adorable pets for sale at Mr n Mrs Pet. Browse verified listings of dogs, cats, birds, and more from trusted pet parents and breeders across India.",
+    "Browse verified listings of dogs for sale from responsible breeders and pet parents across India. Find your perfect furry companion with Mr n Mrs Pet.",
   keywords: [
-    "pets for sale",
     "dogs for sale",
-    "cats for sale",
-    "birds for sale",
-    "Mr n Mrs Pet",
-    "buy pets online",
-    "pet adoption India",
+    "puppies for sale",
+    "dog breeders India",
     "pet marketplace",
+    "Mr n Mrs Pet",
+    "buy dogs online",
   ],
   authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
   creator: "Mr n Mrs Pet",
   publisher: "Mr n Mrs Pet",
   openGraph: {
-    title: "Pets for Sale | Mr n Mrs Pet",
+    title: "Dogs for Sale | Mr n Mrs Pet",
     description:
-      "Explore a wide range of verified pets for sale including dogs, cats, and other adorable companions at Mr n Mrs Pet.",
-    url: "https://www.mrnmrspet.com/pet-for-sale",
+      "Find and adopt your next furry friend from verified listings of dogs for sale across India at Mr n Mrs Pet.",
+    url: "https://www.mrnmrspet.com/dogs-for-sale",
     siteName: "Mr n Mrs Pet",
     images: [
       {
-        url: "/aboutBg.webp",
+        url: "/dogs-for-sale/hero.webp",
         width: 1200,
         height: 630,
-        alt: "Pets for Sale - Mr n Mrs Pet",
+        alt: "Dogs for Sale - Mr n Mrs Pet",
       },
     ],
     locale: "en_IN",
@@ -36,14 +34,14 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pets for Sale | Mr n Mrs Pet",
+    title: "Dogs for Sale | Mr n Mrs Pet",
     description:
-      "Buy or adopt your next furry friend from trusted pet parents and breeders on Mr n Mrs Pet.",
-    images: ["/aboutBg.webp"],
+      "Explore verified listings of dogs for sale from trusted breeders and pet parents on Mr n Mrs Pet.",
+    images: ["/dogs-for-sale/hero.webp"],
     creator: "@mrnmrspet",
   },
   alternates: {
-    canonical: "https://www.mrnmrspet.com/pet-for-sale",
+    canonical: "https://www.mrnmrspet.com/dogs/for-sale",
   },
   robots: {
     index: true,
@@ -51,7 +49,7 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-snippet": -1,
+       "max-snippet": -1,
       "max-image-preview": "large",
       "max-video-preview": -1,
     },
@@ -59,7 +57,7 @@ export const metadata: Metadata = {
   category: "Pet Marketplace",
 };
 
-export default function PetForSaleLayout({
+export default function DogsForSaleLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -67,10 +65,10 @@ export default function PetForSaleLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Pets for Sale | Mr n Mrs Pet",
-    url: "https://www.mrnmrspet.com/pet-for-sale",
+    name: "Dogs for Sale | Mr n Mrs Pet",
+    url: "https://www.mrnmrspet.com/dogs-for-sale",
     description:
-      "Find verified pets for sale at Mr n Mrs Pet — dogs, cats, birds, and more from responsible pet owners and breeders across India.",
+      "Verified listings of dogs for sale across India. Find puppies and adult dogs from trusted breeders and pet parents with Mr n Mrs Pet.",
     publisher: {
       "@type": "Organization",
       name: "Mr n Mrs Pet",
@@ -81,31 +79,34 @@ export default function PetForSaleLayout({
       },
     },
     mainEntity: {
-      "@type": "OfferCatalog",
-      name: "Pet Listings",
+      "@type": "ItemList",
+      name: "Dogs for Sale Listings",
       itemListElement: [
         {
-          "@type": "Offer",
-          itemOffered: {
+          "@type": "ListItem",
+          position: 1,
+          item: {
             "@type": "Product",
-            name: "Dog for Sale",
-            category: "Pets",
+            name: "Puppies for Sale",
+            category: "Dog",
           },
         },
         {
-          "@type": "Offer",
-          itemOffered: {
+          "@type": "ListItem",
+          position: 2,
+          item: {
             "@type": "Product",
-            name: "Cat for Sale",
-            category: "Pets",
+            name: "Adult Dogs for Sale",
+            category: "Dog",
           },
         },
         {
-          "@type": "Offer",
-          itemOffered: {
+          "@type": "ListItem",
+          position: 3,
+          item: {
             "@type": "Product",
-            name: "Bird for Sale",
-            category: "Pets",
+            name: "Breed-Specific Dogs",
+            category: "Dog",
           },
         },
       ],

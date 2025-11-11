@@ -6,7 +6,12 @@ import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const router = useRouter();
-  const { authUser, logout } = authStore(); // ✅ get authUser from zustand
+  type AuthStoreType = {
+    logout: (data: any) => Promise<void>;
+    authUser: any; // changed from [] to any (or you can use object | null for stricter typing)
+  };
+
+  const { authUser, logout } = authStore() as unknown as AuthStoreType; // ✅ get authUser from zustand
   console.log("Hello authUser", authUser);
   const toggleMenu = (menu: string) => {
     setOpenMenu(openMenu === menu ? null : menu);

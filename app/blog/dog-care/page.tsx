@@ -3,7 +3,7 @@ import DogsCareMainSection from "@/Components/Blogs/Dogs-care/CatsCareMainSectio
 import DogssCareHeroSection from "@/Components/Blogs/Dogs-care/DogsCareHeroSection";
 import GuaranteeBadges from "@/Components/Blogs/LastSection";
 
-export default function CatCarePage() {
+export default function DogCarePage() {
   return (
     <div>
       <DogssCareHeroSection />
