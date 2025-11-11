@@ -1,8 +1,9 @@
-// app/layout.tsx
+"use client";
 import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 import Navbar from "@/Components/Navbar";
 import Footer from "@/Components/LandingPage/Footer";
@@ -78,6 +79,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     ],
   };
 
+  const pathname = usePathname();
+  const isDashboard = pathname === '/dashboard';
+  const isLogin = pathname === '/login';
+  const isSignUp = pathname === '/sign-up';
+  const isForgotPassword = pathname === '/forgot-password';
+  const isResetPassword = pathname === '/reset-password';
+
   return (
     <html lang="en">
       <head>
@@ -88,9 +96,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${raleway.variable} antialiased`}>
         <Toaster position="top-center" reverseOrder={false} />
-        <Navbar />
+        {!isLogin && !isSignUp && !isForgotPassword && !isResetPassword && <Navbar />}
         {children}
-        <Footer />
+        {!isDashboard && <Footer />}
       </body>
     </html>
   );

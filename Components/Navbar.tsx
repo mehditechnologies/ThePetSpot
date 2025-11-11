@@ -3,16 +3,32 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
 
+interface AuthUser {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  profileImage?: string;
+}
+
+interface AuthStore {
+  authUser: AuthUser | null;
+  isSigningUp: boolean;
+  isLoggingIn: boolean;
+  isUpdatingProfile: boolean;
+  isCheckingAuth: boolean;
+  signup: (data: any) => Promise<void>;
+  login: (formData: any) => Promise<boolean>;
+  logout: () => Promise<boolean>;
+  checkAuth: () => Promise<void>;
+}
+
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const router = useRouter();
-  type AuthStoreType = {
-    logout: (data: any) => Promise<void>;
-    authUser: any; // changed from [] to any (or you can use object | null for stricter typing)
-  };
-
-  const { authUser, logout } = authStore() as unknown as AuthStoreType; // ✅ get authUser from zustand
-  console.log("Hello authUser", authUser);
+  const store = authStore() as AuthStore;
+  const { authUser, logout } = store;
+  // console.log("Hello authUser", authUser);
   const toggleMenu = (menu: string) => {
     setOpenMenu(openMenu === menu ? null : menu);
   };
@@ -22,8 +38,8 @@ export default function Navbar() {
   const dropdownLinkClassesLogin =
     "block px-3 py-1.5 border-b text-[#202020] border-transparent transition-colors bg-[#FFAC0D] border-gray-300 border-r-gray-300";
 
-  const handleLogout = () => {
-    logout({ authUser: null });
+  const handleLogout = async () => {
+    await logout();
     router.push("/");
   };
 
@@ -186,9 +202,19 @@ export default function Navbar() {
             {authUser ? (
               <button
                 onClick={() => toggleMenu("user")}
-                className="w-10 h-10 rounded-full bg-[#FFAC0D] flex items-center justify-center text-white font-semibold cursor-pointer"
+                className="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-lg cursor-pointer"
               >
-                {authUser.name[0].toUpperCase()}
+                {authUser.profileImage ? (
+                  <img
+                    src={authUser.profileImage}
+                    alt={`${authUser.name}'s profile`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#FFAC0D] flex items-center justify-center text-white font-semibold">
+                    {authUser.name[0].toUpperCase()}
+                  </div>
+                )}
               </button>
             ) : (
               <button
@@ -219,19 +245,19 @@ export default function Navbar() {
 
             {openMenu === "user" && authUser && (
               <div className="absolute right-0 mt-2 w-44 bg-white text-gray-700 rounded-md shadow-lg">
-                <a
+                {/* <a
                   href="/profile"
                   className={dropdownLinkClasses}
                   onClick={() => setOpenMenu(null)}
                 >
                   Profile
-                </a>
+                </a> */}
                 <a
-                  href="/post-your-ads"
+                  href="/dashboard"
                   className={dropdownLinkClasses}
                   onClick={() => setOpenMenu(null)}
                 >
-                  Post Your Ads
+                  Dashboard
                 </a>
                 <button
                   className={`text-start ${dropdownLinkClasses} `}

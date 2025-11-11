@@ -247,7 +247,7 @@ export default function PetsAd() {
     };
 
     try {
-      await postAd(payload);
+      await postAd(payload as any);
       // cleanup blob urls on reset
       revokeAllUrls(state.images);
       dispatch({ type: "RESET" });
