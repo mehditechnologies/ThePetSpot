@@ -3,10 +3,21 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaAngleRight } from "react-icons/fa";
+import { authStore } from "@/Store/authStore";
 
 export default function HeroSection() {
   const router = useRouter();
   const [selectedPet, setSelectedPet] = useState("");
+  const store = authStore() as any;
+  const { authUser } = store;
+
+  const handleAddPetClick = () => {
+    if (authUser) {
+      router.push("/dashboard");
+    } else {
+      router.push("/login");
+    }
+  };
 
   const handleSearch = () => {
     if (
@@ -109,7 +120,10 @@ export default function HeroSection() {
           </div>
 
           <div>
-            <button className="bg-[#028d8f] text-white px-5 py-3 rounded-full text-xs hover:bg-[#037273]">
+            <button 
+              onClick={handleAddPetClick}
+              className="bg-[#028d8f] text-white px-5 py-3 rounded-full text-xs hover:bg-[#037273]"
+            >
               Add Your Pet
               <FaAngleRight className="inline mb-0.5 ml-2" />
             </button>

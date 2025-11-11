@@ -8,6 +8,7 @@ interface AuthUser {
   name: string;
   email: string;
   role: string;
+  profileImage?: string;
 }
 
 interface AuthStore {
@@ -27,7 +28,7 @@ export default function Navbar() {
   const router = useRouter();
   const store = authStore() as AuthStore;
   const { authUser, logout } = store;
-  console.log("Hello authUser", authUser);
+  // console.log("Hello authUser", authUser);
   const toggleMenu = (menu: string) => {
     setOpenMenu(openMenu === menu ? null : menu);
   };
@@ -201,9 +202,19 @@ export default function Navbar() {
             {authUser ? (
               <button
                 onClick={() => toggleMenu("user")}
-                className="w-10 h-10 rounded-full bg-[#FFAC0D] flex items-center justify-center text-white font-semibold cursor-pointer"
+                className="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-lg cursor-pointer"
               >
-                {authUser.name[0].toUpperCase()}
+                {authUser.profileImage ? (
+                  <img
+                    src={authUser.profileImage}
+                    alt={`${authUser.name}'s profile`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#FFAC0D] flex items-center justify-center text-white font-semibold">
+                    {authUser.name[0].toUpperCase()}
+                  </div>
+                )}
               </button>
             ) : (
               <button
@@ -234,13 +245,13 @@ export default function Navbar() {
 
             {openMenu === "user" && authUser && (
               <div className="absolute right-0 mt-2 w-44 bg-white text-gray-700 rounded-md shadow-lg">
-                <a
+                {/* <a
                   href="/profile"
                   className={dropdownLinkClasses}
                   onClick={() => setOpenMenu(null)}
                 >
                   Profile
-                </a>
+                </a> */}
                 <a
                   href="/dashboard"
                   className={dropdownLinkClasses}

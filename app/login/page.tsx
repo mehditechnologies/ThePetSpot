@@ -1,13 +1,16 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
+import { authStore } from "@/Store/authStore";
 
 interface AuthStore {
   login: (formData: any) => Promise<boolean>;
   isLoggingIn: boolean;
+  authUser: any;
+  isCheckingAuth: boolean;
+  checkAuth: () => Promise<void>;
 }
 
 export default function LoginPage() {
@@ -19,7 +22,42 @@ export default function LoginPage() {
 
   const router = useRouter();
   const store = authStore() as AuthStore;
-  const { login, isLoggingIn } = store;
+  const { login, isLoggingIn, authUser, isCheckingAuth, checkAuth } = store;
+
+  // Check authentication on mount
+  useEffect(() => {
+    const verifyAuth = async () => {
+      await checkAuth();
+    };
+    verifyAuth();
+  }, [checkAuth]);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isCheckingAuth) return;
+
+    if (authUser) {
+      router.push('/dashboard');
+      return;
+    }
+  }, [authUser, isCheckingAuth, router]);
+
+  // Show loading while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-[#fdf3f3]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#04A4C3] border-t-transparent mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if authenticated (will redirect)
+  if (authUser) {
+    return null;
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +72,7 @@ export default function LoginPage() {
     const success = await login(formData);
 
     if (success) {
-      router.push("/dashboard"); // navigate to dashboard after login
+      router.push("/"); 
     }
   };
 
@@ -90,7 +128,7 @@ export default function LoginPage() {
           </p>
 
           {/* Tabs */}
-          <div className="flex justify-center text-base font-bold mb-4">
+          {/* <div className="flex justify-center text-base font-bold mb-4">
             <button
               className={`pb-1 px-5 border-b-3 transition font-bold ${
                 activeTab === "password"
@@ -111,7 +149,7 @@ export default function LoginPage() {
             >
               Login with OTP
             </button>
-          </div>
+          </div> */}
 
           <hr className="mb-4 font-light text-gray-200" />
 
@@ -143,6 +181,16 @@ export default function LoginPage() {
                     }`}
                     style={{ fontSize: 20 }}
                   />
+                </div>
+
+                {/* Forgot Password Link */}
+                <div className="text-right">
+                  <a
+                    href="/forgot-password"
+                    className="text-sm text-[#32b5ce] hover:underline"
+                  >
+                    Forgot Password?
+                  </a>
                 </div>
               </>
             ) : (

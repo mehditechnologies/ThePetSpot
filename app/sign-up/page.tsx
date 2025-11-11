@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { toast } from "react-hot-toast";
@@ -20,7 +20,49 @@ export default function SignUpPage() {
   });
 
   // Get signup function and loading state from zustand
-  const { signup, isSigningUp } = authStore();
+  type AuthStore = {
+    signup: (data: Record<string, any>) => Promise<any>;
+    isSigningUp: boolean;
+    authUser: any;
+    isCheckingAuth: boolean;
+    checkAuth: () => Promise<void>;
+  };
+  const { signup, isSigningUp, authUser, isCheckingAuth, checkAuth } = authStore() as AuthStore;
+
+  // Check authentication on mount
+  useEffect(() => {
+    const verifyAuth = async () => {
+      await checkAuth();
+    };
+    verifyAuth();
+  }, [checkAuth]);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isCheckingAuth) return;
+
+    if (authUser) {
+      router.push('/dashboard');
+      return;
+    }
+  }, [authUser, isCheckingAuth, router]);
+
+  // Show loading while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-[#fdf3f3]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#04A4C3] border-t-transparent mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if authenticated (will redirect)
+  if (authUser) {
+    return null;
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -97,7 +139,7 @@ export default function SignUpPage() {
             />
 
             {/* Phone Input */}
-            <PhoneInput
+            {/* <PhoneInput
               country={"in"}
               value={phone}
               onChange={setPhone}
@@ -134,7 +176,7 @@ export default function SignUpPage() {
                 fontSize: "14px",
               }}
               dropdownStyle={{ maxHeight: "250px" }}
-            />
+            /> */}
 
             {/* Email */}
             <input
@@ -159,7 +201,7 @@ export default function SignUpPage() {
             />
 
             {/* Gender */}
-            <select
+            {/* <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
@@ -170,10 +212,10 @@ export default function SignUpPage() {
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
-            </select>
+            </select> */}
 
             {/* City */}
-            <input
+            {/* <input
               type="text"
               name="city"
               placeholder="City"
@@ -181,7 +223,7 @@ export default function SignUpPage() {
               onChange={handleChange}
               className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
               required
-            />
+            /> */}
 
             {/* Pet Parent */}
             <div>

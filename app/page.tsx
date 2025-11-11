@@ -30,12 +30,6 @@ export default function Home() {
     verifyAuth();
   }, [checkAuth]);
 
-  useEffect(() => {
-    if (!isCheckingAuth && authUser) {
-      router.push("/dashboard");
-    }
-  }, [authUser, isCheckingAuth, router]);
-
   if (isCheckingAuth) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 flex items-center justify-center">
