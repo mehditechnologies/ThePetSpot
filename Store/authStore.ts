@@ -63,10 +63,10 @@ export const authStore = create(
       // ✅ Logout
       logout: async () => {
         try {
-          await axios.get(`${Base_URL}/api/users/logout`, {
+          const res = await axios.get(`${Base_URL}/api/users/logout`, {
             withCredentials: true,
           });
-          console.log("api Called");
+          console.log("api Called response", res.data);
           set({ authUser: null });
           toast.success("Logged out successfully");
           return true;
