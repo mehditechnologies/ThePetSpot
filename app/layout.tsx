@@ -16,7 +16,7 @@ const raleway = Raleway({
 });
 
 // SEO Metadata
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Mr n Mrs Pet | Trusted Pet Care & Marketplace in India",
   description:
     "Mr n Mrs Pet offers trusted pet care services, adoption support, and a wide range of pets and pet products across India.",
