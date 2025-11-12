@@ -65,11 +65,7 @@ export const authStore = create(
       logout: async () => {
         try {
           const res = await axios.get(`${Base_URL}/api/users/logout`, {
-            withCredentials: true,
-            headers: {
-              'Cache-Control': 'no-cache',
-              'Pragma': 'no-cache'
-            }
+            withCredentials: true
           });
           console.log("api Called response", res.data);
           
@@ -129,9 +125,9 @@ export const authStore = create(
         try {
           const res = await axios.get(`${Base_URL}/api/users/me`, {
             withCredentials: true,
+            // Remove cache control headers that cause CORS issues
             headers: {
-              'Cache-Control': 'no-cache',
-              'Pragma': 'no-cache'
+              'Content-Type': 'application/json'
             }
           });
           console.log("Auth check successful:", res.data.user.name);
