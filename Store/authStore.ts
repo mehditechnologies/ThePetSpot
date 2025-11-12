@@ -17,6 +17,7 @@ export const authStore = create(
       isCheckingAuth: true,
       isForgotPassword: false,
       isResetPassword: false,
+      lastLogout: null,
 
       // ✅ Signup
       signup: async (data: any) => {
@@ -65,21 +66,37 @@ export const authStore = create(
         try {
           const res = await axios.get(`${Base_URL}/api/users/logout`, {
             withCredentials: true,
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Pragma': 'no-cache'
+            }
           });
           console.log("api Called response", res.data);
           
-          // Immediately clear user state
-          set({ authUser: null });
+          // Immediately clear user state and set logout timestamp
+          set({ authUser: null, lastLogout: Date.now() });
           
-          // Clear any local storage persistence
+          // Aggressively clear all storage
           localStorage.removeItem('auth-storage');
+          localStorage.clear(); // Clear all localStorage
+          sessionStorage.clear(); // Clear all sessionStorage
+          
+          // Force reload to clear any cached state
+          if (typeof window !== 'undefined') {
+            // Add cache busting parameter
+            window.location.href = window.location.pathname + '?logout=' + Date.now();
+          }
           
           toast.success("Logged out successfully");
           return true;
         } catch (error) {
-          // Even if logout API fails, clear local state
-          set({ authUser: null });
+          // Even if logout API fails, clear local state aggressively
+          set({ authUser: null, lastLogout: Date.now() });
+          
+          // Clear all storage even on error
           localStorage.removeItem('auth-storage');
+          localStorage.clear();
+          sessionStorage.clear();
           
           if (axios.isAxiosError(error)) {
             console.error("Logout error:", error);
@@ -87,23 +104,43 @@ export const authStore = create(
           } else {
             toast.error("Logout failed");
           }
+          
+          // Force page reload even on error
+          if (typeof window !== 'undefined') {
+            window.location.href = window.location.pathname + '?logout=' + Date.now();
+          }
+          
           return false;
         }
       },
 
       // ✅ Check auth on page load
       checkAuth: async () => {
+        // Check if we just logged out (from URL parameter)
+        if (typeof window !== 'undefined' && window.location.search.includes('logout=')) {
+          console.log('Detected logout parameter, skipping auth check');
+          set({ authUser: null, isCheckingAuth: false });
+          // Clean URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+          return;
+        }
+
         set({ isCheckingAuth: true });
         try {
           const res = await axios.get(`${Base_URL}/api/users/me`, {
             withCredentials: true,
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Pragma': 'no-cache'
+            }
           });
-          // console.log("additional Api Call");
+          console.log("Auth check successful:", res.data.user.name);
           set({ authUser: res.data.user });
         } catch (error) {
-          if (axios.isAxiosError(error)) {
-            set({ authUser: null });
-          }
+          console.log("Auth check failed, clearing state");
+          set({ authUser: null });
+          // Clear any stale localStorage data
+          localStorage.removeItem('auth-storage');
         } finally {
           set({ isCheckingAuth: false });
         }
@@ -184,7 +221,21 @@ export const authStore = create(
     }),
     {
       name: "auth-storage", // persisted in localStorage
-      partialize: (state: any) => ({ authUser: state.authUser }), // only persist authUser
+      partialize: (state: any) => ({ 
+        authUser: state.authUser,
+        lastLogout: state.lastLogout 
+      }), // persist authUser and logout timestamp
+      onRehydrateStorage: () => (state: any) => {
+        // Check if we recently logged out
+        if (state?.lastLogout) {
+          const timeSinceLogout = Date.now() - state.lastLogout;
+          // If logged out less than 5 seconds ago, don't restore state
+          if (timeSinceLogout < 5000) {
+            console.log('Recent logout detected, not restoring auth state');
+            state.authUser = null;
+          }
+        }
+      }
     }
   )
 );
