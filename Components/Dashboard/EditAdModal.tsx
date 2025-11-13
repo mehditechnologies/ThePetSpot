@@ -1,28 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { dogBreeds, catBreeds, suitableForOptions, pakistaniProvinces, provinceCities } from '@/utils/breeds';
-
-interface Ad {
-  _id: string;
-  title: string;
-  description: string;
-  price: string;
-  category: string;
-  province: string;
-  city: string;
-  breed: string;
-  age: string;
-  gender: string;
-  weight: string;
-  height: string;
-  maxLife: string;
-  contactNumber: string;
-  vaccinated: boolean;
-  kcpRegistered: boolean;
-  suitableFor: string[];
-  images: string[];
-  isApproved: 'pending' | 'approved' | 'rejected';
-}
+import { Ad } from '@/app/dashboard/page';
 
 interface EditAdModalProps {
   isOpen: boolean;

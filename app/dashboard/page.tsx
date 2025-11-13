@@ -34,7 +34,7 @@ interface AuthStore {
   checkAuth: () => Promise<void>;
 }
 
-interface Ad {
+export interface Ad {
   _id: string;
   title: string;
   description: string;
