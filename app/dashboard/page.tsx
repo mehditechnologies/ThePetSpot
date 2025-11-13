@@ -10,6 +10,7 @@ import StatsCards from '@/Components/Dashboard/StatsCards';
 import AdsGrid from '@/Components/Dashboard/AdsGrid';
 import CreateAdModal from '@/Components/Dashboard/CreateAdModal';
 import EditAdModal from '@/Components/Dashboard/EditAdModal';
+import CreateAdForm from '@/Components/Dashboard/CreateAdForm';
 import EmptyState from '@/Components/Dashboard/EmptyState';
 import ProfileInfoForm from '@/Components/Profile/ProfileInfoForm';
 import ChangePasswordForm from '@/Components/Profile/ChangePasswordForm';
@@ -85,7 +86,7 @@ export default function Dashboard() {
   const [editingAd, setEditingAd] = useState<Ad | null>(null);
   const [modalOrigin, setModalOrigin] = useState<{ x: number; y: number } | null>(null);
   const [editModalOrigin, setEditModalOrigin] = useState<{ x: number; y: number } | null>(null);
-  const [activeMenu, setActiveMenu] = useState<'overview' | 'ads' | 'profile' | 'change-password'>('overview');
+  const [activeMenu, setActiveMenu] = useState<'overview' | 'ads' | 'create-ad' | 'profile' | 'change-password'>('overview');
 
   // Check authentication on mount
   useEffect(() => {
@@ -119,12 +120,13 @@ export default function Dashboard() {
     }
   };
 
-  const handleAdSubmit = async (formData: FormData) => {
+  const handleAdSubmit = async (formData: FormData): Promise<boolean> => {
     const success = await postAd(formData);
     if (success) {
       setShowModal(false);
       fetchUserAds(); // Refresh the ads list
     }
+    return success;
   };
 
   const handleAdUpdate = async (adId: string, formData: FormData) => {
@@ -185,7 +187,7 @@ export default function Dashboard() {
           <div className="p-6 h-full">
             <div className="mb-6">
               <button
-                onClick={() => router.back()}
+                onClick={() => router.push("/")}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 group"
                 title="Back to Home"
               >
@@ -219,6 +221,16 @@ export default function Dashboard() {
                 📊 Overview
               </button>
               <button
+                onClick={() => setActiveMenu('create-ad')}
+                className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                  activeMenu === 'create-ad'
+                    ? 'bg-[#028d8f] text-white shadow-md'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                ➕ Create Ad
+              </button>
+              <button
                 onClick={() => setActiveMenu('ads')}
                 className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
                   activeMenu === 'ads'
@@ -226,8 +238,8 @@ export default function Dashboard() {
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                🐾 Ads
-              </button> 
+                🐾 My Ads
+              </button>
               <button
                 onClick={() => setActiveMenu('profile')}
                 className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
@@ -246,7 +258,7 @@ export default function Dashboard() {
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                � Change Password
+                🔒 Change Password
               </button>
             </nav>
           </div>
@@ -278,6 +290,14 @@ export default function Dashboard() {
                 ) : (
                   <EmptyState onCreateAd={() => setShowModal(true)} />
                 )}
+              </div>
+            )}
+
+            {activeMenu === 'create-ad' && (
+              <div className="space-y-6">
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                  <CreateAdForm onSubmit={handleAdSubmit} isSubmitting={isPosting} />
+                </div>
               </div>
             )}
 

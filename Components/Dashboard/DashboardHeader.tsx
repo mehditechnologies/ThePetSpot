@@ -11,7 +11,7 @@ export default function DashboardHeader({ onCreateAd }: DashboardHeaderProps) {
         </h1>
         <p className="text-gray-600">Manage your pet advertisements</p>
       </div>
-      <button
+      {/* <button
         onClick={onCreateAd}
         className="mt-4 sm:mt-0 inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#028d8f] to-[#008080] hover:from-[#00595F] hover:to-[#004d4f] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
       >
@@ -19,7 +19,7 @@ export default function DashboardHeader({ onCreateAd }: DashboardHeaderProps) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
         </svg>
         Create New Ad
-      </button>
+      </button> */}
     </div>
   );
 }

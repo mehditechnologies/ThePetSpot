@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
 
 interface AuthUser {
@@ -28,6 +28,7 @@ export default function Navbar() {
   const router = useRouter();
   const store = authStore() as AuthStore;
   const { authUser, logout } = store;
+  const dropdownRef = useRef<HTMLDivElement>(null);
   // console.log("Hello authUser", authUser);
   const toggleMenu = (menu: string) => {
     setOpenMenu(openMenu === menu ? null : menu);
@@ -43,6 +44,23 @@ export default function Navbar() {
     router.push("/");
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenMenu(null);
+      }
+    };
+
+    if (openMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openMenu]);
+
   return (
     <header className="w-full bg-transparent absolute top-0 right-0 z-30">
       <div className="mx-auto px-52 py-6 flex items-center justify-between relative">
@@ -55,7 +73,7 @@ export default function Navbar() {
         </div>
 
         {/* Navigation */}
-        <nav className="hidden lg:flex gap-10 items-center text-[#ffffff] text-base font-semibold relative">
+        <nav ref={dropdownRef} className="hidden lg:flex gap-10 items-center text-[#ffffff] text-base font-semibold relative">
           {/* Pets Dropdown */}
           <div className="relative">
             <button

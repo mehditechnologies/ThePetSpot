@@ -44,7 +44,7 @@ export default function HeroSection() {
   return (
     <section
       className="relative h-[60vh] w-full bg-cover bg-center flex items-start justify-center text-white"
-      style={{ backgroundImage: "url('/aboutBg.webp')" }}
+      style={{ backgroundImage: "url('/home-banner.jpg')" }}
     >
       <div className="relative z-20 mt-32 w-full max-w-[1100px] text-center px-6">
         <h1 className="text-4xl md:text-4xl font-semibold mb-6 drop-shadow-lg">

@@ -1,12 +1,14 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { dogBreeds, catBreeds, suitableForOptions, pakistaniProvinces, provinceCities } from '@/utils/breeds';
 
 interface AdFormData {
   title: string;
   description: string;
   price: string;
   category: string;
-  location: string;
+  province: string;
+  city: string;
   breed: string;
   age: string;
   gender: string;
@@ -16,7 +18,7 @@ interface AdFormData {
   contactNumber: string;
   vaccinated: boolean;
   kcpRegistered: boolean;
-  suitableFor: string;
+  suitableFor: string[];
   images: File[];
 }
 
@@ -54,7 +56,8 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
     description: '',
     price: '',
     category: '',
-    location: '',
+    province: '',
+    city: '',
     breed: '',
     age: '',
     gender: '',
@@ -64,9 +67,25 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
     contactNumber: '',
     vaccinated: false,
     kcpRegistered: false,
-    suitableFor: '',
+    suitableFor: [],
     images: []
   });
+
+  const getAvailableBreeds = () => {
+    if (formData.category === 'dog') {
+      return dogBreeds;
+    } else if (formData.category === 'cat') {
+      return catBreeds;
+    }
+    return [];
+  };
+
+  const getAvailableCities = () => {
+    if (formData.province && provinceCities[formData.province]) {
+      return provinceCities[formData.province];
+    }
+    return [];
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,10 +98,18 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
         });
       } else if (key === 'vaccinated' || key === 'kcpRegistered') {
         formDataToSend.append(key, value.toString());
+      } else if (key === 'suitableFor') {
+        formDataToSend.append(key, (value as string[]).join(', '));
+      } else if (key === 'province' || key === 'city') {
+        // Skip province and city, we'll combine them into location
       } else {
         formDataToSend.append(key, value as string);
       }
     });
+
+    // Combine province and city into location
+    const location = `${formData.city}, ${formData.province}`;
+    formDataToSend.append('location', location);
 
     onSubmit(formDataToSend);
 
@@ -92,7 +119,8 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
       description: '',
       price: '',
       category: '',
-      location: '',
+      province: '',
+      city: '',
       breed: '',
       age: '',
       gender: '',
@@ -102,7 +130,7 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
       contactNumber: '',
       vaccinated: false,
       kcpRegistered: false,
-      suitableFor: '',
+      suitableFor: [],
       images: []
     });
     setImagePreviews([]);
@@ -139,15 +167,41 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
 
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({
-        ...prev,
-        [name]: checked
-      }));
+
+      if (name === 'vaccinated' || name === 'kcpRegistered') {
+        setFormData(prev => ({
+          ...prev,
+          [name]: checked
+        }));
+      } else if (name.startsWith('suitableFor-')) {
+        // Handle suitableFor checkboxes
+        const option = name.replace('suitableFor-', '');
+        setFormData(prev => ({
+          ...prev,
+          suitableFor: checked
+            ? [...prev.suitableFor, option]
+            : prev.suitableFor.filter(item => item !== option)
+        }));
+      }
     } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
+      setFormData(prev => {
+        const newData = {
+          ...prev,
+          [name]: value
+        };
+
+        // Reset breed when category changes
+        if (name === 'category' && value !== prev.category) {
+          newData.breed = '';
+        }
+
+        // Reset city when province changes
+        if (name === 'province' && value !== prev.province) {
+          newData.city = '';
+        }
+
+        return newData;
+      });
     }
   };
 
@@ -243,16 +297,24 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
                 <label htmlFor="breed" className="block text-sm font-semibold text-gray-700 mb-2">
                   Breed *
                 </label>
-                <input
+                <select
                   id="breed"
                   name="breed"
-                  type="text"
                   value={formData.breed}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#028d8f] focus:border-transparent transition-all duration-200"
-                  placeholder="e.g., Golden Retriever"
-                />
+                  disabled={!formData.category}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#028d8f] focus:border-transparent transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                >
+                  <option value="">
+                    {formData.category ? 'Select a breed' : 'Please select a category first'}
+                  </option>
+                  {getAvailableBreeds().map((breed) => (
+                    <option key={breed} value={breed}>
+                      {breed}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -371,21 +433,53 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
           {/* Location and Contact */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Location & Contact</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="location" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Location *
-                </label>
-                <input
-                  id="location"
-                  name="location"
-                  type="text"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#028d8f] focus:border-transparent transition-all duration-200"
-                  placeholder="City, State"
-                />
+            <div className="grid grid-cols-1 gap-6">
+              {/* First row: Province and City */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="province" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Province *
+                  </label>
+                  <select
+                    id="province"
+                    name="province"
+                    value={formData.province}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#028d8f] focus:border-transparent transition-all duration-200"
+                  >
+                    <option value="">Select Province</option>
+                    {pakistaniProvinces.map((province) => (
+                      <option key={province} value={province}>
+                        {province}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="city" className="block text-sm font-semibold text-gray-700 mb-2">
+                    City *
+                  </label>
+                  <select
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    required
+                    disabled={!formData.province}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#028d8f] focus:border-transparent transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  >
+                    <option value="">
+                      {formData.province ? 'Select City' : 'Please select province first'}
+                    </option>
+                    {getAvailableCities().map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div>
@@ -409,7 +503,7 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
           {/* Price and Additional Info */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Pricing & Additional Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               <div>
                 <label htmlFor="price" className="block text-sm font-semibold text-gray-700 mb-2">
                   Price (₨) *
@@ -428,18 +522,28 @@ export default function CreateAdModal({ isOpen, onClose, onSubmit, isSubmitting,
               </div>
 
               <div>
-                <label htmlFor="suitableFor" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
                   Suitable For
                 </label>
-                <input
-                  id="suitableFor"
-                  name="suitableFor"
-                  type="text"
-                  value={formData.suitableFor}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#028d8f] focus:border-transparent transition-all duration-200"
-                  placeholder="e.g., Kids, Apartments, First-time owners (comma separated)"
-                />
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {suitableForOptions.map((option) => (
+                    <label key={option} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        name={`suitableFor-${option}`}
+                        checked={formData.suitableFor.includes(option)}
+                        onChange={handleInputChange}
+                        className="w-4 h-4 text-[#028d8f] bg-gray-100 border-gray-300 rounded focus:ring-[#028d8f] focus:ring-2"
+                      />
+                      <span className="ml-2 text-sm font-medium text-gray-700">{option}</span>
+                    </label>
+                  ))}
+                </div>
+                {formData.suitableFor.length > 0 && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Selected: {formData.suitableFor.join(', ')}
+                  </p>
+                )}
               </div>
             </div>
 
