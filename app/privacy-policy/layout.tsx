@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Mr n Mrs Pet",
+  title: "Privacy Policy | Pets Corner",
   description:
-    "Read the official Privacy Policy of Mr n Mrs Pet to learn how we collect, process, store, and protect your personal data in compliance with the Digital Personal Data Protection Act, 2023.",
+    "Read the official Privacy Policy of Pets Corner to learn how we collect, process, store, and protect your personal data in compliance with the Digital Personal Data Protection Act, 2023.",
   keywords: [
-    "Mr n Mrs Pet privacy policy",
+    "Pets Corner privacy policy",
     "pet data protection",
     "pet service data usage",
-    "Mr n Mrs Pet data privacy",
+    "Pets Corner data privacy",
     "Digital Personal Data Protection Act compliance",
     "pet website privacy policy",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Privacy Policy | Mr n Mrs Pet",
+    title: "Privacy Policy | Pets Corner",
     description:
-      "Mr n Mrs Pet’s Privacy Policy explains how we collect, use, and safeguard your information under India’s data protection laws.",
+      "Pets Corner’s Privacy Policy explains how we collect, use, and safeguard your information under India’s data protection laws.",
     url: "https://www.mrnmrspet.com/privacy-policy",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/Blog/blog.webp",
         width: 1200,
         height: 630,
-        alt: "Privacy Policy - Mr n Mrs Pet",
+        alt: "Privacy Policy - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Privacy Policy | Mr n Mrs Pet",
+    title: "Privacy Policy | Pets Corner",
     description:
-      "Learn how Mr n Mrs Pet protects your privacy and manages your personal data responsibly and securely.",
+      "Learn how Pets Corner protects your privacy and manages your personal data responsibly and securely.",
     images: ["/Blog/blog.webp"],
     creator: "@mrnmrspet",
   },
@@ -65,13 +65,13 @@ export default function PrivacyPolicyLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "PrivacyPolicy",
-    name: "Privacy Policy | Mr n Mrs Pet",
+    name: "Privacy Policy | Pets Corner",
     url: "https://www.mrnmrspet.com/privacy-policy",
     description:
-      "Official Privacy Policy of Mr n Mrs Pet detailing how we handle, store, and use customer information in compliance with Indian data protection laws.",
+      "Official Privacy Policy of Pets Corner detailing how we handle, store, and use customer information in compliance with Indian data protection laws.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",

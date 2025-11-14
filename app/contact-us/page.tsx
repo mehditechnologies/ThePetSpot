@@ -6,7 +6,7 @@ export default function page() {
   return (
     <div>
       <HeroSection
-        title="About Mr n Mrs Pet"
+        title="About Pets Corner"
         bgImage="/contact.webp"
         currentPage="Contact Us"
       />

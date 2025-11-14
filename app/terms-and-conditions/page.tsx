@@ -5,7 +5,7 @@ export default function TermsAndConditionsPage() {
   return (
     <div>
       <HeroSection
-        title="About Mr n Mrs Pet"
+        title="About Pets Corner"
         bgImage="/terms.webp"
         currentPage="Terms & Conditions"
       />
@@ -13,12 +13,12 @@ export default function TermsAndConditionsPage() {
       <TextSection
         heading="Terms & Conditions"
         paragraphs={[
-          "These Terms and Conditions (“Terms”) form a legally binding electronic agreement under the Information Technology Act, 2000, between you (“User”) and Mr n Mrs Pet (operated from 10, Shaheed Amit Bhardwaj Marg, Jai Shree Nagar, Sector 5, Malviya Nagar, Jaipur, Rajasthan 302017, hereinafter referred to as “Company,” “we,” “us,” or “our”).",
+          "These Terms and Conditions (“Terms”) form a legally binding electronic agreement under the Information Technology Act, 2000, between you (“User”) and Pets Corner (operated from 10, Shaheed Amit Bhardwaj Marg, Jai Shree Nagar, Sector 5, Malviya Nagar, Jaipur, Rajasthan 302017, hereinafter referred to as “Company,” “we,” “us,” or “our”).",
           "By accessing or using our website https://www.mrnmrspet.com (“Platform”), you agree to these Terms and our Privacy Policy. If you do not agree, please discontinue use immediately.",
           "Users must be 18 years or older and legally competent to contract under the Indian Contract Act, 1872.",
           "To access or book services, users may be required to register an account by providing accurate and current information.",
           "Users are responsible for maintaining the confidentiality of their account credentials and for all activities under their account.",
-          "Mr n Mrs Pet offers a variety of pet-related products and services, including but not limited to grooming, training, hostel stays, walking, and the sale of pet accessories, foods, toys and other pet-care products.",
+          "Pets Corner offers a variety of pet-related products and services, including but not limited to grooming, training, hostel stays, walking, and the sale of pet accessories, foods, toys and other pet-care products.",
           "All orders and services are subject to availability, local regulations, and may be modified or discontinued without prior notice.",
           "The Company follows and enforces a strict zero-tolerance policy against any unethical, unsafe, or illegal practices in the delivery of its services, sale or promotion of pet-related foods, products, or accessories. All offerings made available through the Platform are sourced, prepared, and provided in compliance with applicable quality, safety, and animal welfare standards. The Company neither engages in nor supports any activity that may compromise the health, safety, or well-being of pets or users. Any violation of this policy by associated service providers, vendors, or partners shall result in immediate suspension, removal, and reporting to the relevant authorities.",
           "All payments are processed securely through third-party payment gateways or UPI.",

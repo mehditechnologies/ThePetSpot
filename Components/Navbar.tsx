@@ -69,7 +69,7 @@ export default function Navbar() {
           className="flex items-center gap-3 cursor-pointer"
           onClick={() => router.push("/")}
         >
-          <img src="/petlogo.svg" alt="logo" className="h-8 w-auto" />
+          <img src="/petLogo.png" alt="logo" className="h-12 w-auto" />
         </div>
 
         {/* Navigation */}

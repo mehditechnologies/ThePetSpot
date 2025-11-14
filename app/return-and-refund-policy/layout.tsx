@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Refund & Cancellation Policy | Mr n Mrs Pet",
+  title: "Refund & Cancellation Policy | Pets Corner",
   description:
-    "Read Mr n Mrs Pet’s Refund and Cancellation Policy covering eligibility for returns, partial refunds, service cancellations, and non-refundable conditions for pet products and services.",
+    "Read Pets Corner’s Refund and Cancellation Policy covering eligibility for returns, partial refunds, service cancellations, and non-refundable conditions for pet products and services.",
   keywords: [
-    "Mr n Mrs Pet refund policy",
+    "Pets Corner refund policy",
     "pet services cancellation",
-    "return policy Mr n Mrs Pet",
+    "return policy Pets Corner",
     "pet product refunds India",
     "pet food return policy",
     "online pet shop refund",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Refund & Cancellation Policy | Mr n Mrs Pet",
+    title: "Refund & Cancellation Policy | Pets Corner",
     description:
-      "Understand Mr n Mrs Pet’s refund, return, and cancellation policy for pet-related services and products — ensuring transparency and trust for every order.",
+      "Understand Pets Corner’s refund, return, and cancellation policy for pet-related services and products — ensuring transparency and trust for every order.",
     url: "https://www.mrnmrspet.com/refund-policy",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/terms.webp",
         width: 1200,
         height: 630,
-        alt: "Refund and Cancellation Policy - Mr n Mrs Pet",
+        alt: "Refund and Cancellation Policy - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Refund & Cancellation Policy | Mr n Mrs Pet",
+    title: "Refund & Cancellation Policy | Pets Corner",
     description:
-      "Review Mr n Mrs Pet’s refund and cancellation terms for pet products, grooming, training, and boarding services across India.",
+      "Review Pets Corner’s refund and cancellation terms for pet products, grooming, training, and boarding services across India.",
     images: ["/terms.webp"],
     creator: "@mrnmrspet",
   },
@@ -65,13 +65,13 @@ export default function RefundPolicyLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "RefundPolicy",
-    name: "Refund & Cancellation Policy | Mr n Mrs Pet",
+    name: "Refund & Cancellation Policy | Pets Corner",
     url: "https://www.mrnmrspet.com/refund-policy",
     description:
-      "Official Refund and Cancellation Policy of Mr n Mrs Pet covering refunds, returns, and service cancellations for pet care products and services.",
+      "Official Refund and Cancellation Policy of Pets Corner covering refunds, returns, and service cancellations for pet care products and services.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",
@@ -80,7 +80,7 @@ export default function RefundPolicyLayout({
     },
     mainEntity: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       sameAs: [
         "https://www.facebook.com/mrnmrspet",
         "https://www.instagram.com/mrnmrspet",

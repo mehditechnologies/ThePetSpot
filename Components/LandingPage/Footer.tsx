@@ -27,7 +27,7 @@ export default function Footer() {
         <div>
           <img
             src="/Footer.png"
-            alt="Mr n Mrs Pet Logo"
+            alt="Pets Corner Logo"
             className="h-10 mb-4"
           />
           <p className="text-sm leading-relaxed">

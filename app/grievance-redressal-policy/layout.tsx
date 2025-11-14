@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Grievance Redressal Policy | Mr n Mrs Pet",
+  title: "Grievance Redressal Policy | Pets Corner",
   description:
-    "Learn about the Grievance Redressal Policy of Mr n Mrs Pet. Contact the Grievance Officer for any complaints or service-related issues and understand the resolution process.",
+    "Learn about the Grievance Redressal Policy of Pets Corner. Contact the Grievance Officer for any complaints or service-related issues and understand the resolution process.",
   keywords: [
     "grievance redressal",
     "complaint policy",
-    "Mr n Mrs Pet",
+    "Pets Corner",
     "pet marketplace",
     "customer support",
     "pet services complaint",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Grievance Redressal Policy | Mr n Mrs Pet",
+    title: "Grievance Redressal Policy | Pets Corner",
     description:
-      "Access the Grievance Redressal Policy of Mr n Mrs Pet to understand complaint handling and resolution procedures for all pet-related services and products.",
+      "Access the Grievance Redressal Policy of Pets Corner to understand complaint handling and resolution procedures for all pet-related services and products.",
     url: "https://www.mrnmrspet.com/grievance-redressal",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/terms.webp",
         width: 1200,
         height: 630,
-        alt: "Grievance Redressal Policy - Mr n Mrs Pet",
+        alt: "Grievance Redressal Policy - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Grievance Redressal Policy | Mr n Mrs Pet",
+    title: "Grievance Redressal Policy | Pets Corner",
     description:
-      "Review our Grievance Redressal Policy and reach out to the Grievance Officer for any complaints or service concerns at Mr n Mrs Pet.",
+      "Review our Grievance Redressal Policy and reach out to the Grievance Officer for any complaints or service concerns at Pets Corner.",
     images: ["/terms.webp"],
     creator: "@mrnmrspet",
   },
@@ -65,13 +65,13 @@ export default function GrievanceRedressalLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Grievance Redressal Policy | Mr n Mrs Pet",
+    name: "Grievance Redressal Policy | Pets Corner",
     url: "https://www.mrnmrspet.com/grievance-redressal",
     description:
-      "Grievance Redressal Policy of Mr n Mrs Pet: process for handling complaints related to pets, services, and products on the platform.",
+      "Grievance Redressal Policy of Pets Corner: process for handling complaints related to pets, services, and products on the platform.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",

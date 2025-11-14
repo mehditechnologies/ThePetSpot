@@ -1,34 +1,34 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pets for Sale | Mr n Mrs Pet",
+  title: "Pets for Sale | Pets Corner",
   description:
-    "Find adorable pets for sale at Mr n Mrs Pet. Browse verified listings of dogs, cats, birds, and more from trusted pet parents and breeders across India.",
+    "Find adorable pets for sale at Pets Corner. Browse verified listings of dogs, cats, birds, and more from trusted pet parents and breeders across India.",
   keywords: [
     "pets for sale",
     "dogs for sale",
     "cats for sale",
     "birds for sale",
-    "Mr n Mrs Pet",
+    "Pets Corner",
     "buy pets online",
     "pet adoption India",
     "pet marketplace",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Pets for Sale | Mr n Mrs Pet",
+    title: "Pets for Sale | Pets Corner",
     description:
-      "Explore a wide range of verified pets for sale including dogs, cats, and other adorable companions at Mr n Mrs Pet.",
+      "Explore a wide range of verified pets for sale including dogs, cats, and other adorable companions at Pets Corner.",
     url: "https://www.mrnmrspet.com/pet-for-sale",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/aboutBg.webp",
         width: 1200,
         height: 630,
-        alt: "Pets for Sale - Mr n Mrs Pet",
+        alt: "Pets for Sale - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pets for Sale | Mr n Mrs Pet",
+    title: "Pets for Sale | Pets Corner",
     description:
-      "Buy or adopt your next furry friend from trusted pet parents and breeders on Mr n Mrs Pet.",
+      "Buy or adopt your next furry friend from trusted pet parents and breeders on Pets Corner.",
     images: ["/aboutBg.webp"],
     creator: "@mrnmrspet",
   },
@@ -67,13 +67,13 @@ export default function PetForSaleLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Pets for Sale | Mr n Mrs Pet",
+    name: "Pets for Sale | Pets Corner",
     url: "https://www.mrnmrspet.com/pet-for-sale",
     description:
-      "Find verified pets for sale at Mr n Mrs Pet — dogs, cats, birds, and more from responsible pet owners and breeders across India.",
+      "Find verified pets for sale at Pets Corner — dogs, cats, birds, and more from responsible pet owners and breeders across India.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",

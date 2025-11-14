@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us | Mr n Mrs Pet",
+  title: "About Us | Pets Corner",
   description:
-    "Learn about Mr n Mrs Pet — our mission, services, and commitment to pet care. We provide trusted grooming, training, boarding, and pet products across India.",
+    "Learn about Pets Corner — our mission, services, and commitment to pet care. We provide trusted grooming, training, boarding, and pet products across India.",
   keywords: [
     "about us",
-    "Mr n Mrs Pet",
+    "Pets Corner",
     "pet care services",
     "pet grooming",
     "pet boarding",
@@ -14,21 +14,21 @@ export const metadata: Metadata = {
     "cat care",
     "pet products",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "About Us | Mr n Mrs Pet",
+    title: "About Us | Pets Corner",
     description:
-      "Discover Mr n Mrs Pet's mission, services, and commitment to quality pet care across India.",
+      "Discover Pets Corner's mission, services, and commitment to quality pet care across India.",
     url: "https://www.mrnmrspet.com/about-us",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/aboutBg.webp",
         width: 1200,
         height: 630,
-        alt: "About Us - Mr n Mrs Pet",
+        alt: "About Us - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "About Us | Mr n Mrs Pet",
+    title: "About Us | Pets Corner",
     description:
-      "Learn about Mr n Mrs Pet, our mission, services, and trusted pet care solutions across India.",
+      "Learn about Pets Corner, our mission, services, and trusted pet care solutions across India.",
     images: ["/aboutBg.webp"],
     creator: "@mrnmrspet",
   },
@@ -60,7 +60,7 @@ export default function AboutUsLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Mr n Mrs Pet",
+    name: "Pets Corner",
     url: "https://www.mrnmrspet.com",
     logo: "https://www.mrnmrspet.com/logo.png",
     sameAs: [
@@ -69,7 +69,7 @@ export default function AboutUsLayout({
       "https://twitter.com/mrnmrspet",
     ],
     description:
-      "Mr n Mrs Pet provides trusted pet care services including grooming, training, boarding, and a variety of pet products across India.",
+      "Pets Corner provides trusted pet care services including grooming, training, boarding, and a variety of pet products across India.",
     contactPoint: [
       {
         "@type": "ContactPoint",

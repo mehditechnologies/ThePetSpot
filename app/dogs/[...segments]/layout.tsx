@@ -39,13 +39,13 @@ export async function generateMetadata({
   // Title & description
   const title = `${breed || "Dogs"} Puppies & Dogs for Sale${
     city ? ` in ${city}` : ""
-  } | Mr n Mrs Pet`;
+  } | Pets Corner`;
 
   const description = `Browse verified ${
     breed || "dogs"
   } puppies and dogs for sale${
     city ? ` in ${city}` : ""
-  } on Mr n Mrs Pet. Trusted breeders and pet parents across Pakistan.`;
+  } on Pets Corner. Trusted breeders and pet parents across Pakistan.`;
 
   // Build canonical URL
   const baseUrl = "https://www.mrnmrspet.com";
@@ -73,7 +73,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonical,
-      siteName: "Mr n Mrs Pet",
+      siteName: "Pets Corner",
       images: [
         {
           url: `${baseUrl}/og-image.jpg`,

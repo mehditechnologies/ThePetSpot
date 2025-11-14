@@ -2,32 +2,32 @@ import type { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Dog Care Tips & Guides | Mr n Mrs Pet",
+  title: "Dog Care Tips & Guides | Pets Corner",
   description:
-    "Discover expert tips and guides for dog care, grooming, feeding, and health on Mr n Mrs Pet's Dog Care blog.",
+    "Discover expert tips and guides for dog care, grooming, feeding, and health on Pets Corner's Dog Care blog.",
   keywords: [
     "dog care tips",
     "dog grooming",
     "dog health",
     "dog feeding",
     "dog blog",
-    "Mr n Mrs Pet dog blog",
+    "Pets Corner dog blog",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Dog Care Tips & Guides | Mr n Mrs Pet",
+    title: "Dog Care Tips & Guides | Pets Corner",
     description:
       "Read our blogs for expert advice on taking care of your dog, including grooming, feeding, and health tips.",
     url: "https://www.mrnmrspet.com/dog-care",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/dogs-care-hero.webp",
         width: 1200,
         height: 630,
-        alt: "Dog Care Blog - Mr n Mrs Pet",
+        alt: "Dog Care Blog - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dog Care Tips & Guides | Mr n Mrs Pet",
+    title: "Dog Care Tips & Guides | Pets Corner",
     description:
-      "Expert dog care guides on grooming, feeding, health, and more at Mr n Mrs Pet.",
+      "Expert dog care guides on grooming, feeding, health, and more at Pets Corner.",
     images: ["/dogs-care-hero.webp"],
     creator: "@mrnmrspet",
   },
@@ -59,11 +59,11 @@ export default function DogCareLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Dog Care Tips & Guides | Mr n Mrs Pet",
+    name: "Dog Care Tips & Guides | Pets Corner",
     url: "https://www.mrnmrspet.com/dog-care",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",

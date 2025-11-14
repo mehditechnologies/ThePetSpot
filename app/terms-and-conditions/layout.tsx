@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Mr n Mrs Pet",
+  title: "Terms & Conditions | Pets Corner",
   description:
-    "Read the official Terms and Conditions of Mr n Mrs Pet – governing your use of our pet services, including grooming, adoption, training, and accessories. Stay informed and safe.",
+    "Read the official Terms and Conditions of Pets Corner – governing your use of our pet services, including grooming, adoption, training, and accessories. Stay informed and safe.",
   keywords: [
-    "Mr n Mrs Pet Terms and Conditions",
+    "Pets Corner Terms and Conditions",
     "pet adoption terms",
     "pet grooming policy",
-    "Mr n Mrs Pet legal",
+    "Pets Corner legal",
     "refund policy pets",
     "pet care services India",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Terms & Conditions | Mr n Mrs Pet",
+    title: "Terms & Conditions | Pets Corner",
     description:
-      "These Terms and Conditions govern the use of Mr n Mrs Pet’s platform and services including grooming, training, and pet adoption support.",
+      "These Terms and Conditions govern the use of Pets Corner’s platform and services including grooming, training, and pet adoption support.",
     url: "https://www.mrnmrspet.com/terms-and-conditions",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/terms.webp",
         width: 1200,
         height: 630,
-        alt: "Mr n Mrs Pet Terms & Conditions",
+        alt: "Pets Corner Terms & Conditions",
       },
     ],
     locale: "en_IN",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terms & Conditions | Mr n Mrs Pet",
+    title: "Terms & Conditions | Pets Corner",
     description:
-      "Learn more about Mr n Mrs Pet’s Terms & Conditions – your trusted pet care and adoption partner.",
+      "Learn more about Pets Corner’s Terms & Conditions – your trusted pet care and adoption partner.",
     images: ["/terms.webp"],
     creator: "@mrnmrspet",
   },
@@ -66,13 +66,13 @@ export default function TermsAndConditionsLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Terms & Conditions | Mr n Mrs Pet",
+    name: "Terms & Conditions | Pets Corner",
     url: "https://www.mrnmrspet.com/terms-and-conditions",
     description:
-      "Official Terms & Conditions outlining the policies, legal disclaimers, and service rules for Mr n Mrs Pet users.",
+      "Official Terms & Conditions outlining the policies, legal disclaimers, and service rules for Pets Corner users.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",
@@ -81,7 +81,7 @@ export default function TermsAndConditionsLayout({
     },
     mainEntity: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       sameAs: [
         "https://www.facebook.com/mrnmrspet",
         "https://www.instagram.com/mrnmrspet",

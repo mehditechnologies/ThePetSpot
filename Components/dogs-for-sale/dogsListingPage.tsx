@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FiMapPin, FiPlus, FiDollarSign } from "react-icons/fi";
 import { FaDog, FaFire } from "react-icons/fa";
+import { useAdStore } from "@/Store/AdsStore";
 import { pets, breeds, popularBreeds, statesWithCities } from "./data"; // adjust path if needed
 
 export default function DogsPage() {
@@ -17,14 +18,23 @@ export default function DogsPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const ITEMS_PER_PAGE = 12;
 
+  // API states
+  const [apiData, setApiData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalAds, setTotalAds] = useState<number>(0);
+
   // Sidebar/filter states
   const [petCategory, setPetCategory] = useState<string>("Dogs");
   const [lookingFor, setLookingFor] = useState<string>("Buying");
   const [sortBy, setSortBy] = useState<string>("");
-  const [filteredPetsList, setFilteredPetsList] = useState(pets);
+  const [filteredPetsList, setFilteredPetsList] = useState<any[]>([]);
 
   const [selectedGender, setSelectedGender] = useState<string>("");
   const [selectedFeature, setSelectedFeature] = useState<string>("");
+
+  // Store
+  const { getApprovedDogAds } = useAdStore();
 
   const genderOptions = ["Male", "Female", "Other"];
   const featureOptions = [
@@ -78,26 +88,33 @@ export default function DogsPage() {
     return "";
   };
 
-  // ---------- Layout helpers ----------
+  // ---------- API Data Fetching ----------
   useEffect(() => {
-    const checkPosition = () => {
-      if (!searchRef.current) return;
-      const rect = searchRef.current.getBoundingClientRect();
-      setOpenUp(window.innerHeight - rect.bottom < 250);
+    const fetchApprovedDogAds = async () => {
+      setLoading(true);
+      try {
+        const result = await getApprovedDogAds(currentPage, ITEMS_PER_PAGE);
+        setApiData(result.ads);
+        setFilteredPetsList(result.ads);
+        setTotalPages(result.pagination.totalPages);
+        setTotalAds(result.pagination.totalAds);
+      } catch (error) {
+        console.error('Failed to fetch approved dog ads:', error);
+        setApiData([]);
+        setFilteredPetsList([]);
+      } finally {
+        setLoading(false);
+      }
     };
-    checkPosition();
-    window.addEventListener("scroll", checkPosition);
-    window.addEventListener("resize", checkPosition);
-    return () => {
-      window.removeEventListener("scroll", checkPosition);
-      window.removeEventListener("resize", checkPosition);
-    };
-  }, []);
 
-  // ---------- Filtering logic (same as yours) ----------
+    fetchApprovedDogAds();
+  }, [currentPage, getApprovedDogAds]);
+
+  // ---------- Filtering logic (client-side for current page data) ----------
   const applyFilters = () => {
-    let result = pets.slice();
-    setCurrentPage(1);
+    if (!apiData.length) return;
+
+    let result = [...apiData];
 
     // Breed / name search
     if (selectedBreed && selectedBreed.trim() !== "") {
@@ -159,7 +176,7 @@ export default function DogsPage() {
         return bb - aa;
       });
     } else if (sortBy === "newest") {
-      result.sort((a, b) => b.id - a.id);
+      result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
 
     setFilteredPetsList(result);
@@ -167,7 +184,6 @@ export default function DogsPage() {
 
   useEffect(() => {
     applyFilters();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedBreed,
     selectedState,
@@ -176,8 +192,7 @@ export default function DogsPage() {
     selectedGender,
     selectedFeature,
     sortBy,
-    petCategory,
-    lookingFor,
+    apiData,
   ]);
 
   const dropdownClass = `absolute z-20 left-0 w-full bg-white border border-gray-200  rounded-md max-h-48 overflow-y-auto `;
@@ -708,7 +723,7 @@ export default function DogsPage() {
           </h3>
           <div className="space-y-2 text-gray-700">
             {popularBreeds.map((breed, i) => {
-              const breedCount = pets.filter((p) => p.breed === breed).length;
+              const breedCount = apiData.filter((p) => p.breed === breed).length;
               return (
                 <div
                   key={i}
@@ -749,56 +764,70 @@ export default function DogsPage() {
                     ? `${selectedBreed} For Sale`
                     : "Dogs For Sale"}
                 </h1>
-                <p className="text-gray-600 flex items-center gap-2">
+                {/* <p className="text-gray-600 flex items-center gap-2">
                   <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-600 font-semibold text-sm">
-                    {filteredPetsList.length}
+                    {loading ? '...' : totalAds}
                   </span>
                   Premium pets available near you
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {(() => {
-              const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-              const endIdx = startIdx + ITEMS_PER_PAGE;
-              const paginatedList = filteredPetsList.slice(startIdx, endIdx);
-              const totalPages = Math.ceil(
-                filteredPetsList.length / ITEMS_PER_PAGE
-              );
-
-              if (paginatedList.length === 0) {
-                return (
-                  <div className="col-span-3 text-center py-20">
-                    <div className="text-6xl mb-4">🐕</div>
-                    <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                      No pets found
-                    </h3>
-                    <p className="text-gray-500">Try adjusting your filters</p>
+            {loading ? (
+              // Loading state
+              Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
+                  <div className="h-64 bg-gray-200"></div>
+                  <div className="p-5">
+                    <div className="h-6 bg-gray-200 rounded mb-3"></div>
+                    <div className="space-y-2.5 mb-4">
+                      <div className="flex justify-between">
+                        <div className="h-4 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        <div className="h-4 bg-gray-200 rounded w-24"></div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="h-4 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-18"></div>
+                      </div>
+                    </div>
+                    <div className="h-10 bg-gray-200 rounded-lg"></div>
                   </div>
-                );
-              }
-
-              return paginatedList.map((pet) => (
+                </div>
+              ))
+            ) : filteredPetsList.length === 0 ? (
+              <div className="col-span-3 text-center py-20">
+                <div className="text-6xl mb-4">🐕</div>
+                <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                  No pets found
+                </h3>
+                <p className="text-gray-500">Try adjusting your filters</p>
+              </div>
+            ) : (
+              filteredPetsList.map((pet) => (
                 <div
-                  key={pet.id}
+                  key={pet.id || pet._id}
                   className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="relative overflow-hidden">
                     <img
-                      src={pet.img}
+                      src={pet.img || pet.images?.[0] || '/default-pet.jpg'}
                       alt={pet.name}
                       className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                    <div className="absolute top-3 left-3">
+                    {/* <div className="absolute top-3 left-3">
                       <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-purple-600 text-xs font-semibold rounded-full shadow-lg">
                         ⭐ Premium
                       </span>
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="p-5">
@@ -816,7 +845,7 @@ export default function DogsPage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-500">Gender & Age</span>
                         <span className="font-semibold text-gray-800">
-                          {pet.gender}, {pet.age}
+                          {pet.gender}, {pet.age} {pet.age === 1 ? 'month' : 'months'}
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
@@ -828,80 +857,85 @@ export default function DogsPage() {
                     </div>
 
                     <div className="grid grid-cols-3 gap-2 mb-3">
-                      <button className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium">
+                      <a
+                        href={`tel:${pet.contactNumber}`}
+                        className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium text-center block"
+                      >
                         Call
-                      </button>
-                      <button className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium">
-                        Chat
-                      </button>
-                      <button className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium">
+                      </a>
+                        <a
+                          href={`https://wa.me/${pet.contactNumber}?text=${encodeURIComponent('Hi, I saw your ad, I am interested')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium text-center block"
+                        >
+                          Chat
+                        </a>
+                      <a
+                        href={`/dogs/pet/${pet._id || pet.id}`}
+                        className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium text-center block"
+                      >
                         Info
-                      </button>
+                      </a>
                     </div>
 
                     <button className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
-                      Book Now
+                      {pet.price?.toLocaleString() || 'N/A'} PKR
                     </button>
                   </div>
                 </div>
-              ));
-            })()}
+              ))
+            )}
           </div>
 
           {/* Pagination */}
-          {(() => {
-            const totalPages = Math.ceil(
-              filteredPetsList.length / ITEMS_PER_PAGE
-            );
-            if (totalPages <= 1) return null;
-            return (
-              <div className="mt-12 flex items-center justify-center gap-4">
-                <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className={`px-6 py-2.5 rounded-full font-medium transition-all duration-200 ${
-                    currentPage === 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-purple-600 hover:bg-purple-50 shadow-sm hover:shadow-md hover:scale-105"
-                  }`}
-                >
-                  Previous
-                </button>
+          {!loading && totalPages > 1 && (
+            <div className="mt-12 flex items-center justify-center gap-4">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-200 ${
+                  currentPage === 1
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-purple-600 hover:bg-purple-50 shadow-sm hover:shadow-md hover:scale-105"
+                }`}
+              >
+                Previous
+              </button>
 
-                <div className="flex items-center gap-2">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`w-10 h-10 rounded-full font-semibold transition-all duration-200 ${
-                          currentPage === page
-                            ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-110"
-                            : "bg-white text-gray-600 hover:bg-purple-50 hover:text-purple-600"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    )
-                  )}
-                </div>
-
-                <button
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(totalPages, p + 1))
-                  }
-                  disabled={currentPage >= totalPages}
-                  className={`px-6 py-2.5 rounded-full font-medium transition-all duration-200 ${
-                    currentPage >= totalPages
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-purple-600 hover:bg-purple-50 shadow-sm hover:shadow-md hover:scale-105"
-                  }`}
-                >
-                  Next
-                </button>
+              <div className="flex items-center gap-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-10 h-10 rounded-full font-semibold transition-all duration-200 ${
+                        currentPage === page
+                          ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-110"
+                          : "bg-white text-gray-600 hover:bg-purple-50 hover:text-purple-600"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
               </div>
-            );
-          })()}
+
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
+                disabled={currentPage >= totalPages}
+                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-200 ${
+                  currentPage >= totalPages
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-purple-600 hover:bg-purple-50 shadow-sm hover:shadow-md hover:scale-105"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

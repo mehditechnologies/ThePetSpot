@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dogs for Sale | Mr n Mrs Pet",
+  title: "Dogs for Sale | Pets Corner",
   description:
-    "Browse verified listings of dogs for sale from responsible breeders and pet parents across India. Find your perfect furry companion with Mr n Mrs Pet.",
+    "Browse verified listings of dogs for sale from responsible breeders and pet parents across India. Find your perfect furry companion with Pets Corner.",
   keywords: [
     "dogs for sale",
     "puppies for sale",
     "dog breeders India",
     "pet marketplace",
-    "Mr n Mrs Pet",
+    "Pets Corner",
     "buy dogs online",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Dogs for Sale | Mr n Mrs Pet",
+    title: "Dogs for Sale | Pets Corner",
     description:
-      "Find and adopt your next furry friend from verified listings of dogs for sale across India at Mr n Mrs Pet.",
+      "Find and adopt your next furry friend from verified listings of dogs for sale across India at Pets Corner.",
     url: "https://www.mrnmrspet.com/dogs-for-sale",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/dogs-for-sale/hero.webp",
         width: 1200,
         height: 630,
-        alt: "Dogs for Sale - Mr n Mrs Pet",
+        alt: "Dogs for Sale - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dogs for Sale | Mr n Mrs Pet",
+    title: "Dogs for Sale | Pets Corner",
     description:
-      "Explore verified listings of dogs for sale from trusted breeders and pet parents on Mr n Mrs Pet.",
+      "Explore verified listings of dogs for sale from trusted breeders and pet parents on Pets Corner.",
     images: ["/dogs-for-sale/hero.webp"],
     creator: "@mrnmrspet",
   },
@@ -65,13 +65,13 @@ export default function DogsForSaleLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Dogs for Sale | Mr n Mrs Pet",
+    name: "Dogs for Sale | Pets Corner",
     url: "https://www.mrnmrspet.com/dogs-for-sale",
     description:
-      "Verified listings of dogs for sale across India. Find puppies and adult dogs from trusted breeders and pet parents with Mr n Mrs Pet.",
+      "Verified listings of dogs for sale across India. Find puppies and adult dogs from trusted breeders and pet parents with Pets Corner.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",

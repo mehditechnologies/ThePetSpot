@@ -30,7 +30,7 @@ export default function WhyMMP() {
       image: "/MMP/Process.png",
       title: "Easy and Hassle-free Process",
       description:
-        "With Mr N Mrs Pet, your journey with a pet starts with no difficulties. You have access to adorable pets looking for furever homes nationwide. You can receive guidance regarding any pet-related aspect in the comfort of your home. We make sure that a healthy and happy pet is delivered to you and have a secured payment process.",
+        "With Pets Corner, your journey with a pet starts with no difficulties. You have access to adorable pets looking for furever homes nationwide. You can receive guidance regarding any pet-related aspect in the comfort of your home. We make sure that a healthy and happy pet is delivered to you and have a secured payment process.",
       paws: "/MMP/paws_04.png",
     },
     {
@@ -56,11 +56,11 @@ export default function WhyMMP() {
     <section className="py-16 bg-white px-44">
       {/* Heading */}
       <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#1E7E8F] mb-2">
-          Why MMP?
+        <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">
+          Why Pets Corner?
         </h2>
         <p className="text-black font-medium text-sm">
-          Looking for a furry companion? Know why MMP is the perfect option for
+          Looking for a furry companion? Know why Pets Corner is the perfect option for
           you.
         </p>
       </div>

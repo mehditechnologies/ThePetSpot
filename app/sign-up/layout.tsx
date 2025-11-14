@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign Up | Mr n Mrs Pet",
+  title: "Sign Up | Pets Corner",
   description:
-    "Create your free account on Mr n Mrs Pet to book grooming, training, and pet care services. Join our trusted community of pet parents and professionals today.",
+    "Create your free account on Pets Corner to book grooming, training, and pet care services. Join our trusted community of pet parents and professionals today.",
   keywords: [
-    "Mr n Mrs Pet signup",
+    "Pets Corner signup",
     "create pet account",
-    "join Mr n Mrs Pet",
+    "join Pets Corner",
     "pet parent registration",
     "pet grooming booking",
     "pet care login",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Sign Up | Mr n Mrs Pet",
+    title: "Sign Up | Pets Corner",
     description:
-      "Join Mr n Mrs Pet – India’s trusted pet platform for adoption, grooming, training, and more. Create your account today and start your pet journey.",
+      "Join Pets Corner – India’s trusted pet platform for adoption, grooming, training, and more. Create your account today and start your pet journey.",
     url: "https://www.mrnmrspet.com/signup",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/signup-bg.webp",
         width: 1200,
         height: 630,
-        alt: "Sign Up - Mr n Mrs Pet",
+        alt: "Sign Up - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sign Up | Mr n Mrs Pet",
+    title: "Sign Up | Pets Corner",
     description:
-      "Join Mr n Mrs Pet – your one-stop platform for pet adoption, grooming, and care services across India.",
+      "Join Pets Corner – your one-stop platform for pet adoption, grooming, and care services across India.",
     images: ["/signup-bg.webp"],
     creator: "@mrnmrspet",
   },
@@ -65,10 +65,10 @@ export default function SignUpLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Sign Up | Mr n Mrs Pet",
+    name: "Sign Up | Pets Corner",
     url: "https://www.mrnmrspet.com/signup",
     description:
-      "User registration page for Mr n Mrs Pet – where pet lovers and service providers can join our growing community.",
+      "User registration page for Pets Corner – where pet lovers and service providers can join our growing community.",
     potentialAction: {
       "@type": "RegisterAction",
       target: "https://www.mrnmrspet.com/signup",
@@ -76,7 +76,7 @@ export default function SignUpLayout({
     },
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",
@@ -85,7 +85,7 @@ export default function SignUpLayout({
     },
     mainEntity: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       sameAs: [
         "https://www.facebook.com/mrnmrspet",
         "https://www.instagram.com/mrnmrspet",

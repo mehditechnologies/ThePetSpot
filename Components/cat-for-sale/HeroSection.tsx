@@ -14,7 +14,7 @@ export default function HeroSection() {
           Because every home deserves a loyal companion
         </h1>
         <p className="text-black text-sm md:text-base leading-relaxed">
-          Finding a furry companion became easy peasy with Mr n Mrs Pet. Choose
+          Finding a furry companion became easy peasy with Pets Corner. Choose
           your dream pup and bring home tons of happiness and goofiness.
         </p>
       </div>

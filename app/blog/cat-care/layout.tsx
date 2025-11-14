@@ -2,32 +2,32 @@ import type { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Cat Care Tips & Guides | Mr n Mrs Pet",
+  title: "Cat Care Tips & Guides | Pets Corner",
   description:
-    "Discover expert tips and guides for cat care, grooming, feeding, and health on Mr n Mrs Pet's Cat Care blog.",
+    "Discover expert tips and guides for cat care, grooming, feeding, and health on Pets Corner's Cat Care blog.",
   keywords: [
     "cat care tips",
     "cat grooming",
     "cat health",
     "cat feeding",
     "cat blog",
-    "Mr n Mrs Pet cat blog",
+    "Pets Corner cat blog",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Cat Care Tips & Guides | Mr n Mrs Pet",
+    title: "Cat Care Tips & Guides | Pets Corner",
     description:
       "Read our blogs for expert advice on taking care of your cat, including grooming, feeding, and health tips.",
     url: "https://www.mrnmrspet.com/cat-care",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/cats-care-hero.webp",
         width: 1200,
         height: 630,
-        alt: "Cat Care Blog - Mr n Mrs Pet",
+        alt: "Cat Care Blog - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cat Care Tips & Guides | Mr n Mrs Pet",
+    title: "Cat Care Tips & Guides | Pets Corner",
     description:
-      "Expert cat care guides on grooming, feeding, health, and more at Mr n Mrs Pet.",
+      "Expert cat care guides on grooming, feeding, health, and more at Pets Corner.",
     images: ["/cats-care-hero.webp"],
     creator: "@mrnmrspet",
   },
@@ -55,11 +55,11 @@ export default function CatCareLayout({ children }: { children: React.ReactNode 
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Cat Care Tips & Guides | Mr n Mrs Pet",
+    name: "Cat Care Tips & Guides | Pets Corner",
     url: "https://www.mrnmrspet.com/cat-care",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",

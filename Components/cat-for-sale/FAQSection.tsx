@@ -30,7 +30,7 @@ export default function FAQPage() {
       a: "Buying online is possible but requires caution — verify seller reviews, request health records, and prefer meet-and-greet before payment.",
     },
     {
-      q: "Why is Mr n Mrs Pet a reliable option to buy dogs online in India?",
+      q: "Why is Pets Corner a reliable option to buy dogs online in India?",
       a: "We list verified breeders, provide health reports, and enable secure communication between buyers and sellers (example placeholder answer).",
     },
     {
@@ -62,7 +62,7 @@ export default function FAQPage() {
           Frequently Asked Questions
         </h1>
         <p className="mt-6 text-gray-500 font-medium">
-          These are questions that people commonly search for on Mr n Mrs Pet
+          These are questions that people commonly search for on Pets Corner
         </p>
       </div>
 

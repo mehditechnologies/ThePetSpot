@@ -1,33 +1,33 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Login | Mr n Mrs Pet",
+  title: "Login | Pets Corner",
   description:
-    "Login to your Mr n Mrs Pet account to explore verified pets for sale, adoption, grooming, and more. Manage your profile and enjoy personalized pet care services.",
+    "Login to your Pets Corner account to explore verified pets for sale, adoption, grooming, and more. Manage your profile and enjoy personalized pet care services.",
   keywords: [
     "login",
-    "Mr n Mrs Pet",
+    "Pets Corner",
     "pet store login",
     "pet adoption India",
     "buy pets online",
     "pet marketplace account",
     "pet care services",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Login | Mr n Mrs Pet",
+    title: "Login | Pets Corner",
     description:
-      "Access your Mr n Mrs Pet account — your trusted platform for buying, adopting, and caring for pets.",
+      "Access your Pets Corner account — your trusted platform for buying, adopting, and caring for pets.",
     url: "https://www.mrnmrspet.com/login",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/signup-bg.webp",
         width: 1200,
         height: 630,
-        alt: "Login - Mr n Mrs Pet",
+        alt: "Login - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Login | Mr n Mrs Pet",
+    title: "Login | Pets Corner",
     description:
-      "Login to your Mr n Mrs Pet account and discover thousands of verified pets and services near you.",
+      "Login to your Pets Corner account and discover thousands of verified pets and services near you.",
     images: ["/signup-bg.webp"],
     creator: "@mrnmrspet",
   },
@@ -66,13 +66,13 @@ export default function LoginLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Login | Mr n Mrs Pet",
+    name: "Login | Pets Corner",
     url: "https://www.mrnmrspet.com/login",
     description:
-      "Login securely to your Mr n Mrs Pet account to manage your pets, explore services, and connect with verified breeders and pet parents.",
+      "Login securely to your Pets Corner account to manage your pets, explore services, and connect with verified breeders and pet parents.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",
@@ -81,9 +81,9 @@ export default function LoginLayout({
     },
     mainEntity: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet User Account",
+      name: "Pets Corner User Account",
       description:
-        "Registered users can access pet listings, manage their profiles, and post pet ads on Mr n Mrs Pet.",
+        "Registered users can access pet listings, manage their profiles, and post pet ads on Pets Corner.",
       url: "https://www.mrnmrspet.com/login",
       sameAs: [
         "https://www.facebook.com/mrnmrspet",

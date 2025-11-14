@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shipping Policy | Mr n Mrs Pet",
+  title: "Shipping Policy | Pets Corner",
   description:
-    "Learn about Mr n Mrs Pet’s Shipping Policy, including delivery timelines, coverage areas, logistics partners, and order tracking details for pet products and accessories.",
+    "Learn about Pets Corner’s Shipping Policy, including delivery timelines, coverage areas, logistics partners, and order tracking details for pet products and accessories.",
   keywords: [
-    "Mr n Mrs Pet shipping policy",
+    "Pets Corner shipping policy",
     "pet product delivery India",
     "pet accessories shipping",
-    "Mr n Mrs Pet logistics",
+    "Pets Corner logistics",
     "pet food delivery",
     "order tracking pets",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Shipping Policy | Mr n Mrs Pet",
+    title: "Shipping Policy | Pets Corner",
     description:
-      "Understand Mr n Mrs Pet’s shipping and delivery policy — covering order processing, fulfillment timelines, and regional availability across India.",
+      "Understand Pets Corner’s shipping and delivery policy — covering order processing, fulfillment timelines, and regional availability across India.",
     url: "https://www.mrnmrspet.com/shipping-policy",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/terms.webp",
         width: 1200,
         height: 630,
-        alt: "Shipping Policy - Mr n Mrs Pet",
+        alt: "Shipping Policy - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shipping Policy | Mr n Mrs Pet",
+    title: "Shipping Policy | Pets Corner",
     description:
-      "Learn about shipping timelines, regions served, and delivery process at Mr n Mrs Pet – India’s trusted online pet care and product store.",
+      "Learn about shipping timelines, regions served, and delivery process at Pets Corner – India’s trusted online pet care and product store.",
     images: ["/terms.webp"],
     creator: "@mrnmrspet",
   },
@@ -65,13 +65,13 @@ export default function ShippingPolicyLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Shipping Policy | Mr n Mrs Pet",
+    name: "Shipping Policy | Pets Corner",
     url: "https://www.mrnmrspet.com/shipping-policy",
     description:
-      "Official Shipping Policy of Mr n Mrs Pet outlining delivery timelines, order processing, and logistics coverage across India.",
+      "Official Shipping Policy of Pets Corner outlining delivery timelines, order processing, and logistics coverage across India.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",
@@ -80,7 +80,7 @@ export default function ShippingPolicyLayout({
     },
     mainEntity: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       sameAs: [
         "https://www.facebook.com/mrnmrspet",
         "https://www.instagram.com/mrnmrspet",

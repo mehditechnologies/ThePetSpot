@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Pet Blogs | Mr n Mrs Pet",
+  title: "Pet Blogs | Pets Corner",
   description:
-    "Read informative blogs about pet care, training, grooming, adoption, and tips for cats and dogs at Mr n Mrs Pet.",
+    "Read informative blogs about pet care, training, grooming, adoption, and tips for cats and dogs at Pets Corner.",
   keywords: [
     "pet blogs",
     "dog care tips",
@@ -12,23 +12,23 @@ export const metadata: Metadata = {
     "pet training",
     "pet grooming",
     "pet adoption",
-    "Mr n Mrs Pet blogs",
+    "Pets Corner blogs",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Pet Blogs | Mr n Mrs Pet",
+    title: "Pet Blogs | Pets Corner",
     description:
       "Explore our blogs covering pet care, grooming, training, adoption tips for cats and dogs.",
     url: "https://www.mrnmrspet.com/blogs",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/blogHero.webp",
         width: 1200,
         height: 630,
-        alt: "Pet Blogs - Mr n Mrs Pet",
+        alt: "Pet Blogs - Pets Corner",
       },
     ],
     locale: "en_IN",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pet Blogs | Mr n Mrs Pet",
+    title: "Pet Blogs | Pets Corner",
     description:
       "Read expert blogs on pet care, adoption, grooming, and training for cats and dogs.",
     images: ["/blogHero.webp"],
@@ -60,11 +60,11 @@ export default function BlogsLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Pet Blogs | Mr n Mrs Pet",
+    name: "Pet Blogs | Pets Corner",
     url: "https://www.mrnmrspet.com/blogs",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",

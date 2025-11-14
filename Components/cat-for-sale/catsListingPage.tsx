@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FiMapPin, FiPlus, FiDollarSign } from "react-icons/fi";
 import { FaDog, FaFire } from "react-icons/fa";
+import { useAdStore } from "@/Store/AdsStore";
 import { cats, catBreeds, popularCatBreeds, statesWithCatCities } from "./data";
 
 export default function PetListingPage() {
@@ -16,11 +17,20 @@ export default function PetListingPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
 
+  // API states
+  const [apiData, setApiData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalAds, setTotalAds] = useState<number>(0);
+
   // New states for controlling sidebar radios and filtered list
   const [petCategory, setPetCategory] = useState<string>("Cats");
   const [lookingFor, setLookingFor] = useState<string>("Buying");
   const [sortBy, setSortBy] = useState<string>("newest");
-  const [filteredPetsList, setFilteredPetsList] = useState(cats);
+  const [filteredPetsList, setFilteredPetsList] = useState<any[]>([]);
+
+  // Store
+  const { getApprovedCatAds } = useAdStore();
 
   const searchRef = useRef<HTMLDivElement>(null);
   const [selectedGender, setSelectedGender] = useState<string>("");
@@ -34,6 +44,27 @@ export default function PetListingPage() {
     "Champion Bloodline",
     "All",
   ];
+
+  // ---------- API Data Fetching ----------
+  useEffect(() => {
+    const fetchApprovedCatAds = async () => {
+      setLoading(true);
+      try {
+        const result = await getApprovedCatAds();
+        setApiData(result.ads || []);
+        setFilteredPetsList(result.ads || []);
+        setTotalAds(result.ads?.length || 0);
+      } catch (error) {
+        console.error('Failed to fetch approved cat ads:', error);
+        setApiData([]);
+        setFilteredPetsList([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchApprovedCatAds();
+  }, [getApprovedCatAds]);
   useEffect(() => {
     const checkPosition = () => {
       if (!searchRef.current) return;
@@ -49,9 +80,11 @@ export default function PetListingPage() {
     };
   }, []);
 
-  // Filter function: applies current selected filters to `pets` from data.ts
+  // Filter function: applies current selected filters to API data
   const applyFilters = () => {
-    let result = cats.slice();
+    if (!apiData.length) return;
+    
+    let result = [...apiData];
     setCurrentPage(1); // Reset to first page when filters change
 
     // Breed / name search
@@ -114,7 +147,7 @@ export default function PetListingPage() {
         return bb - aa;
       });
     } else if (sortBy === "newest") {
-      result.sort((a, b) => b.id - a.id);
+      result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
 
     setFilteredPetsList(result);
@@ -134,6 +167,7 @@ export default function PetListingPage() {
     sortBy,
     petCategory,
     lookingFor,
+    apiData,
   ]);
 
   const dropdownClass = `absolute z-20 left-0 w-full bg-white border border-gray-200  rounded-md max-h-48 overflow-y-auto `;
@@ -570,7 +604,7 @@ export default function PetListingPage() {
           </h3>
           <div className="space-y-2 text-gray-700">
             {popularCatBreeds.map((breed, i) => {
-              const breedCount = cats.filter((p) => p.breed === breed).length;
+              const breedCount = apiData.filter((p) => p.breed === breed).length;
               return (
                 <div
                   key={i}
@@ -585,141 +619,218 @@ export default function PetListingPage() {
           </div>
         </div>
 
-        {/* 🐶 Pets Grid */}
+        {/* 🐱 Cats Grid */}
         <div className="flex-1">
-          <div className="bg-white p-6 rounded-xl  mb-6">
-            <p className="text-sm text-gray-500">
-              Home &gt; <span className="text-purple-600">Cat For Sale</span>{" "}
-              &gt; Cat For Sale
-            </p>
-            <h2 className="text-2xl font-bold mt-2">
-              Labrador Retriever Puppies For Sale
-            </h2>
-            <p className="text-black mt-3 text-base leading-relaxed inline">
-              Buy health-certified cats and kittens online in India for sale.
-              Available cat breeds like{" "}
-              <span className="text-[#7B3AED]">
-                Persian, Bengal, British Shorthair, British Longhair, Calico,
-                Maine Coon, Ragdoll,
-              </span>{" "}
-              and more cat species are available in India. ...
-            </p>
-            <button className="mt-3 ml-2 inline text-sm bg-purple-100 text-purple-600 px-4 py-1 rounded-md">
-              Read More
-            </button>
+          <div className="mb-8">
+            <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+              <span className="hover:text-purple-600 cursor-pointer transition-colors">
+                Home
+              </span>
+              <span>→</span>
+              <span className="hover:text-purple-600 cursor-pointer transition-colors">
+                Cats
+              </span>
+              <span>→</span>
+              <span className="text-purple-600 font-medium">
+                {selectedBreed
+                  ? `${selectedBreed} for Sale`
+                  : "All Cats for Sale"}
+              </span>
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                  {selectedBreed
+                    ? `${selectedBreed} For Sale`
+                    : "Cats For Sale"}
+                </h1>
+                <p className="text-gray-600 flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-600 font-semibold text-sm">
+                    {loading ? '...' : totalAds}
+                  </span>
+                  Premium cats available near you
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {/* Calculate pagination */}
-            {(() => {
-              const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-              const endIdx = startIdx + ITEMS_PER_PAGE;
-              const paginatedList = filteredPetsList.slice(startIdx, endIdx);
-              const totalPages = Math.ceil(
-                filteredPetsList.length / ITEMS_PER_PAGE
-              );
-
-              if (paginatedList.length === 0) {
-                return (
-                  <div className="col-span-3 text-center text-gray-500">
-                    No pets found for the current filters.
-                  </div>
-                );
-              }
-              return paginatedList.map((pet) => (
-                <div key={pet.id} className="bg-white rounded-xl ">
-                  <div className="relative">
-                    <img
-                      src={pet.img}
-                      alt={pet.name}
-                      className="w-full h-48 object-cover"
-                    />
-                    <span className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-3 py-1 rounded-full">
-                      Pet Quality
-                    </span>
-                    <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent text-white px-3 py-2 text-sm font-semibold">
-                      View Price
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {loading ? (
+              // Loading state
+              Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
+                  <div className="h-64 bg-gray-200"></div>
+                  <div className="p-5">
+                    <div className="h-6 bg-gray-200 rounded mb-3"></div>
+                    <div className="space-y-2.5 mb-4">
+                      <div className="flex justify-between">
+                        <div className="h-4 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        <div className="h-4 bg-gray-200 rounded w-24"></div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="h-4 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-18"></div>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="p-4 space-y-2 text-xs text-gray-700">
-                    <h3 className="text-purple-700 font-semibold text-sm mb-2">
-                      {pet.name}
-                    </h3>
-                    <p>
-                      <span className="font-medium mr-1">Breed:</span>
-                      {"  "} {pet.breed}
-                    </p>
-                    <p className="flex items-center gap-1">
-                      <span className="font-medium">Gender:</span>
-                      {pet.gender}
-                      <span className="ml-3">
-                        <span className="font-medium">Age:</span> {pet.age}
-                      </span>
-                    </p>
-
-                    <p>
-                      <span className="font-medium">City:</span>{" "}
-                      <span className="text-purple-600 cursor-pointer hover:underline">
-                        {pet.city}
-                      </span>
-                    </p>
-
-                    <div>
-                      <button className="px-4 py-1.5 mr-1.5 text-black border-gray-100 font-medium border hover:bg-[#9461F7] hover:text-white rounded">
-                        Call
-                      </button>
-                      <button className="px-2 py-1.5 mr-1.5 text-black border-gray-100 font-medium border hover:bg-[#9461F7] hover:text-white rounded">
-                        Whatsapp
-                      </button>
-                      <button className="px-4 py-1.5 border-gray-100 text-black font-medium border hover:bg-[#9461F7] hover:text-white rounded">
-                        Details
-                      </button>
-                    </div>
-
-                    <button className="hover:bg-[#9361f7d4] text-white w-full py-1.5 bg-[#9461F7] font-medium text-sm">
-                      Book Now
-                    </button>
+                    <div className="h-10 bg-gray-200 rounded-lg"></div>
                   </div>
                 </div>
-              ));
-            })()}
+              ))
+            ) : filteredPetsList.length === 0 ? (
+              <div className="col-span-3 text-center py-20">
+                <div className="text-6xl mb-4">🐱</div>
+                <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                  No cats found
+                </h3>
+                <p className="text-gray-500">Try adjusting your filters</p>
+              </div>
+            ) : (
+              (() => {
+                const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+                const endIdx = startIdx + ITEMS_PER_PAGE;
+                const paginatedList = filteredPetsList.slice(startIdx, endIdx);
+                
+                return paginatedList.map((pet) => (
+                  <div
+                    key={pet.id || pet._id}
+                    className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={pet.img || pet.images?.[0] || '/default-pet.jpg'}
+                        alt={pet.name}
+                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                      <div className="absolute top-3 left-3">
+                        <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-purple-600 text-xs font-semibold rounded-full shadow-lg">
+                          ⭐ Premium
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-5">
+                      <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors">
+                        {pet.name}
+                      </h3>
+
+                      <div className="space-y-2.5 mb-4">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-500">Breed</span>
+                          <span className="font-semibold text-gray-800">
+                            {pet.breed}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-500">Gender & Age</span>
+                          <span className="font-semibold text-gray-800">
+                            {pet.gender}, {pet.age} {pet.age === 1 ? 'month' : 'months'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-500">Location</span>
+                          <span className="font-semibold text-purple-600">
+                            {pet.city}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 mb-3">
+                        <a
+                          href={`tel:${pet.contactNumber}`}
+                          className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium text-center block"
+                        >
+                          Call
+                        </a>
+                        <a
+                          href={`https://wa.me/${pet.contactNumber}?text=${encodeURIComponent('Hi, I saw your ad, I am interested')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium text-center block"
+                        >
+                          Chat
+                        </a>
+                        <a
+                          href={`/cats/pet/${pet._id || pet.id}`}
+                          className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium text-center block"
+                        >
+                          Info
+                        </a>
+                      </div>
+
+                      <button className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
+                        {pet.price?.toLocaleString() || 'N/A'} PKR
+                      </button>
+                    </div>
+                  </div>
+                ));
+              })()
+            )}
           </div>
-          {/* Pagination controls below grid */}
+          {/* Modern Pagination */}
           {(() => {
             const totalPages = Math.ceil(
               filteredPetsList.length / ITEMS_PER_PAGE
             );
             if (totalPages <= 1) return null;
             return (
-              <div className="mt-8 flex items-center justify-between">
-                <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className={`px-4 py-2 text-sm font-medium rounded ${
-                    currentPage === 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-purple-100 text-purple-600 hover:bg-purple-200"
-                  }`}
-                >
-                  Previous Page
-                </button>
-                <div className="text-sm text-gray-700">
-                  Page {currentPage} of {totalPages}
+              <div className="flex items-center justify-between mt-12">
+                <div className="text-sm text-gray-600">
+                  Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1}-{Math.min(currentPage * ITEMS_PER_PAGE, filteredPetsList.length)} of {filteredPetsList.length} cats
                 </div>
-                <button
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(totalPages, p + 1))
-                  }
-                  disabled={currentPage >= totalPages}
-                  className={`px-4 py-2 text-sm font-medium rounded ${
-                    currentPage >= totalPages
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-purple-100 text-purple-600 hover:bg-purple-200"
-                  }`}
-                >
-                  Next Page
-                </button>
+                
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNumber;
+                    
+                    if (totalPages <= 5) {
+                      pageNumber = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNumber = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNumber = totalPages - 4 + i;
+                    } else {
+                      pageNumber = currentPage - 2 + i;
+                    }
+                    
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => setCurrentPage(pageNumber)}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg ${
+                          currentPage === pageNumber
+                            ? 'text-white bg-purple-600 shadow-lg'
+                            : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+                  
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage >= totalPages}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             );
           })()}

@@ -8,16 +8,22 @@ interface AdState {
   isPosting: boolean;
   isDeleting: boolean;
   isUpdating: boolean;
+  isLoading: boolean;
   postAd: (formData: FormData) => Promise<boolean>;
   deleteAd: (adId: string) => Promise<boolean>;
   updateAd: (adId: string, formData: FormData) => Promise<boolean>;
   getUserAds: () => Promise<any[]>;
+  getApprovedDogAds: (page?: number, limit?: number) => Promise<any>;
+  getApprovedDogAdById: (id: string) => Promise<any>;
+  getApprovedCatAds: (page?: number, limit?: number) => Promise<any>;
+  getApprovedCatAdById: (id: string) => Promise<any>;
 }
 
 export const useAdStore = create<AdState>((set, get) => ({
   isPosting: false,
   isDeleting: false,
   isUpdating: false,
+  isLoading: false,
 
   postAd: async (formData: FormData) => {
     set({ isPosting: true });
@@ -119,6 +125,170 @@ export const useAdStore = create<AdState>((set, get) => ({
         toast.error("Failed to fetch ads");
       }
       return [];
+    }
+  },
+
+  getApprovedDogAds: async (page = 1, limit = 12) => {
+    set({ isLoading: true });
+    try {
+      const res = await axios.get(`${Base_URL}/api/ads/approved/dogs?page=${page}&limit=${limit}`, {
+        withCredentials: true,
+      });
+      
+      // Map backend field names to frontend field names
+      const mappedAds = res.data.ads.map((ad: any) => ({
+        ...ad,
+        id: ad._id, // Add id field for compatibility
+        name: ad.name || ad.title,
+        title: ad.name || ad.title,
+        location: ad.city || ad.location,
+        category: ad.type || ad.category,
+        img: ad.images?.[0] || '/default-pet.jpg', // Use first image or default
+        // Ensure all fields exist with proper defaults
+        breed: ad.breed || '',
+        age: ad.age?.toString() || '',
+        gender: ad.gender || '',
+        price: ad.price || 0,
+        city: ad.city || '',
+        vaccinated: ad.vaccinated || false,
+        kcpRegistered: ad.kcpRegistered || false,
+        suitableFor: Array.isArray(ad.suitableFor) ? ad.suitableFor : (ad.suitableFor ? ad.suitableFor.split(', ') : []),
+        isApproved: ad.isApproved || 'pending',
+      }));
+      
+      return {
+        ads: mappedAds,
+        pagination: res.data.pagination
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Failed to fetch approved dog ads");
+      } else {
+        toast.error("Failed to fetch approved dog ads");
+      }
+      return { ads: [], pagination: { currentPage: 1, totalPages: 1, totalAds: 0 } };
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  getApprovedDogAdById: async (id: string) => {
+    try {
+      const res = await axios.get(`${Base_URL}/api/ads/approved/dogs/${id}`, {
+        withCredentials: true,
+      });
+      
+      // Map backend field names to frontend field names
+      const ad = res.data;
+      const mappedAd = {
+        ...ad,
+        id: ad._id,
+        name: ad.name || ad.title,
+        title: ad.name || ad.title,
+        location: ad.city || ad.location,
+        category: ad.type || ad.category,
+        img: ad.images?.[0] || '/default-pet.jpg',
+        breed: ad.breed || '',
+        age: ad.age?.toString() || '',
+        gender: ad.gender || '',
+        price: ad.price || 0,
+        city: ad.city || '',
+        vaccinated: ad.vaccinated || false,
+        kcpRegistered: ad.kcpRegistered || false,
+        suitableFor: Array.isArray(ad.suitableFor) ? ad.suitableFor : (ad.suitableFor ? ad.suitableFor.split(', ') : []),
+        isApproved: ad.isApproved || 'pending',
+      };
+      
+      return mappedAd;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Failed to fetch ad");
+      } else {
+        toast.error("Failed to fetch ad");
+      }
+      return null;
+    }
+  },
+
+  getApprovedCatAds: async (page = 1, limit = 12) => {
+    set({ isLoading: true });
+    try {
+      const res = await axios.get(`${Base_URL}/api/ads/approved/cats?page=${page}&limit=${limit}`, {
+        withCredentials: true,
+      });
+      
+      // Map backend field names to frontend field names
+      const mappedAds = res.data.ads.map((ad: any) => ({
+        ...ad,
+        id: ad._id, // Add id field for compatibility
+        name: ad.name || ad.title,
+        title: ad.name || ad.title,
+        location: ad.city || ad.location,
+        category: ad.type || ad.category,
+        img: ad.images?.[0] || '/default-pet.jpg', // Use first image or default
+        // Ensure all fields exist with proper defaults
+        breed: ad.breed || '',
+        age: ad.age?.toString() || '',
+        gender: ad.gender || '',
+        price: ad.price || 0,
+        city: ad.city || '',
+        vaccinated: ad.vaccinated || false,
+        kcpRegistered: ad.kcpRegistered || false,
+        suitableFor: Array.isArray(ad.suitableFor) ? ad.suitableFor : (ad.suitableFor ? ad.suitableFor.split(', ') : []),
+        isApproved: ad.isApproved || 'pending',
+      }));
+      
+      return {
+        ads: mappedAds,
+        pagination: res.data.pagination
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Failed to fetch approved cat ads");
+      } else {
+        toast.error("Failed to fetch approved cat ads");
+      }
+      return { ads: [], pagination: { currentPage: 1, totalPages: 1, totalAds: 0 } };
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  getApprovedCatAdById: async (id: string) => {
+    try {
+      const res = await axios.get(`${Base_URL}/api/ads/approved/cats/${id}`, {
+        withCredentials: true,
+      });
+      
+      // Map backend field names to frontend field names
+      const ad = res.data;
+      const mappedAd = {
+        ...ad,
+        id: ad._id,
+        name: ad.name || ad.title,
+        title: ad.name || ad.title,
+        location: ad.city || ad.location,
+        category: ad.type || ad.category,
+        img: ad.images?.[0] || '/default-pet.jpg',
+        breed: ad.breed || '',
+        age: ad.age?.toString() || '',
+        gender: ad.gender || '',
+        price: ad.price || 0,
+        city: ad.city || '',
+        vaccinated: ad.vaccinated || false,
+        kcpRegistered: ad.kcpRegistered || false,
+        suitableFor: Array.isArray(ad.suitableFor) ? ad.suitableFor : (ad.suitableFor ? ad.suitableFor.split(', ') : []),
+        isApproved: ad.isApproved || 'pending',
+      };
+      
+      return mappedAd;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Failed to fetch cat ad");
+      } else {
+        toast.error("Failed to fetch cat ad");
+      }
+      return null;
     }
   },
 }));

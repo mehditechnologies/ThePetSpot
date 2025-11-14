@@ -17,11 +17,11 @@ const raleway = Raleway({
 
 // SEO Metadata
 const metadata: Metadata = {
-  title: "Mr n Mrs Pet | Trusted Pet Care & Marketplace in India",
+  title: "Pets Corner | Trusted Pet Care & Marketplace in India",
   description:
-    "Mr n Mrs Pet offers trusted pet care services, adoption support, and a wide range of pets and pet products across India.",
+    "Pets Corner offers trusted pet care services, adoption support, and a wide range of pets and pet products across India.",
   keywords: [
-    "Mr n Mrs Pet",
+    "Pets Corner",
     "pet care India",
     "pets for sale",
     "dog grooming",
@@ -30,24 +30,24 @@ const metadata: Metadata = {
     "pet products online",
     "pet services",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Mr n Mrs Pet | Trusted Pet Care & Marketplace in India",
+    title: "Pets Corner | Trusted Pet Care & Marketplace in India",
     description:
-      "Discover Mr n Mrs Pet — trusted pet care, adoption support, and a marketplace for pets and pet products across India.",
+      "Discover Pets Corner — trusted pet care, adoption support, and a marketplace for pets and pet products across India.",
     url: "https://www.mrnmrspet.com",
-    siteName: "Mr n Mrs Pet",
-    images: [{ url: "/aboutBg.webp", width: 1200, height: 630, alt: "Mr n Mrs Pet" }],
+    siteName: "Pets Corner",
+    images: [{ url: "/aboutBg.webp", width: 1200, height: 630, alt: "Pets Corner" }],
     locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mr n Mrs Pet | Trusted Pet Care & Marketplace in India",
+    title: "Pets Corner | Trusted Pet Care & Marketplace in India",
     description:
-      "Explore trusted pet care, adoption support, and a wide range of pets and pet products at Mr n Mrs Pet.",
+      "Explore trusted pet care, adoption support, and a wide range of pets and pet products at Pets Corner.",
     images: ["/aboutBg.webp"],
     creator: "@mrnmrspet",
   },
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Mr n Mrs Pet",
+    name: "Pets Corner",
     url: "https://www.mrnmrspet.com",
     logo: "https://www.mrnmrspet.com/logo.png",
     sameAs: [

@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
           <div className="absolute inset-0 bg-[#169bb6]/70 z-10" />
           <div className="relative z-20 text-center max-w-sm">
             <Image
-              src="/petlogo.svg"
+              src="/petLogoAuth.png"
               alt="logo"
               width={180}
               height={180}
@@ -120,7 +120,7 @@ export default function ForgotPasswordPage() {
               className={`w-full py-2 rounded-md font-medium text-white transition ${
                 isForgotPassword || otpSent
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#04A4C3] hover:bg-[#118196]"
+                  : "bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)]"
               }`}
             >
               {isForgotPassword

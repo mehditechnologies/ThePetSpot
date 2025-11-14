@@ -22,7 +22,7 @@ export default function BreedNavbar() {
       }`}
     >
       <div className=" mx-auto flex items-center justify-between px-8 py-4 max-w-6xl ">
-        <div className="font-semibold text-lg">🐾 Mr n Mrs Pet</div>
+        <div className="font-semibold text-lg">🐾 Pets Corner</div>
         <button className="bg-white text-[#028d8f] px-5 py-2 rounded-full font-medium hover:bg-gray-100">
           View Puppies
         </button>

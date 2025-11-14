@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Use | Mr n Mrs Pet",
+  title: "Terms of Use | Pets Corner",
   description:
-    "Read the official Terms of Use for Mr n Mrs Pet. Learn about the rules, responsibilities, and conditions that govern the use of our website, services, and pet-related offerings.",
+    "Read the official Terms of Use for Pets Corner. Learn about the rules, responsibilities, and conditions that govern the use of our website, services, and pet-related offerings.",
   keywords: [
-    "Mr n Mrs Pet Terms of Use",
+    "Pets Corner Terms of Use",
     "pet service agreement",
-    "Mr n Mrs Pet policy",
+    "Pets Corner policy",
     "pet adoption terms",
     "pet care India",
     "online pet store rules",
   ],
-  authors: [{ name: "Mr n Mrs Pet", url: "https://www.mrnmrspet.com" }],
-  creator: "Mr n Mrs Pet",
-  publisher: "Mr n Mrs Pet",
+  authors: [{ name: "Pets Corner", url: "https://www.mrnmrspet.com" }],
+  creator: "Pets Corner",
+  publisher: "Pets Corner",
   openGraph: {
-    title: "Terms of Use | Mr n Mrs Pet",
+    title: "Terms of Use | Pets Corner",
     description:
-      "Review Mr n Mrs Pet’s Terms of Use to understand your rights and responsibilities when accessing our pet services and platform.",
+      "Review Pets Corner’s Terms of Use to understand your rights and responsibilities when accessing our pet services and platform.",
     url: "https://www.mrnmrspet.com/terms-of-use",
-    siteName: "Mr n Mrs Pet",
+    siteName: "Pets Corner",
     images: [
       {
         url: "/terms.webp",
         width: 1200,
         height: 630,
-        alt: "Mr n Mrs Pet Terms of Use",
+        alt: "Pets Corner Terms of Use",
       },
     ],
     locale: "en_IN",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terms of Use | Mr n Mrs Pet",
+    title: "Terms of Use | Pets Corner",
     description:
-      "Official Terms of Use for Mr n Mrs Pet — covering website access, service usage, and legal obligations.",
+      "Official Terms of Use for Pets Corner — covering website access, service usage, and legal obligations.",
     images: ["/terms.webp"],
     creator: "@mrnmrspet",
   },
@@ -65,13 +65,13 @@ export default function TermsOfUseLayout({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Terms of Use | Mr n Mrs Pet",
+    name: "Terms of Use | Pets Corner",
     url: "https://www.mrnmrspet.com/terms-of-use",
     description:
-      "Mr n Mrs Pet Terms of Use — outlining the legal terms for using our pet services, website, and digital offerings.",
+      "Pets Corner Terms of Use — outlining the legal terms for using our pet services, website, and digital offerings.",
     publisher: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       url: "https://www.mrnmrspet.com",
       logo: {
         "@type": "ImageObject",
@@ -80,7 +80,7 @@ export default function TermsOfUseLayout({
     },
     mainEntity: {
       "@type": "Organization",
-      name: "Mr n Mrs Pet",
+      name: "Pets Corner",
       sameAs: [
         "https://www.facebook.com/mrnmrspet",
         "https://www.instagram.com/mrnmrspet",

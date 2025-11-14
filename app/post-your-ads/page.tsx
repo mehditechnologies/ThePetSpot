@@ -5,7 +5,7 @@ export default function PostYourAdsPage() {
   return (
     <div>
       <HeroSection
-        title="About Mr n Mrs Pet"
+        title="About Pets Corner"
         bgImage="/aboutBg.webp"
         currentPage="Pet for sale"
       />

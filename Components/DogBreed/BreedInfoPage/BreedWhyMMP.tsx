@@ -29,7 +29,7 @@ export const data = [
   {
     icon: FaRegSmileBeam,
     title: "Easy and Hassle-free Process",
-    text: "With Mr N Mrs Pet, your journey with a pet starts with no difficulties. You have access to adorable pets looking for furever homes nationwide. You can receive guidance regarding any pet-related aspect in the comfort of your home. We make sure that a healthy and happy pet is delivered to you and have a secured payment process.",
+    text: "With Pets Corner, your journey with a pet starts with no difficulties. You have access to adorable pets looking for furever homes nationwide. You can receive guidance regarding any pet-related aspect in the comfort of your home. We make sure that a healthy and happy pet is delivered to you and have a secured payment process.",
   },
   {
     icon: MdOutlineSupportAgent,

@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+/* Global Color Variables */
+:root {
+  --color-primary: orange;
+  --color-primary-hover: #357ac9;
+  --color-primary-light: #6db4ff;
+  
+  /* Background Colors */
+  --bg-dark: #1a1a2e;
+  --bg-dark-secondary: #16213e;
+  --bg-dark-accent: #0f3460;
+  --bg-light: #f8f9fa;
+  --bg-white: #ffffff;
+  
+  /* Gradient Colors */
+  --gradient-dark: linear-gradient(to right, #1a1a2e, #16213e, #0f3460);
+  --gradient-hero: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
 /* Reset */
 html,
 body {
