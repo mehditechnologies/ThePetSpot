@@ -119,13 +119,13 @@ export default function HeroSection() {
                     Welcome to Pets Corner
                   </span>
                 </div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
                   Find Your
                   <span className="block bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent">
                     Perfect Companion
                   </span>
                 </h1>
-                <p className="text-xl md:text-2xl text-white/90 font-light leading-relaxed">
+                <p className="text-xl md:text-xl text-white/90 font-light leading-relaxed">
                   Connecting loving families with adorable pets. Your journey to unconditional love starts here.
                 </p>
               </div>
