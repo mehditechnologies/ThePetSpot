@@ -77,10 +77,9 @@ export const authStore = create(
           localStorage.clear(); // Clear all localStorage
           sessionStorage.clear(); // Clear all sessionStorage
           
-          // Force reload to clear any cached state
+          // Redirect to home page
           if (typeof window !== 'undefined') {
-            // Add cache busting parameter
-            window.location.href = window.location.pathname + '?logout=' + Date.now();
+            window.location.href = '/';
           }
           
           toast.success("Logged out successfully");
@@ -101,9 +100,9 @@ export const authStore = create(
             toast.error("Logout failed");
           }
           
-          // Force page reload even on error
+          // Redirect to home page even on error
           if (typeof window !== 'undefined') {
-            window.location.href = window.location.pathname + '?logout=' + Date.now();
+            window.location.href = '/';
           }
           
           return false;
