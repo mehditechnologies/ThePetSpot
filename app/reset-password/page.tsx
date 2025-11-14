@@ -3,6 +3,9 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { authStore } from "@/Store/authStore";
+// Import FontAwesome for eye icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 interface AuthStore {
   resetPassword: (data: { otp: string; newPassword: string }) => Promise<boolean>;
@@ -17,6 +20,7 @@ export default function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [passwordReset, setPasswordReset] = useState(false);
 
@@ -24,7 +28,7 @@ export default function ResetPasswordPage() {
   const store = authStore() as AuthStore;
   const { resetPassword, isResetPassword, authUser, isCheckingAuth, checkAuth } = store;
 
-  // Check authentication on mount
+  // Check authentication on mount and handle redirects
   useEffect(() => {
     const verifyAuth = async () => {
       await checkAuth();
@@ -38,58 +42,6 @@ export default function ResetPasswordPage() {
       router.push('/dashboard');
     }
   }, [authUser, isCheckingAuth, router]);
-
-  // Show loading while checking auth
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-[#fdf3f3]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#04A4C3] border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render if authenticated
-  if (authUser) {
-    return null;
-  }
-
-  // Check authentication on mount
-  useEffect(() => {
-    const verifyAuth = async () => {
-      await checkAuth();
-    };
-    verifyAuth();
-  }, [checkAuth]);
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isCheckingAuth) return;
-
-    if (authUser) {
-      router.push('/dashboard');
-      return;
-    }
-  }, [authUser, isCheckingAuth, router]);
-
-  // Show loading while checking auth
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-[#fdf3f3]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#04A4C3] border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render if authenticated (will redirect)
-  if (authUser) {
-    return null;
-  }
 
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
@@ -231,11 +183,10 @@ export default function ResetPasswordPage() {
                 }`}
                 required
               />
-              <span
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
                 onClick={() => setShowPassword((v) => !v)}
-                className={`fa fa-fw field-icon toggle-password absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer ${
-                  showPassword ? "fa-eye-slash" : "fa-eye"
-                }`}
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
                 style={{ fontSize: 20 }}
               />
               {errors.newPassword && (
@@ -243,9 +194,9 @@ export default function ResetPasswordPage() {
               )}
             </div>
 
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm New Password"
                 value={confirmPassword}
                 onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
@@ -253,6 +204,12 @@ export default function ResetPasswordPage() {
                   errors.confirmPassword ? 'border-red-300' : ''
                 }`}
                 required
+              />
+              <FontAwesomeIcon
+                icon={showConfirmPassword ? faEyeSlash : faEye}
+                onClick={() => setShowConfirmPassword((v) => !v)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
+                style={{ fontSize: 20 }}
               />
               {errors.confirmPassword && (
                 <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>

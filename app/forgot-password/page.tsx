@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
   const store = authStore() as AuthStore;
   const { forgotPassword, isForgotPassword, authUser, isCheckingAuth, checkAuth } = store;
 
-  // Check authentication on mount
+  // Check authentication on mount and handle redirects
   useEffect(() => {
     const verifyAuth = async () => {
       await checkAuth();
@@ -34,58 +34,6 @@ export default function ForgotPasswordPage() {
       router.push('/dashboard');
     }
   }, [authUser, isCheckingAuth, router]);
-
-  // Show loading while checking auth
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-[#fdf3f3]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#04A4C3] border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render if authenticated
-  if (authUser) {
-    return null;
-  }
-
-  // Check authentication on mount
-  useEffect(() => {
-    const verifyAuth = async () => {
-      await checkAuth();
-    };
-    verifyAuth();
-  }, [checkAuth]);
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isCheckingAuth) return;
-
-    if (authUser) {
-      router.push('/dashboard');
-      return;
-    }
-  }, [authUser, isCheckingAuth, router]);
-
-  // Show loading while checking auth
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-[#fdf3f3]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#04A4C3] border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render if authenticated (will redirect)
-  if (authUser) {
-    return null;
-  }
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();

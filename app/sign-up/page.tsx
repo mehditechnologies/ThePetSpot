@@ -6,10 +6,14 @@ import "react-phone-input-2/lib/style.css";
 import { toast } from "react-hot-toast";
 import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
 import { useRouter } from "next/navigation";
+// Import FontAwesome for eye icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export default function SignUpPage() {
   const router = useRouter();
   const [phone, setPhone] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -190,15 +194,23 @@ export default function SignUpPage() {
             />
 
             {/* Password */}
-            <input
-              type="password"
-              name="password"
-              placeholder="Create Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Create Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6] pr-12"
+                required
+              />
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
+                style={{ fontSize: 20 }}
+              />
+            </div>
 
             {/* Gender */}
             {/* <select
@@ -276,12 +288,12 @@ export default function SignUpPage() {
               Login
             </a>
           </p>
-          <p className="text-center text-sm text-gray-600 mt-1">
+          {/* <p className="text-center text-sm text-gray-600 mt-1">
             Sign up as a Service Provider{" "}
             <a href="#" className="text-[#32b5ce] font-medium hover:underline">
               Join Us
             </a>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
