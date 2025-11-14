@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { toast } from "react-hot-toast";
-import { authStore } from "@/Store/authStore"; // ✅ import your zustand store
+import { authStore } from "@/Store/authStore";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 // Import FontAwesome for eye icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -92,6 +92,185 @@ export default function SignUpPage() {
     <div className="min-h-screen flex justify-center bg-[#fdf3f3] py-5 pb-10">
       <div className="w-full max-w-5xl bg-white shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden">
         {/* Left Section */}
+         <div className="flex flex-col px-10 py-10">
+          <div className="text-left mb-4">
+            <Link href="/" className="text-[var(--color-secondary)] font-medium hover:underline">
+              ← Back to Home
+            </Link>
+          </div>
+          <div className="flex-grow flex flex-col justify-center">
+            <h2 className="text-2xl font-semibold text-center mb-2 text-[var(--color-primary)]">
+              Sign Up
+            </h2>
+
+            <form onSubmit={handleSubmit} className="space-y-5 mt-8">
+              {/* Full Name */}
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                required
+              />
+
+              {/* Phone Input */}
+              {/* <PhoneInput
+                country={"in"}
+                value={phone}
+                onChange={setPhone}
+                enableSearch={true}
+                disableSearchIcon={true}
+                preferredCountries={[
+                  "in",
+                  "pk",
+                  "us",
+                  "gb",
+                  "ca",
+                  "au",
+                  "ae",
+                  "de",
+                  "fr",
+                  "it",
+                  "es",
+                  "id",
+                  "sg",
+                  "bd",
+                  "sa",
+                  "qa",
+                  "kw",
+                  "my",
+                  "th",
+                  "vn",
+                ]}
+                inputStyle={{
+                  width: "100%",
+                  backgroundColor: "#F1F1F1",
+                  borderRadius: "0.375rem",
+                  border: "none",
+                  height: "45px",
+                  fontSize: "14px",
+                }}
+                dropdownStyle={{ maxHeight: "250px" }}
+              /> */}
+
+              {/* Email */}
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                required
+              />
+
+              {/* Password */}
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Create Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6] pr-12"
+                  required
+                />
+                <FontAwesomeIcon
+                  icon={showPassword ? faEyeSlash : faEye}
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
+                  style={{ fontSize: 20 }}
+                />
+              </div>
+
+              {/* Gender */}
+              {/* <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                required
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select> */}
+
+              {/* City */}
+              {/* <input
+                type="text"
+                name="city"
+                placeholder="City"
+                value={formData.city}
+                onChange={handleChange}
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                required
+              /> */}
+
+              {/* Pet Parent */}
+              <div>
+                <p className="text-gray-700 text-sm mb-1">
+                  Are you a Pet Parent?
+                </p>
+                <div className="flex items-center gap-5">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="radio"
+                      name="isPetParent"
+                      value="Yes"
+                      onChange={handleChange}
+                      className="accent-[#169bb6]"
+                    />
+                    Yes
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="radio"
+                      name="isPetParent"
+                      value="No"
+                      onChange={handleChange}
+                      className="accent-[#169bb6]"
+                    />
+                    No
+                  </label>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSigningUp} // ✅ disable while signing up
+                className={`w-full py-2 rounded-md font-medium text-white transition ${
+                  isSigningUp
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)]"
+                }`}
+              >
+                {isSigningUp ? "Signing Up..." : "Create an account"}
+              </button>
+            </form>
+
+            <p className="text-center text-sm text-gray-600 mt-4">
+              Already a member?{" "}
+              <a
+                href="/login"
+                className="text-[var(--color-secondary)] font-medium hover:underline"
+              >
+                Login
+              </a>
+            </p>
+            {/* <p className="text-center text-sm text-gray-600 mt-1">
+              Sign up as a Service Provider{" "}
+              <a href="#" className="text-[#32b5ce] font-medium hover:underline">
+                Join Us
+              </a>
+            </p> */}
+          </div>
+        </div>
+
+        {/* Right Section */}
         <div className="relative flex flex-col justify-center items-center text-white px-10 py-16">
           <Image
             src="/signup-bg.webp"
@@ -99,7 +278,7 @@ export default function SignUpPage() {
             fill
             className="object-cover z-0"
           />
-          <div className="absolute inset-0 bg-[#169bb6]/70 z-10" />
+          <div className="absolute inset-0 bg-[var(--bg-dark-accent)]/70 z-10" />
           <div className="relative z-20 text-center max-w-sm">
             <Image
               src="/petLogoAuth.png"
@@ -115,185 +294,13 @@ export default function SignUpPage() {
               with our open <br /> Heart and Paws!
             </p>
           </div>
-          <Image
+          {/* <Image
             src="/taddy.png"
             alt="pets"
             width={260}
             height={260}
             className="relative z-20 mt-8"
-          />
-        </div>
-
-        {/* Right Section */}
-        <div className="flex flex-col justify-center px-20 py-14">
-          <h2 className="text-2xl font-semibold text-center mb-2 text-[#2CA4B6]">
-            Sign Up
-          </h2>
-
-          <form onSubmit={handleSubmit} className="space-y-5 mt-8">
-            {/* Full Name */}
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
-              required
-            />
-
-            {/* Phone Input */}
-            {/* <PhoneInput
-              country={"in"}
-              value={phone}
-              onChange={setPhone}
-              enableSearch={true}
-              disableSearchIcon={true}
-              preferredCountries={[
-                "in",
-                "pk",
-                "us",
-                "gb",
-                "ca",
-                "au",
-                "ae",
-                "de",
-                "fr",
-                "it",
-                "es",
-                "id",
-                "sg",
-                "bd",
-                "sa",
-                "qa",
-                "kw",
-                "my",
-                "th",
-                "vn",
-              ]}
-              inputStyle={{
-                width: "100%",
-                backgroundColor: "#F1F1F1",
-                borderRadius: "0.375rem",
-                border: "none",
-                height: "45px",
-                fontSize: "14px",
-              }}
-              dropdownStyle={{ maxHeight: "250px" }}
-            /> */}
-
-            {/* Email */}
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
-              required
-            />
-
-            {/* Password */}
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Create Password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6] pr-12"
-                required
-              />
-              <FontAwesomeIcon
-                icon={showPassword ? faEyeSlash : faEye}
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
-                style={{ fontSize: 20 }}
-              />
-            </div>
-
-            {/* Gender */}
-            {/* <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
-              required
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select> */}
-
-            {/* City */}
-            {/* <input
-              type="text"
-              name="city"
-              placeholder="City"
-              value={formData.city}
-              onChange={handleChange}
-              className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
-              required
-            /> */}
-
-            {/* Pet Parent */}
-            <div>
-              <p className="text-gray-700 text-sm mb-1">
-                Are you a Pet Parent?
-              </p>
-              <div className="flex items-center gap-5">
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="isPetParent"
-                    value="Yes"
-                    onChange={handleChange}
-                    className="accent-[#169bb6]"
-                  />
-                  Yes
-                </label>
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="isPetParent"
-                    value="No"
-                    onChange={handleChange}
-                    className="accent-[#169bb6]"
-                  />
-                  No
-                </label>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSigningUp} // ✅ disable while signing up
-              className={`w-full py-2 rounded-md font-medium text-white transition ${
-                isSigningUp
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)]"
-              }`}
-            >
-              {isSigningUp ? "Signing Up..." : "Create an account"}
-            </button>
-          </form>
-
-          <p className="text-center text-sm text-gray-600 mt-4">
-            Already a member?{" "}
-            <a
-              href="/login"
-              className="text-[#32b5ce] font-medium hover:underline"
-            >
-              Login
-            </a>
-          </p>
-          {/* <p className="text-center text-sm text-gray-600 mt-1">
-            Sign up as a Service Provider{" "}
-            <a href="#" className="text-[#32b5ce] font-medium hover:underline">
-              Join Us
-            </a>
-          </p> */}
+          /> */}
         </div>
       </div>
     </div>

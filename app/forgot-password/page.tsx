@@ -64,7 +64,7 @@ export default function ForgotPasswordPage() {
             fill
             className="object-cover z-0"
           />
-          <div className="absolute inset-0 bg-[#169bb6]/70 z-10" />
+          <div className="absolute inset-0 bg-[var(--bg-dark-accent)]/70 z-10" />
           <div className="relative z-20 text-center max-w-sm">
             <Image
               src="/petLogoAuth.png"
@@ -80,18 +80,18 @@ export default function ForgotPasswordPage() {
               Don't worry! We'll help you <br /> reset it securely.
             </p>
           </div>
-          <Image
+          {/* <Image
             src="/taddy.png"
             alt="pets"
             width={260}
             height={260}
             className="relative z-20 mt-8"
-          />
+          /> */}
         </div>
 
         {/* Right Section */}
         <div className="flex flex-col justify-center px-20 py-14">
-          <h2 className="text-2xl font-semibold text-center mb-2 text-[#2CA4B6]">
+          <h2 className="text-2xl font-semibold text-center mb-2 text-[var(--color-primary)]">
             Reset Your Password
           </h2>
           <p className="text-center text-sm text-gray-600 mb-8">
@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
               Remember your password?
               <a
                 href="/login"
-                className="text-[#32b5ce] ml-1 font-medium hover:underline"
+                className="text-[var(--color-secondary)] ml-1 font-medium hover:underline"
               >
                 Back to Login
               </a>

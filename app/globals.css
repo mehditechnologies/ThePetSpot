@@ -3,8 +3,9 @@
 /* Global Color Variables */
 :root {
   --color-primary: orange;
-  --color-primary-hover: #357ac9;
+  --color-primary-hover: #e69b0b;
   --color-primary-light: #6db4ff;
+  --color-secondary: #357ac9;
   
   /* Background Colors */
   --bg-dark: #1a1a2e;
