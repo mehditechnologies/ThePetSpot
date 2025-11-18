@@ -54,8 +54,8 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center bg-[#fdf3f3] py-5 pb-10">
-      <div className="w-full max-w-5xl bg-white shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+    <div className="min-h-screen flex justify-center py-5 pb-10" style={{background: 'var(--gradient-hero)'}}>
+      <div className="w-full max-w-5xl bg-white shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-4xl">
         {/* Left Section */}
         <div className="relative flex flex-col justify-center items-center text-white px-10 py-16">
           <Image
@@ -108,7 +108,7 @@ export default function ForgotPasswordPage() {
                 placeholder="Enter Your Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6] focus:ring-1 focus:ring-[#169bb6]"
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
                 required
                 disabled={otpSent}
               />

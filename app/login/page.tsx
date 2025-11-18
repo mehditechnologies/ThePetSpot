@@ -43,10 +43,10 @@ export default function LoginPage() {
   // Show loading while checking auth
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-[#fdf3f3]">
+      <div className="min-h-screen flex justify-center items-center" style={{background: 'var(--gradient-hero)'}}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#04A4C3] border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[var(--color-primary)] border-t-transparent mx-auto mb-4"></div>
+          <p className="text-white text-lg">Loading...</p>
         </div>
       </div>
     );
@@ -75,8 +75,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center bg-[#fdf3f3] py-5 pb-10">
-      <div className="w-full max-w-5xl bg-white shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+    <div className="min-h-screen flex justify-center py-5 pb-10" style={{background: 'var(--gradient-hero)'}}>
+      <div className="w-full max-w-5xl bg-white shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-4xl">
         {/* Left Section */}
         <div className="relative flex flex-col justify-center items-center text-white px-10 py-16">
           <Image
@@ -175,7 +175,7 @@ export default function LoginPage() {
                       placeholder="Password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                      className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[var(--color-primary)]"
                       required
                     />
                     <span

@@ -40,13 +40,13 @@ const WinningFormula = () => {
   ];
 
   return (
-    <section className="bg-[#FFF6F0] py-16 px-6 lg:px-44">
+    <section className="py-16 px-6 lg:px-44" style={{background: 'var(--gradient-hero)'}}>
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-semibold text-gray-900">
+        <h2 className="text-3xl font-semibold text-white">
           Our Winning Formula
         </h2>
-        <p className="text-gray-600 mt-2">
-          MMP ensures quality, safety, and love in every step of your pet’s
+        <p className="text-white mt-2">
+          MMP ensures quality, safety, and love in every step of your pet's
           journey.
         </p>
       </div>
@@ -59,7 +59,7 @@ const WinningFormula = () => {
               key={item.id}
               className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 flex items-start gap-4"
             >
-              <div className="bg-[#FDDDC6] text-white font-bold w-8 h-8 flex items-center justify-center rounded-full text-sm text-[#E4823A] shrink-0">
+              <div className="bg-[var(--color-primary)] text-white font-bold w-8 h-8 flex items-center justify-center rounded-full text-sm shrink-0">
                 {item.id}
               </div>
               <div>
@@ -92,7 +92,7 @@ const WinningFormula = () => {
               key={item.id}
               className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 flex items-start gap-4"
             >
-              <div className="bg-[#FDDDC6] text-white font-bold w-8 h-8 flex items-center justify-center rounded-full text-sm text-[#E4823A] shrink-0">
+              <div className="bg-[var(--color-primary)] text-white font-bold w-8 h-8 flex items-center justify-center rounded-full text-sm shrink-0">
                 {item.id}
               </div>
               <div>

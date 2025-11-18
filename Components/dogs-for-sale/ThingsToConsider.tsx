@@ -32,7 +32,7 @@ const considerations = [
 
 export default function ThingsToConsider() {
   return (
-    <section className="px-6 md:px-16 lg:px-52 py-16 text-gray-800 bg-white">
+    <section className="px-6 md:px-16 lg:px-52 py-16 text-white" style={{background: 'var(--gradient-hero)'}}>
       <div className=" mb-10">
         <h2 className="text-3xl font-medium mb-2">
           Things To Consider While Selecting a Dog Breed

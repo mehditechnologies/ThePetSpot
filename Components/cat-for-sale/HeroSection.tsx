@@ -22,7 +22,7 @@ export default function HeroSection() {
       {/* Right Image */}
       <div className="relative w-[350px] md:w-[450px] lg:w-[480px] h-[350px] md:h-[450px] mt-28">
         <Image
-          src="/listing-hero-ban.png"
+          src="/dog-listing-hero-img.png"
           alt="Hero Section Dog and Owner"
           fill
           className="object-contain"

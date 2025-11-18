@@ -1,20 +1,21 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiMapPin, FiPlus, FiDollarSign } from "react-icons/fi";
 import { FaDog, FaFire } from "react-icons/fa";
 import { useAdStore } from "@/Store/AdsStore";
 import { cats, catBreeds, popularCatBreeds, statesWithCatCities } from "./data";
 
-export default function PetListingPage() {
-  const [budget, setBudget] = useState(500000);
-  const [selectedBreed, setSelectedBreed] = useState("");
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [showBreeds, setShowBreeds] = useState(false);
-  const [showStates, setShowStates] = useState(false);
-  const [showCities, setShowCities] = useState(false);
-  const [openUp, setOpenUp] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+export default function CatsPage() {
+  // Core states
+  const [budget, setBudget] = useState<number>(500000);
+  const [selectedBreed, setSelectedBreed] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [showBreeds, setShowBreeds] = useState<boolean>(false);
+  const [showStates, setShowStates] = useState<boolean>(false);
+  const [showCities, setShowCities] = useState<boolean>(false);
+  const [openUp, setOpenUp] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const ITEMS_PER_PAGE = 12;
 
   // API states
@@ -23,18 +24,19 @@ export default function PetListingPage() {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalAds, setTotalAds] = useState<number>(0);
 
-  // New states for controlling sidebar radios and filtered list
+  // Sidebar/filter states
   const [petCategory, setPetCategory] = useState<string>("Cats");
   const [lookingFor, setLookingFor] = useState<string>("Buying");
-  const [sortBy, setSortBy] = useState<string>("newest");
+  const [sortBy, setSortBy] = useState<string>("");
   const [filteredPetsList, setFilteredPetsList] = useState<any[]>([]);
+
+  const [selectedGender, setSelectedGender] = useState<string>("");
+  const [selectedFeature, setSelectedFeature] = useState<string>("");
 
   // Store
   const { getApprovedCatAds } = useAdStore();
 
-  const searchRef = useRef<HTMLDivElement>(null);
-  const [selectedGender, setSelectedGender] = useState<string>("");
-  const [selectedFeature, setSelectedFeature] = useState<string>("");
+  const searchRef = useRef<HTMLDivElement | null>(null);
 
   const genderOptions = ["Male", "Female", "Other"];
   const featureOptions = [
@@ -45,15 +47,57 @@ export default function PetListingPage() {
     "All",
   ];
 
+  // ---------- Utility helpers ----------
+  const slugify = (s?: string) => {
+    if (!s) return "";
+    return encodeURIComponent(
+      s
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/[\s\_]+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+    );
+  };
+
+  // Convert slug back to human readable (german-shepherd -> German Shepherd)
+  const unSlug = (s?: string) => {
+    if (!s) return "";
+    try {
+      const dec = decodeURIComponent(s);
+      const words = dec
+        .replace(/-/g, " ")
+        .replace(/_/g, " ")
+        .trim()
+        .split(/\s+/)
+        .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w));
+      return words.join(" ");
+    } catch {
+      return s.replace(/-/g, " ");
+    }
+  };
+
+  const findStateForCity = (cityName: string) => {
+    if (!cityName) return "";
+    for (const [state, cities] of Object.entries(statesWithCatCities)) {
+      if (cities.map((c) => c.toLowerCase()).includes(cityName.toLowerCase()))
+        return state;
+    }
+    return "";
+  };
+
   // ---------- API Data Fetching ----------
   useEffect(() => {
     const fetchApprovedCatAds = async () => {
       setLoading(true);
       try {
-        const result = await getApprovedCatAds();
-        setApiData(result.ads || []);
-        setFilteredPetsList(result.ads || []);
-        setTotalAds(result.ads?.length || 0);
+        const result = await getApprovedCatAds(currentPage, ITEMS_PER_PAGE);
+        setApiData(result.ads);
+        setFilteredPetsList(result.ads);
+        setTotalPages(result.pagination?.totalPages || 1);
+        setTotalAds(result.pagination?.totalAds || result.ads?.length || 0);
       } catch (error) {
         console.error('Failed to fetch approved cat ads:', error);
         setApiData([]);
@@ -64,28 +108,13 @@ export default function PetListingPage() {
     };
 
     fetchApprovedCatAds();
-  }, [getApprovedCatAds]);
-  useEffect(() => {
-    const checkPosition = () => {
-      if (!searchRef.current) return;
-      const rect = searchRef.current.getBoundingClientRect();
-      setOpenUp(window.innerHeight - rect.bottom < 250);
-    };
-    checkPosition();
-    window.addEventListener("scroll", checkPosition);
-    window.addEventListener("resize", checkPosition);
-    return () => {
-      window.removeEventListener("scroll", checkPosition);
-      window.removeEventListener("resize", checkPosition);
-    };
-  }, []);
+  }, [currentPage, getApprovedCatAds]);
 
-  // Filter function: applies current selected filters to API data
+  // ---------- Filtering logic (client-side for current page data) ----------
   const applyFilters = () => {
     if (!apiData.length) return;
-    
+
     let result = [...apiData];
-    setCurrentPage(1); // Reset to first page when filters change
 
     // Breed / name search
     if (selectedBreed && selectedBreed.trim() !== "") {
@@ -100,8 +129,8 @@ export default function PetListingPage() {
     if (selectedCity) {
       result = result.filter((p) => p.city === selectedCity);
     } else if (selectedState) {
-      // Try to match city list for selectedState, fallback to exact state match
-      const cities = statesWithCatCities[selectedState] || [];
+      const cities =
+        statesWithCatCities[selectedState as keyof typeof statesWithCatCities] || [];
       if (cities.length > 0) {
         result = result.filter(
           (p) => cities.includes(p.city) || p.city === selectedState
@@ -121,7 +150,7 @@ export default function PetListingPage() {
       result = result.filter((p) => p.gender === selectedGender);
     }
 
-    // Feature: implement only Puppy Quality (<= 8 weeks) and All (no-op)
+    // Feature: implement "Puppy Quality" as <= 8 weeks
     if (selectedFeature === "Puppy Quality") {
       result = result.filter((p) => {
         const weeks = parseInt(String(p.age || "0"), 10) || 0;
@@ -153,10 +182,8 @@ export default function PetListingPage() {
     setFilteredPetsList(result);
   };
 
-  // Apply filters when relevant selections change so UI stays responsive
   useEffect(() => {
     applyFilters();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedBreed,
     selectedState,
@@ -165,22 +192,21 @@ export default function PetListingPage() {
     selectedGender,
     selectedFeature,
     sortBy,
-    petCategory,
-    lookingFor,
     apiData,
   ]);
 
-  const dropdownClass = `absolute z-20 left-0 w-full bg-white border border-gray-200  rounded-md max-h-48 overflow-y-auto `;
+  const dropdownClass = `absolute z-20 left-0 w-full bg-white border border-gray-300 rounded-md max-h-48 overflow-y-auto shadow-lg`;
+  const dropdownStyle = {background: 'white'};
 
   return (
-    <div className="min-h-screen  font-raleway p-6 px-44">
+    <div className="min-h-screen font-raleway p-6 px-44 bg-orange-50">
       {/* 🔍 Integrated Search Bar */}
       <div
-        ref={searchRef}
-        className="w-full max-w-6xl mx-auto bg-white border border-gray-200 
-        rounded-xl flex items-center justify-between gap-3 
-        px-4 sm:px-6 lg:px-8 py-4 mb-10"
-      >
+              ref={searchRef}
+              className="w-full max-w-6xl mx-auto bg-white border border-gray-200 
+              rounded-xl flex items-center justify-between gap-3 
+              px-4 sm:px-6 lg:px-8 py-4 mb-10"
+            >
         {/* 🐶 Breed Input */}
         <div className="relative flex items-center bg-white border border-gray-200 rounded-md px-3 py-2 w-full">
           <FaDog className="text-gray-400 text-lg mr-2" />
@@ -213,7 +239,7 @@ export default function PetListingPage() {
                       setSelectedBreed(breed);
                       setShowBreeds(false);
                     }}
-                    className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
+                    className="px-3 py-2 hover:bg-[var(--color-primary)] hover:text-white cursor-pointer text-gray-800 transition-colors"
                   >
                     {breed}
                   </li>
@@ -242,6 +268,7 @@ export default function PetListingPage() {
               className={`${dropdownClass} ${
                 openUp ? "bottom-full mb-1" : "top-full mt-1"
               }`}
+              style={dropdownStyle}
             >
               {Object.keys(statesWithCatCities).map((state) => (
                 <li
@@ -251,7 +278,7 @@ export default function PetListingPage() {
                     setSelectedCity("");
                     setShowStates(false);
                   }}
-                  className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
+                  className="px-3 py-2 hover:bg-[var(--color-primary)] hover:text-white cursor-pointer text-gray-800 transition-colors"
                 >
                   {state}
                 </li>
@@ -265,9 +292,16 @@ export default function PetListingPage() {
           <FiMapPin className="text-gray-400 text-lg mr-2" />
           <input
             type="text"
-            placeholder="City"
+            placeholder={selectedState ? "City" : "Select State First"}
             value={selectedCity}
             readOnly
+            onClick={() => {
+              if (selectedState) {
+                setShowCities(!showCities);
+                setShowBreeds(false);
+                setShowStates(false);
+              }
+            }}
             onFocus={() => {
               if (selectedState) {
                 setShowCities(!showCities);
@@ -275,13 +309,16 @@ export default function PetListingPage() {
                 setShowStates(false);
               }
             }}
-            className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400 cursor-pointer"
+            className={`w-full outline-none text-sm placeholder:text-gray-400 cursor-pointer ${
+              selectedState ? 'text-gray-700' : 'text-gray-400'
+            }`}
           />
           {showCities && selectedState && (
             <ul
               className={`${dropdownClass} ${
                 openUp ? "bottom-full mb-1" : "top-full mt-1"
               }`}
+              style={dropdownStyle}
             >
               {statesWithCatCities[selectedState].map((city) => (
                 <li
@@ -290,7 +327,7 @@ export default function PetListingPage() {
                     setSelectedCity(city);
                     setShowCities(false);
                   }}
-                  className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
+                  className="px-3 py-2 hover:bg-[var(--color-primary)] hover:text-white cursor-pointer text-gray-800 transition-colors"
                 >
                   {city}
                 </li>
@@ -302,7 +339,7 @@ export default function PetListingPage() {
         {/* 🔍 Search Button */}
         <button
           onClick={() => applyFilters()}
-          className="bg-[#8957E9] hover:bg-[#8b3ffd] text-white font-medium 
+          className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white font-medium 
             rounded-md px-18 py-2 flex items-center justify-center gap-2 
             transition-all duration-200"
         >
@@ -314,201 +351,172 @@ export default function PetListingPage() {
       <div className="max-w-7xl mx-auto flex gap-4">
         {/* 🧭 Sidebar */}
         <div className="w-60 ">
-          {/* Header */}
-          <div className="bg-[#F9F6FF] px-5 py-5 shadow">
-            <div className="  text-[#8957E9] rounded-lg  p flex items-center justify-between ">
-              <h3 className="font-semibold text-base flex items-center gap-2">
-                Add Pet
-              </h3>
-              <FiPlus className="text-lg font-extrabold cursor-pointer hover:scale-110 transition" />
-            </div>
-            <hr className="my-1.5 border-gray-200" />
-
-            {/* Pet Type Section */}
-            <div className="space-y-0 text-gray-700 text-sm">
-              <div className="hover:text-purple-600 cursor-pointer text-sm font-semibold my-2">
-                For Sale
-              </div>
-              <hr className="my-2 border-gray-200" />
-              <div className="hover:text-purple-600 cursor-pointer font-semibold">
-                For Mating
-              </div>
-              <hr className="my-2 border-gray-200" />
-              <div className="hover:text-purple-600 cursor-pointer font-semibold">
-                For Adoption
-              </div>
-            </div>
+          {/* Clear All Filters */}
+          <div className="px-5 py-3 shadow rounded-lg mb-3" style={{background: 'var(--color-primary)'}}>
+            <button
+              onClick={() => {
+                setSelectedBreed("");
+                setSelectedState("");
+                setSelectedCity("");
+                setSelectedGender("");
+                setSelectedFeature("");
+                setSortBy("");
+                setBudget(500000);
+              }}
+              className="w-full text-white font-semibold hover:bg-white hover:text-[var(--color-primary)] transition-all duration-200 py-2 rounded-md"
+            >
+              Clear All Filters
+            </button>
           </div>
 
-          {/* Filters */}
-          <h3 className="text-purple-600 font-medium text-xl flex items-center gap-2 my-6">
-            Filters
-          </h3>
-          {/* i Am Looking */}
-          <div className=" px-5 py-5 shadow my-3">
-            <div className="  text-[#8957E9] rounded-lg  p flex items-center justify-between ">
-              <h3 className="font-semibold text-base flex items-center gap-2">
-                I am Looking
-              </h3>
+          {/* Active Filters Display */}
+          {(selectedBreed || selectedState || selectedCity || selectedGender || selectedFeature || sortBy) && (
+            <div className="px-5 py-3 shadow rounded-lg mb-3 bg-white border">
+              <h3 className="text-gray-700 font-semibold text-sm mb-2">Active Filters:</h3>
+              <div className="flex flex-wrap gap-2">
+                {selectedBreed && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-[var(--color-primary)] text-white text-xs rounded-full">
+                    {selectedBreed}
+                    <button 
+                      onClick={() => setSelectedBreed("")} 
+                      className="ml-1 hover:bg-white hover:text-[var(--color-primary)] rounded-full w-4 h-4 flex items-center justify-center"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {selectedState && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-500 text-white text-xs rounded-full">
+                    {selectedState}
+                    <button 
+                      onClick={() => {setSelectedState(""); setSelectedCity("");}} 
+                      className="ml-1 hover:bg-white hover:text-blue-500 rounded-full w-4 h-4 flex items-center justify-center"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {selectedCity && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500 text-white text-xs rounded-full">
+                    {selectedCity}
+                    <button 
+                      onClick={() => setSelectedCity("")} 
+                      className="ml-1 hover:bg-white hover:text-green-500 rounded-full w-4 h-4 flex items-center justify-center"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {selectedGender && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-500 text-white text-xs rounded-full">
+                    {selectedGender}
+                    <button 
+                      onClick={() => setSelectedGender("")} 
+                      className="ml-1 hover:bg-white hover:text-purple-500 rounded-full w-4 h-4 flex items-center justify-center"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {selectedFeature && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-indigo-500 text-white text-xs rounded-full">
+                    {selectedFeature}
+                    <button 
+                      onClick={() => setSelectedFeature("")} 
+                      className="ml-1 hover:bg-white hover:text-indigo-500 rounded-full w-4 h-4 flex items-center justify-center"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {sortBy && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-500 text-white text-xs rounded-full">
+                    Sort: {sortBy === 'priceLowHigh' ? 'Price ↑' : sortBy === 'priceHighLow' ? 'Price ↓' : sortBy === 'ageLowHigh' ? 'Age ↑' : sortBy === 'ageHighLow' ? 'Age ↓' : 'Newest'}
+                    <button 
+                      onClick={() => setSortBy("")} 
+                      className="ml-1 hover:bg-white hover:text-gray-500 rounded-full w-4 h-4 flex items-center justify-center"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+              </div>
             </div>
-            <hr className="my-1.5 border-gray-200 mb-4" />
-
-            {/* Pet Type Section (controlled) */}
-            <div className="space-y-0 text-gray-700 text-sm mt-2">
-              <label className="flex items-center gap-2 font-semibold cursor-pointer">
-                <input
-                  type="radio"
-                  name="lookingFor"
-                  value="Buying"
-                  className="accent-[#8957E9] w-4 h-4"
-                  checked={lookingFor === "Buying"}
-                  onChange={() => setLookingFor("Buying")}
-                />
-                For Buying
-              </label>
-              <hr className="my-2 border-gray-200" />
-              <label className="flex items-center gap-2 font-semibold cursor-pointer">
-                <input
-                  type="radio"
-                  name="lookingFor"
-                  value="Mating"
-                  className="accent-[#8957E9] w-4 h-4"
-                  checked={lookingFor === "Mating"}
-                  onChange={() => setLookingFor("Mating")}
-                />
-                For Mating
-              </label>
-              <hr className="my-2 border-gray-200" />
-              <label className="flex items-center gap-2 font-semibold cursor-pointer">
-                <input
-                  type="radio"
-                  name="lookingFor"
-                  value="Adoption"
-                  className="accent-[#8957E9] w-4 h-4"
-                  checked={lookingFor === "Adoption"}
-                  onChange={() => setLookingFor("Adoption")}
-                />
-                For Adoption
-              </label>
-            </div>
-          </div>
-
-          {/* Pet Category */}
-          <div className="px-5 py-5 shadow rounded-lg bg-white my-3">
-            <div className="text-[#8957E9] flex items-center justify-between">
-              <h3 className="font-semibold text-base flex items-center gap-2">
-                Pet Category
-              </h3>
-            </div>
-
-            <hr className="my-2 border-gray-200 mb-4" />
-
-            {/* Pet Type Section */}
-            <div className="space-y-3 text-gray-700 text-sm">
-              <label className="flex items-center gap-2 font-semibold cursor-pointer">
-                <input
-                  type="radio"
-                  name="petCategory"
-                  value="Dogs"
-                  className="accent-[#8957E9] w-4 h-4"
-                  checked={petCategory === "Dogs"}
-                  onChange={() => setPetCategory("Dogs")}
-                />
-                Dogs
-              </label>
-              <hr className="border-gray-200" />
-              <label className="flex items-center gap-2 font-semibold cursor-pointer">
-                <input
-                  type="radio"
-                  name="petCategory"
-                  value="Cats"
-                  className="accent-[#8957E9] w-4 h-4"
-                  checked={petCategory === "Cats"}
-                  onChange={() => setPetCategory("Cats")}
-                />
-                Cats
-              </label>
-              <hr className="border-gray-200" />
-              <label className="flex items-center gap-2 font-semibold cursor-pointer">
-                <input
-                  type="radio"
-                  name="petCategory"
-                  value="Small Pets"
-                  className="accent-[#8957E9] w-4 h-4"
-                  checked={petCategory === "Small Pets"}
-                  onChange={() => setPetCategory("Small Pets")}
-                />
-                Small Pets
-              </label>
-            </div>
-          </div>
+          )}
 
           {/* Sorted By */}
-          <div className="px-5 py-5 shadow rounded-lg bg-white my-3">
-            <div className="text-[#8957E9] flex items-center justify-between">
-              <h3 className="font-semibold text-base flex items-center gap-2">
+          <div className="px-5 py-5 shadow rounded-lg my-3" style={{background: 'var(--gradient-hero)'}}>
+            <div className="text-[var(--color-primary)] flex items-center justify-between">
+              <h3 className="font-semibold text-base flex items-center gap-2 text-white">
                 Sort By
               </h3>
+              {sortBy && (
+                <button 
+                  onClick={() => setSortBy("")} 
+                  className="text-xs text-gray-300 hover:text-white transition-colors"
+                >
+                  Clear
+                </button>
+              )}
             </div>
 
-            <hr className="my-2 border-gray-200 mb-4" />
+            <hr className="my-2 border-gray-400 mb-4" />
 
-            {/* Pet Type Section */}
-            <div className="space-y-3 text-gray-700 text-sm">
+            <div className="space-y-3 text-white text-sm">
               <label className="flex items-center gap-2 font-semibold cursor-pointer">
                 <input
                   type="radio"
                   name="sortBy"
                   value="priceLowHigh"
-                  className="accent-[#8957E9] w-4 h-4"
+                  className="accent-[var(--color-primary)] w-4 h-4"
                   checked={sortBy === "priceLowHigh"}
                   onChange={() => setSortBy("priceLowHigh")}
                 />
                 Price Low to High
               </label>
-              <hr className="border-gray-200" />
+              <hr className="border-gray-400" />
               <label className="flex items-center gap-2 font-semibold cursor-pointer">
                 <input
                   type="radio"
                   name="sortBy"
                   value="priceHighLow"
-                  className="accent-[#8957E9] w-4 h-4"
+                  className="accent-[var(--color-primary)] w-4 h-4"
                   checked={sortBy === "priceHighLow"}
                   onChange={() => setSortBy("priceHighLow")}
                 />
                 Price High to Low
               </label>
-              <hr className="border-gray-200" />
+              <hr className="border-gray-400" />
               <label className="flex items-center gap-2 font-semibold cursor-pointer">
                 <input
                   type="radio"
                   name="sortBy"
                   value="ageLowHigh"
-                  className="accent-[#8957E9] w-4 h-4"
+                  className="accent-[var(--color-primary)] w-4 h-4"
                   checked={sortBy === "ageLowHigh"}
                   onChange={() => setSortBy("ageLowHigh")}
                 />
                 Age Low to High
               </label>
-              <hr className="border-gray-200" />
+              <hr className="border-gray-400" />
               <label className="flex items-center gap-2 font-semibold cursor-pointer">
                 <input
                   type="radio"
                   name="sortBy"
                   value="ageHighLow"
-                  className="accent-[#8957E9] w-4 h-4"
+                  className="accent-[var(--color-primary)] w-4 h-4"
                   checked={sortBy === "ageHighLow"}
                   onChange={() => setSortBy("ageHighLow")}
                 />
                 Age High to Low
               </label>
-              <hr className="border-gray-200" />
+              <hr className="border-gray-400" />
               <label className="flex items-center gap-2 font-semibold cursor-pointer">
                 <input
                   type="radio"
                   name="sortBy"
                   value="newest"
-                  className="accent-[#8957E9] w-4 h-4"
+                  className="accent-[var(--color-primary)] w-4 h-4"
                   checked={sortBy === "newest"}
                   onChange={() => setSortBy("newest")}
                 />
@@ -516,29 +524,37 @@ export default function PetListingPage() {
               </label>
             </div>
           </div>
-          <div className="px-5 py-5 shadow rounded-lg bg-white my-3">
-            <div className="text-[#8957E9] flex items-center justify-between">
-              <h3 className="font-semibold text-base flex items-center gap-2">
+          <div className="px-5 py-5 shadow rounded-lg my-3" style={{background: 'var(--gradient-hero)'}}>
+            <div className="text-[var(--color-primary)] flex items-center justify-between">
+              <h3 className="font-semibold text-base flex items-center gap-2 text-white">
                 Gender
               </h3>
+              {selectedGender && (
+                <button 
+                  onClick={() => setSelectedGender("")} 
+                  className="text-xs text-gray-300 hover:text-white transition-colors"
+                >
+                  Clear
+                </button>
+              )}
             </div>
-            <hr className="my-2 border-gray-200 mb-4" />
-            <div className="space-y-3 text-gray-700 text-sm">
+            <hr className="my-2 border-gray-400 mb-4" />
+            <div className="space-y-3 text-white text-sm">
               {genderOptions.map((opt, idx) => (
                 <div key={opt}>
-                  <label className="flex items-center gap-2 font-semibold cursor-pointer active:text-[#8957E9]">
+                  <label className="flex items-center gap-2 font-semibold cursor-pointer active:text-[var(--color-primary)]">
                     <input
                       type="radio"
                       name="gender"
                       value={opt}
-                      className="accent-[#8957E9] w-4 h-4 mb-2 "
+                      className="accent-[var(--color-primary)] w-4 h-4 mb-2 "
                       checked={selectedGender === opt}
                       onChange={() => setSelectedGender(opt)}
                     />
                     {opt}
                   </label>
                   {idx < genderOptions.length - 1 && (
-                    <hr className="border-gray-200 my-1.5" />
+                    <hr className="border-gray-400 my-1.5" />
                   )}
                 </div>
               ))}
@@ -546,14 +562,22 @@ export default function PetListingPage() {
           </div>
 
           {/* Pet Features Section */}
-          <div className="px-5 py-5 shadow rounded-lg bg-white my-3">
-            <div className="text-[#8957E9] flex items-center justify-between">
-              <h3 className="font-semibold text-base flex items-center gap-2">
+          <div className="px-5 py-5 shadow rounded-lg my-3" style={{background: 'var(--gradient-hero)'}}>
+            <div className="text-[var(--color-primary)] flex items-center justify-between">
+              <h3 className="font-semibold text-base flex items-center gap-2 text-white">
                 Pet Features
               </h3>
+              {selectedFeature && (
+                <button 
+                  onClick={() => setSelectedFeature("")} 
+                  className="text-xs text-gray-300 hover:text-white transition-colors"
+                >
+                  Clear
+                </button>
+              )}
             </div>
-            <hr className="my-2 border-gray-200 mb-4" />
-            <div className="space-y-3 text-gray-700 text-sm">
+            <hr className="my-2 border-gray-400 mb-4" />
+            <div className="space-y-3 text-white text-sm">
               {featureOptions.map((opt, idx) => (
                 <div key={opt}>
                   <label className="flex items-center gap-2 font-semibold cursor-pointer mb-2">
@@ -561,23 +585,23 @@ export default function PetListingPage() {
                       type="radio"
                       name="feature"
                       value={opt}
-                      className="accent-[#8957E9] w-4 h-4"
+                      className="accent-[var(--color-primary)] w-4 h-4"
                       checked={selectedFeature === opt}
                       onChange={() => setSelectedFeature(opt)}
                     />
                     {opt}
                   </label>
                   {idx < featureOptions.length - 1 && (
-                    <hr className="border-gray-200 my-1.5" />
+                    <hr className="border-gray-400 my-1.5" />
                   )}
                 </div>
               ))}
             </div>
           </div>
           {/* 💰 Budget Range */}
-          <div className="mb-5">
-            <h3 className="text-purple-600 font-semibold flex items-center gap-2 mb-3">
-              <FiDollarSign /> Budget
+          <div className="mb-5 px-5 py-5 shadow rounded-lg" style={{background: 'var(--gradient-hero)'}}>
+            <h3 className="text-white font-semibold flex items-center gap-2 mb-3">
+              <FiDollarSign className="text-[var(--color-primary)]" /> Budget
             </h3>
             <input
               type="range"
@@ -585,37 +609,37 @@ export default function PetListingPage() {
               max="1000000"
               value={budget}
               onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full appearance-none h-2 bg-gray-200 rounded-lg accent-[#8957E9] cursor-pointer outline-none"
+              className="w-full appearance-none h-2 bg-gray-600 rounded-lg accent-[var(--color-primary)] cursor-pointer outline-none"
             />
-            <div className="flex justify-between font-semibold">
+            <div className="flex justify-between font-semibold text-white mt-2">
               <p>0</p>
               <p>10L</p>
             </div>
-            <p className="text-sm text-gray-600 mt-2">
-              Your Budget: <span className="font-semibold">₹: {budget}</span>
+            <p className="text-sm text-gray-300 mt-2">
+              Your Budget: <span className="font-semibold text-white">{budget} PKR</span>
             </p>
           </div>
 
-          <hr className="my-5 border-gray-300" />
-
           {/* 🔥 Popular Breeds */}
-          <h3 className="text-purple-600 font-semibold flex items-center gap-2 mb-3">
-            <FaFire /> Popular Breeds
-          </h3>
-          <div className="space-y-2 text-gray-700">
-            {popularCatBreeds.map((breed, i) => {
-              const breedCount = apiData.filter((p) => p.breed === breed).length;
-              return (
-                <div
-                  key={i}
-                  onClick={() => setSelectedBreed(breed)}
-                  className="hover:text-purple-600 cursor-pointer text-sm flex gap-2"
-                >
-                  <span>{breed}</span>
-                  <span className="text-gray-500">({breedCount})</span>
-                </div>
-              );
-            })}
+          <div className="px-5 py-5 shadow rounded-lg my-3" style={{background: 'var(--gradient-hero)'}}>
+            <h3 className="text-white font-semibold flex items-center gap-2 mb-3">
+              <FaFire className="text-[var(--color-primary)]" /> Popular Breeds
+            </h3>
+            <div className="space-y-2">
+              {popularCatBreeds.map((breed, i) => {
+                const breedCount = apiData.filter((p) => p.breed === breed).length;
+                return (
+                  <div
+                    key={i}
+                    onClick={() => setSelectedBreed(breed)}
+                    className="hover:text-[var(--color-primary)] cursor-pointer text-sm flex gap-2 text-white transition-colors"
+                  >
+                    <span>{breed}</span>
+                    <span className="text-gray-300">({breedCount})</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -623,15 +647,15 @@ export default function PetListingPage() {
         <div className="flex-1">
           <div className="mb-8">
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-              <span className="hover:text-purple-600 cursor-pointer transition-colors">
+              <span className="hover:text-[var(--color-primary)] cursor-pointer transition-colors">
                 Home
               </span>
               <span>→</span>
-              <span className="hover:text-purple-600 cursor-pointer transition-colors">
+              <span className="hover:text-[var(--color-primary)] cursor-pointer transition-colors">
                 Cats
               </span>
               <span>→</span>
-              <span className="text-purple-600 font-medium">
+              <span className="text-[var(--color-primary)] font-medium">
                 {selectedBreed
                   ? `${selectedBreed} for Sale`
                   : "All Cats for Sale"}
@@ -640,17 +664,17 @@ export default function PetListingPage() {
 
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent mb-2" style={{color: "var(--color-primary)"}}>
                   {selectedBreed
                     ? `${selectedBreed} For Sale`
                     : "Cats For Sale"}
                 </h1>
-                <p className="text-gray-600 flex items-center gap-2">
+                {/* <p className="text-gray-600 flex items-center gap-2">
                   <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-600 font-semibold text-sm">
                     {loading ? '...' : totalAds}
                   </span>
-                  Premium cats available near you
-                </p>
+                  Premium pets available near you
+                </p> */}
               </div>
             </div>
           </div>
@@ -659,25 +683,25 @@ export default function PetListingPage() {
             {loading ? (
               // Loading state
               Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
-                  <div className="h-64 bg-gray-200"></div>
+                <div key={index} className="rounded-2xl overflow-hidden shadow-sm animate-pulse" style={{background: 'var(--gradient-hero)'}}>
+                  <div className="h-64 bg-gray-600"></div>
                   <div className="p-5">
-                    <div className="h-6 bg-gray-200 rounded mb-3"></div>
+                    <div className="h-6 bg-gray-600 rounded mb-3"></div>
                     <div className="space-y-2.5 mb-4">
                       <div className="flex justify-between">
-                        <div className="h-4 bg-gray-200 rounded w-16"></div>
-                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        <div className="h-4 bg-gray-600 rounded w-16"></div>
+                        <div className="h-4 bg-gray-600 rounded w-20"></div>
                       </div>
                       <div className="flex justify-between">
-                        <div className="h-4 bg-gray-200 rounded w-20"></div>
-                        <div className="h-4 bg-gray-200 rounded w-24"></div>
+                        <div className="h-4 bg-gray-600 rounded w-20"></div>
+                        <div className="h-4 bg-gray-600 rounded w-24"></div>
                       </div>
                       <div className="flex justify-between">
-                        <div className="h-4 bg-gray-200 rounded w-16"></div>
-                        <div className="h-4 bg-gray-200 rounded w-18"></div>
+                        <div className="h-4 bg-gray-600 rounded w-16"></div>
+                        <div className="h-4 bg-gray-600 rounded w-18"></div>
                       </div>
                     </div>
-                    <div className="h-10 bg-gray-200 rounded-lg"></div>
+                    <div className="h-10 bg-gray-600 rounded-lg"></div>
                   </div>
                 </div>
               ))
@@ -685,70 +709,55 @@ export default function PetListingPage() {
               <div className="col-span-3 text-center py-20">
                 <div className="text-6xl mb-4">🐱</div>
                 <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                  No cats found
+                  No pets found
                 </h3>
                 <p className="text-gray-500">Try adjusting your filters</p>
               </div>
             ) : (
-              (() => {
-                const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-                const endIdx = startIdx + ITEMS_PER_PAGE;
-                const paginatedList = filteredPetsList.slice(startIdx, endIdx);
-                
-                return paginatedList.map((pet) => (
-                  <div
-                    key={pet.id || pet._id}
-                    className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                  >
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={pet.img || pet.images?.[0] || '/default-pet.jpg'}
-                        alt={pet.name}
-                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                      <div className="absolute top-3 left-3">
-                        <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-purple-600 text-xs font-semibold rounded-full shadow-lg">
-                          ⭐ Premium
+ filteredPetsList.map((pet) => (
+                <div
+                  key={pet.id || pet._id}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={pet.img || pet.images?.[0] || '/default-pet.jpg'}
+                      alt={pet.name}
+                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />                    {/* <div className="absolute top-3 left-3">
+                      <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-purple-600 text-xs font-semibold rounded-full shadow-lg">
+                        ⭐ Premium
+                      </span>
+                    </div> */}
+                  </div>                  <div className="p-5">
+                    <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors">
+                      {pet.name}
+                    </h3>                    <div className="space-y-2.5 mb-4">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Breed</span>
+                        <span className="font-semibold text-gray-800">
+                          {pet.breed}
                         </span>
                       </div>
-                    </div>
-
-                    <div className="p-5">
-                      <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors">
-                        {pet.name}
-                      </h3>
-
-                      <div className="space-y-2.5 mb-4">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-500">Breed</span>
-                          <span className="font-semibold text-gray-800">
-                            {pet.breed}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-500">Gender & Age</span>
-                          <span className="font-semibold text-gray-800">
-                            {pet.gender}, {pet.age} {pet.age === 1 ? 'month' : 'months'}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-500">Location</span>
-                          <span className="font-semibold text-purple-600">
-                            {pet.city}
-                          </span>
-                        </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Gender & Age</span>
+                        <span className="font-semibold text-gray-800">
+                          {pet.gender}, {pet.age} {pet.age === 1 ? 'month' : 'months'}
+                        </span>
                       </div>
-
-                      <div className="grid grid-cols-3 gap-2 mb-3">
-                        <a
-                          href={`tel:${pet.contactNumber}`}
-                          className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium text-center block"
-                        >
-                          Call
-                        </a>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Location</span>
+                        <span className="font-semibold text-purple-600">
+                          {pet.city}
+                        </span>
+                      </div>
+                    </div>                    <div className="grid grid-cols-3 gap-2 mb-3">
+                      <a
+                        href={`tel:${pet.contactNumber}`}
+                        className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium text-center block"
+                      >
+                        Call
+                      </a>
                         <a
                           href={`https://wa.me/${pet.contactNumber}?text=${encodeURIComponent('Hi, I saw your ad, I am interested')}`}
                           target="_blank"
@@ -757,83 +766,72 @@ export default function PetListingPage() {
                         >
                           Chat
                         </a>
-                        <a
-                          href={`/cats/pet/${pet._id || pet.id}`}
-                          className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium text-center block"
-                        >
-                          Info
-                        </a>
-                      </div>
-
-                      <button className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
-                        {pet.price?.toLocaleString() || 'N/A'} PKR
-                      </button>
-                    </div>
+                      <a
+                        href={`/cats/pet/${pet._id || pet.id}`}
+                        className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium text-center block"
+                      >
+                        Info
+                      </a>
+                    </div>                    
+                    <button className="w-full py-3 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-200 hover:scale-[1.02]" style={{background: "var(--gradient-hero)"}}>
+                      {pet.price?.toLocaleString() || 'N/A'} PKR
+                    </button>
                   </div>
-                ));
-              })()
+                </div>
+              ))
             )}
           </div>
-          {/* Modern Pagination */}
-          {(() => {
-            const totalPages = Math.ceil(
-              filteredPetsList.length / ITEMS_PER_PAGE
-            );
-            if (totalPages <= 1) return null;
-            return (
-              <div className="flex items-center justify-between mt-12">
-                <div className="text-sm text-gray-600">
-                  Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1}-{Math.min(currentPage * ITEMS_PER_PAGE, filteredPetsList.length)} of {filteredPetsList.length} cats
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Previous
-                  </button>
-                  
-                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                    let pageNumber;
-                    
-                    if (totalPages <= 5) {
-                      pageNumber = i + 1;
-                    } else if (currentPage <= 3) {
-                      pageNumber = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNumber = totalPages - 4 + i;
-                    } else {
-                      pageNumber = currentPage - 2 + i;
-                    }
-                    
-                    return (
-                      <button
-                        key={pageNumber}
-                        onClick={() => setCurrentPage(pageNumber)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg ${
-                          currentPage === pageNumber
-                            ? 'text-white bg-purple-600 shadow-lg'
-                            : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
-                        }`}
-                      >
-                        {pageNumber}
-                      </button>
-                    );
-                  })}
-                  
-                  <button
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage >= totalPages}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Next
-                  </button>
-                </div>
+          {/* Pagination */}
+          {!loading && totalPages > 1 && (
+            <div className="mt-12 flex items-center justify-center gap-4">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-200 ${
+                  currentPage === 1
+                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                    : "text-white hover:bg-[var(--color-primary-hover)] shadow-sm hover:shadow-md hover:scale-105"
+                }`}
+                style={currentPage !== 1 ? {background: 'var(--bg-dark-accent)'} : {}}
+              >
+                Previous
+              </button>
+
+              <div className="flex items-center gap-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-10 h-10 rounded-full font-semibold transition-all duration-200 ${
+                        currentPage === page
+                          ? "bg-[var(--color-primary)] text-white shadow-lg scale-110"
+                          : "text-white hover:bg-[var(--color-primary-hover)] hover:text-white"
+                      }`}
+                      style={currentPage !== page ? {background: 'var(--bg-dark-accent)'} : {}}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
               </div>
-            );
-          })()}
+
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
+                disabled={currentPage >= totalPages}
+                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-200 ${
+                  currentPage >= totalPages
+                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                    : "text-white hover:bg-[var(--color-primary-hover)] shadow-sm hover:shadow-md hover:scale-105"
+                }`}
+                style={currentPage < totalPages ? {background: 'var(--bg-dark-accent)'} : {}}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

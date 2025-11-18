@@ -54,10 +54,10 @@ export default function SignUpPage() {
   // Show loading while checking auth
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-[#fdf3f3]">
+      <div className="min-h-screen flex justify-center items-center" style={{background: 'var(--gradient-hero)'}}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#04A4C3] border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[var(--color-primary)] border-t-transparent mx-auto mb-4"></div>
+          <p className="text-white text-lg">Loading...</p>
         </div>
       </div>
     );
@@ -89,8 +89,8 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center bg-[#fdf3f3] py-5 pb-10">
-      <div className="w-full max-w-5xl bg-white shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+    <div className="min-h-screen flex justify-center py-5 pb-10" style={{background: 'var(--gradient-hero)'}}>
+      <div className="w-full max-w-5xl bg-white shadow-[0_4px_25px_rgba(0,0,0,0.08)] grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-4xl">
         {/* Left Section */}
          <div className="flex flex-col px-10 py-10">
           <div className="text-left mb-4">
@@ -111,7 +111,7 @@ export default function SignUpPage() {
                 placeholder="Full Name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[var(--color-primary)]"
                 required
               />
 
@@ -162,7 +162,7 @@ export default function SignUpPage() {
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6]"
+                className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[var(--color-primary)]"
                 required
               />
 
@@ -174,7 +174,7 @@ export default function SignUpPage() {
                   placeholder="Create Password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[#169bb6] pr-12"
+                  className="w-full p-3 bg-[#F1F1F1] rounded-md text-sm focus:outline-none focus:border-[var(--color-primary)] pr-12"
                   required
                 />
                 <FontAwesomeIcon
@@ -222,7 +222,7 @@ export default function SignUpPage() {
                       name="isPetParent"
                       value="Yes"
                       onChange={handleChange}
-                      className="accent-[#169bb6]"
+                      className="accent-[var(--color-primary)]"
                     />
                     Yes
                   </label>
@@ -232,7 +232,7 @@ export default function SignUpPage() {
                       name="isPetParent"
                       value="No"
                       onChange={handleChange}
-                      className="accent-[#169bb6]"
+                      className="accent-[var(--color-primary)]"
                     />
                     No
                   </label>

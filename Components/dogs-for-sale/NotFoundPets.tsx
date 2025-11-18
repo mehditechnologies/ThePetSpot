@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function NotFoundPets() {
   return (
-    <section className="w-full min-h-screen px-44 bg-white flex flex-col md:flex-row items-center justify-center  py-16 md:py-24">
+    <section className="w-full min-h-screen px-44 flex flex-col md:flex-row items-center justify-center  py-16 md:py-24" style={{ background: 'var(--gradient-hero)' }}>
       {/* Left Side Image */}
       <div className="md:w-4/12 w-full flex justify-center mb-10 md:mb-0">
         <div className="relative w-[320px] md:w-[340px]">
@@ -19,17 +19,17 @@ export default function NotFoundPets() {
 
       {/* Right Side Form */}
       <div className="md:w-7/12 w-full md:pl-8 lg:pl-16">
-        <h2 className="text-xl md:text-xl font-medium text-gray-800 mb-2">
+        <h2 className="text-xl md:text-xl font-medium text-white mb-2">
           Hey! Still not found what you are looking for?
         </h2>
-        <p className="text-gray-500 text-sm md:text-sm mb-8 leading-relaxed">
+        <p className="text-white text-sm md:text-sm mb-8 leading-relaxed">
           No worries!! Let our pet experts come to your rescue. Fill in your
           details and we will give you a call. Our MMP experts have successfully
           helped in completing 4000+ families by finding and connecting them to
           their lovable furbabies across India.
         </p>
 
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 text-white">
           {/* Name */}
           <div>
             <input

@@ -17,14 +17,14 @@ export default function DogsForSalePage() {
       {/* <Navbar /> */}
       <HeroSection />
       <PetListingPage />
-      <NotFoundPets />
+      {/* <NotFoundPets /> */}
       <ThingsToConsider />
       <AvailablePets />
       <WinningFormula />
-      <AreYouResponsible />
+      {/* <AreYouResponsible /> */}
       <PopularCatSearches />
-      <Feedback />
-      <FAQSection />
+      {/* <Feedback /> */}
+      {/* <FAQSection /> */}
       <BlogSection />
       {/* <Footer /> */}
     </div>
