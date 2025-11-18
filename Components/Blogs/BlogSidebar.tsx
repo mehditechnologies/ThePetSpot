@@ -22,6 +22,8 @@ export default function BlogSidebar({ category = "" }: { category?: string }) {
 
   const page = 1;
   const limit = 6;
+  const Base_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -29,7 +31,7 @@ export default function BlogSidebar({ category = "" }: { category?: string }) {
         setLoading(true);
         setError(null);
         const res = await axios.get(
-          `http://localhost:8000/api/admin/blogs/get-all?category=${category}&page=${page}&limit=${limit}`
+          `${Base_URL}/api/admin/blogs/get-all?category=${category}&page=${page}&limit=${limit}`
         );
         setBlogs(res.data.blogs);
       } catch (err: any) {
