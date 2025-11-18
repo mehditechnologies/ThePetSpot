@@ -20,8 +20,8 @@ export default function HappyCustomers() {
   return (
     <section className=" py-16 px-44">
       {/* Section Title */}
-      <h2 className="text-3xl md:text-4xl font-semibold text-center mb-10 text-[#0F766E]">
-        Meet Our Happy Customers
+      <h2 className="text-3xl md:text-4xl font-semibold text-center mb-10">
+        Meet Our <span className="font-bold" style={{color: 'var(--color-primary)'}}>Happy Customers</span>
       </h2>
 
       {/* Carousel Container */}

@@ -28,8 +28,9 @@ export default function ServicesSection() {
 
   return (
     <section className="py-16 bg-white px-44">
-      <h2 className="text-2xl md:text-3xl font-semibold text-center text-[#145D63] mb-10">
-        Exciting Services For Your Pets
+      <h2 className="text-2xl md:text-3xl font-semibold text-center mb-10">
+        Exciting Services
+        <span style={{color: 'var(--color-primary)'}} className="font-bold"> For Your Pets</span>
       </h2>
 
       <div className="max-w-7xl mx-auto px-4">
@@ -59,7 +60,7 @@ export default function ServicesSection() {
               />
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/40 transition flex flex-col justify-end items-center text-white text-center p-4">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 group-hover:to-black/90 transition flex flex-col justify-end items-center text-white text-center p-4">
                 <h3 className="text-2xl font-semibold mb-3">{service.title}</h3>
 
                 {/* Hide button for last item */}

@@ -57,10 +57,10 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-[#004D4D] flex flex-col items-center py-16 px-6 md:px-16 lg:px-44">
+    <div className="min-h-screen flex flex-col items-center py-16 px-6 md:px-16 lg:px-44" style={{ background: 'var(--gradient-hero)' }}>
       {/* Join Us Section */}
       <section className="w-full max-w-6xl text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-[#025B5B]">
+        <h2 className="text-3xl md:text-4xl font-bold mb-8" style={{color: 'var(--color-primary)'}}>
           Join Us
         </h2>
 
@@ -85,10 +85,10 @@ export default function HomePage() {
 
       {/* Excited Section */}
       <section className="text-center max-w-3xl mb-12">
-        <h3 className="text-2xl md:text-3xl font-semibold text-[#025B5B]">
-          Excited to get a pet, but still confused?
+        <h3 className="text-2xl md:text-3xl font-semibold text-white">
+          Excited to get a pet, <span style={{color: 'var(--color-primary)'}}>but still confused?</span>
         </h3>
-        <p className="text-black text-sm mt-1">
+        <p className="text-white text-sm mt-1">
           We're here to help you! Try MMP Tools and make the right choice!
         </p>
       </section>
@@ -113,7 +113,7 @@ export default function HomePage() {
             />
 
             {card.button ? (
-              <div className="absolute inset-0 flex flex-col justify-end mb-3 items-center text-center text-white transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 flex flex-col justify-end mb-3 items-center text-center text-white transition-all duration-300">
                 <h4 className="text-2xl font-semibold mb-1">{card.title}</h4>
                 <p className="text-sm mb-3 opacity-90">{card.subtitle}</p>
                 <button className="border border-white px-4 py-1 text-sm rounded hover:bg-white hover:text-black transition">
@@ -121,77 +121,16 @@ export default function HomePage() {
                 </button>
               </div>
             ) : (
-              <div className="absolute bottom-3 left-3 text-white font-semibold text-lg drop-shadow-md">
-                {card.title}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 flex items-end p-3">
+                <div className="text-white font-semibold text-lg drop-shadow-md">
+                  {card.title}
+                </div>
               </div>
             )}
           </div>
         ))}
       </section>
 
-      {/* Health Experts Section */}
-      {/* Health Experts Section */}
-      <section className="w-full max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {healthArticles.map((item) => (
-            <div
-              key={item.id}
-              className={` rounded-xl overflow-hidden  flex flex-col justify-between`}
-            >
-              {/* First Card Special Layout */}
-              {item.id === 1 ? (
-                <div className="flex flex-col items-center justify-between h-full text-center ">
-                  {/* Text Section (Top) */}
-                  <div className="mb-4">
-                    <h3 className="text-xl text-start md:text-xl font-medium mb-2 text-black">
-                      Read top articles from health experts
-                    </h3>
-                    <p className="text-sm text-black font-medium  text-start">
-                      Find inspiration in the new photos we hand-select every
-                      day or use our search to find and download exactly what
-                      you’re looking for.
-                    </p>
-                  </div>
-
-                  {/* Image Section (Reduced Height) */}
-                  <div className="relative  w-full h-80">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <>
-                  {/* Image Section */}
-                  <div className="relative  w-full h-96">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-
-                  {/* Text Section */}
-                  <div className=" text-center bg-white text-black">
-                    {item.subtitle && (
-                      <p className="text-xs tracking-[3px] text-start font-semibold text-[#025B5B]">
-                        {item.subtitle}
-                      </p>
-                    )}
-                    <p className="text-xs text-gray-600 text-start mt-1">
-                      {item.description}
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

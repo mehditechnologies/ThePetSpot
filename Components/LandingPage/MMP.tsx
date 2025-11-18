@@ -53,13 +53,13 @@ export default function WhyMMP() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-16 bg-white px-44">
+    <section className="py-16 bg-[var(--gradient-hero)] px-44" style={{ background: 'var(--gradient-hero)' }}>
       {/* Heading */}
       <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">
-          Why Pets Corner?
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+          Why <span style={{color: 'var(--color-primary)'}}> Pets Corner? </span>
         </h2>
-        <p className="text-black font-medium text-sm">
+        <p className="text-white font-medium text-sm">
           Looking for a furry companion? Know why Pets Corner is the perfect option for
           you.
         </p>

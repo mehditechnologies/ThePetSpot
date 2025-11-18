@@ -22,11 +22,11 @@ export default function Footer() {
     { name: "Grievance Policy", href: "/grievance-redressal-policy" },
   ];
   return (
-    <footer className="bg-[#F7F9FB]  text-[#333] pt-12 pb-6 border-t border-gray-200 px-44">
+    <footer className="text-white pt-12 pb-6 border-t border-gray-200 px-44" style={{ background: 'var(--gradient-hero)' }}>
       <div className="flex gap-20">
         <div>
           <img
-            src="/Footer.png"
+            src="/petLogo.png"
             alt="Pets Corner Logo"
             className="h-10 mb-4"
           />
@@ -38,17 +38,16 @@ export default function Footer() {
           <div className="mt-5 space-y-3 text-sm">
             <div className="flex items-center gap-3">
               <FaPhoneAlt className="text-[#6B7280]" />
-              <span>+91 - 7597-972-222</span>
+              <span>+92-333333333</span>
             </div>
             <div className="flex items-center gap-3">
               <FaEnvelope className="text-[#6B7280]" />
-              <span>hello@mrnmrspet.com</span>
+              <span>hello@petscorner.com</span>
             </div>
             <div className="flex items-start gap-3">
               <FaMapMarkerAlt className="text-[#6B7280] mt-1" />
               <span>
-                Plot No. 10, Ground Floor, Jayshree Nagar, Malviya Nagar,
-                Jaipur, Rajasthan 302017
+                123, Pet Street, Animal City, Country - 123456
               </span>
             </div>
           </div>
@@ -64,7 +63,7 @@ export default function Footer() {
                 <li key={item.name} className="mb-4">
                   <Link
                     href={item.href}
-                    className="hover:text-[#7B3AED] transition-colors cursor-pointer"
+                    className="hover:text-[var(--color-primary)] transition-colors cursor-pointer"
                   >
                     {item.name}
                   </Link>
@@ -88,7 +87,7 @@ export default function Footer() {
               ].map((item) => (
                 <li
                   key={item}
-                  className="hover:text-[#7B3AED] cursor-pointer mb-4"
+                  className="hover:text-[var(--color-primary)] cursor-pointer mb-4"
                 >
                   {item}
                 </li>
@@ -109,7 +108,7 @@ export default function Footer() {
                 placeholder="Enter Email ID"
                 className="w-full px-4 py-2 border border-gray-300 rounded-l-md text-sm outline-none"
               />
-              <button className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-5 py-2 rounded-r-md text-sm font-medium">
+              <button className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-black px-5 py-2 rounded-r-md text-sm font-medium">
                 Go
               </button>
             </div>
@@ -123,7 +122,7 @@ export default function Footer() {
               ].map((Icon, i) => (
                 <div
                   key={i}
-                  className="w-9 h-9 rounded-full bg-[#8B5CF6] text-white flex items-center justify-center text-lg cursor-pointer hover:bg-[#7C3AED]"
+                  className="w-9 h-9 rounded-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-black flex items-center justify-center text-lg cursor-pointer hover:bg-[var(--color-primary-hover)] transition"
                 >
                   {Icon}
                 </div>
@@ -132,25 +131,10 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap justify-start gap-x-10 text-gray-600">
-        <span className="font-semibold text-[#333] w-full mb-3 text-xl">
-          Join Us as a
-        </span>
-        <span>Breeder</span>
-
-        <span>Sitter</span>
-        <span>Dog Trainer</span>
-
-        <span>Dog Walker</span>
-
-        <span>Dog Groomer</span>
-
-        <span>Veterinarian</span>
-      </div>
 
       {/* Bottom Section */}
-      <div className="max-w-7xl mx-auto px-4 mt-10 border-t border-gray-200 pt-6 text-center text-sm text-gray-500">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-2">
+      <div className="max-w-7xl mx-auto px-4 mt-10 border-t border-gray-200 pt-6 text-center text-sm text-white">
+        <div className="flex flex-col md:flex-row justify-between items-center justify-center gap-2">
           <p className="">
             © 2018-2025 Wanderlust Pet Services Private Limited. All Rights
             Reserved.

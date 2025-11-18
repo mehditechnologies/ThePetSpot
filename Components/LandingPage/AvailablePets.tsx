@@ -93,15 +93,15 @@ export default function AvailablePets() {
         <div className="text-center">
           <button
             onClick={() => router.push("/dogs/for-sale")}
-            className="group inline-flex items-center gap-3 bg-[var(--bg-dark-accent)] text-white font-bold px-10 py-5 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+            className="group inline-flex items-center gap-3 bg-[var(--color-primary)] text-white font-bold px-10 py-5 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
           >
-            <span className="text-lg">Explore All Pets</span>
-            <FaArrowRight className="group-hover:translate-x-2 transition-transform duration-300" />
+            <span className="text-lg text-black" >Explore All Pets</span>
+            <FaArrowRight className="group-hover:translate-x-2 transition-transform duration-300 text-black" />
           </button>
         </div>
 
         {/* Additional Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
           {[
             {
               icon: "🏥",
@@ -128,7 +128,7 @@ export default function AvailablePets() {
               <p className="text-gray-600 text-sm">{item.desc}</p>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );
