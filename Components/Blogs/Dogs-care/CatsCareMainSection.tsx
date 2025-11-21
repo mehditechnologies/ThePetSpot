@@ -1,12 +1,17 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import BlogSidebar from "../BlogSidebar";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { useState } from "react";
-import { dogsBlogData } from "@/Data/dogsData";
+import { useEffect, useState } from "react";
+import { BlogStore } from "@/Store/BlogStore";
+
 export default function DogsCareMainSection() {
+  const router = useRouter();
+  const { blogsDogs, fetchBlogs, page, setPage, totalPages, loading, error } =
+    BlogStore();
+
   const [index, setIndex] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const IMAGES = [
     "https://images.unsplash.com/photo-1558788353-f76d92427f16",
@@ -18,12 +23,14 @@ export default function DogsCareMainSection() {
   const prevSlide = () =>
     setIndex((prev) => (prev - 1 + IMAGES.length) % IMAGES.length);
 
-  // PAGINATION LOGIC
-  const ITEMS_PER_PAGE = 12;
-  const totalPages = Math.ceil(dogsBlogData.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentBlogs = dogsBlogData.slice(startIndex, endIndex);
+  // ⭐ Fetch Dogs blogs from API
+  useEffect(() => {
+    fetchBlogs("dogs", page);
+  }, [page]);
+
+  const goToBlog = (slug: string) => {
+    router.push(`/blog/${slug}`); // Navigate to single blog page
+  };
 
   return (
     <section className="max-w-6xl mx-auto py-10 flex flex-col lg:flex-row gap-10">
@@ -67,20 +74,27 @@ export default function DogsCareMainSection() {
           </div>
         </div>
 
-        <div className="bg-[#018F98] block w-full text-white text-lg font-semibold px-4 py-2 rounded-md w-fit mb-5">
+        <div className="bg-[#018F98] block w-fit text-white text-lg font-semibold px-4 py-2 rounded-md mb-5">
           Dog Care
         </div>
 
+        {/* Loading */}
+        {loading && <p>Loading blogs...</p>}
+
+        {/* Error */}
+        {error && <p className="text-red-600">{error}</p>}
+
         {/* Blog Grid */}
         <div className="grid md:grid-cols-3 gap-3">
-          {currentBlogs.map((blog, i) => (
+          {blogsDogs.map((blog: any) => (
             <div
-              key={i}
-              className="overflow-hidden shadow-sm bg-white rounded-md"
+              key={blog._id}
+              onClick={() => goToBlog(blog.slug)} // Navigate on click
+              className="overflow-hidden shadow-sm bg-white rounded-md cursor-pointer hover:shadow-md transition"
             >
               <div className="relative w-full h-48">
                 <Image
-                  src={blog.img}
+                  src={blog.image}
                   alt={blog.title}
                   fill
                   className="object-cover"
@@ -90,23 +104,21 @@ export default function DogsCareMainSection() {
                 <p className="text-xs text-[#018F98] font-medium">
                   {blog.category}
                 </p>
-                <h3 className="font-semibold text-sm hover:text-[#018F98] cursor-pointer">
-                  {blog.title}
-                </h3>
-                <p className="text-xs text-gray-600 mt-1">{blog.desc}</p>
+                <h3 className="font-semibold text-sm">{blog.title}</h3>
+                <p className="text-xs text-gray-600 mt-1">{blog.excerpt}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* PAGINATION */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-8 flex items-center justify-between">
             <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
+              onClick={() => setPage(Math.max(1, page - 1))}
+              disabled={page === 1}
               className={`px-4 py-2 text-sm font-medium rounded transition-all ${
-                currentPage === 1
+                page === 1
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                   : "bg-[#E0F7F8] text-[#018F98] hover:bg-[#C9F0F2]"
               }`}
@@ -115,14 +127,14 @@ export default function DogsCareMainSection() {
             </button>
 
             <div className="text-sm text-gray-700">
-              Page {currentPage} of {totalPages}
+              Page {page} of {totalPages}
             </div>
 
             <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage >= totalPages}
+              onClick={() => setPage(Math.min(totalPages, page + 1))}
+              disabled={page >= totalPages}
               className={`px-4 py-2 text-sm font-medium rounded transition-all ${
-                currentPage >= totalPages
+                page >= totalPages
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                   : "bg-[#E0F7F8] text-[#018F98] hover:bg-[#C9F0F2]"
               }`}
