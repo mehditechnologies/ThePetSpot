@@ -217,7 +217,7 @@ export default function ChangePasswordForm({ onSuccess }: ChangePasswordFormProp
         <button
           type="submit"
           disabled={isUpdatingProfile}
-          className="px-8 py-3 bg-gradient-to-r from-[#028d8f] to-[#008080] hover:from-[#00595F] hover:to-[#004d4f] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="px-8 py-3 hover:from-[#00595F] hover:to-[#004d4f] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" style={{background: "var(--gradient-hero)"}}
         >
           {isUpdatingProfile ? (
             <div className="flex items-center">

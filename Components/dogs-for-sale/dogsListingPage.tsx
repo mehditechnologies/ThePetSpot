@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { FiMapPin, FiPlus, FiDollarSign } from "react-icons/fi";
+import { FiMapPin, FiPlus, FiDollarSign, FiPhone, FiInfo } from "react-icons/fi";
 import { FaDog, FaFire } from "react-icons/fa";
+import { SiWhatsapp } from "react-icons/si";
 import { useAdStore } from "@/Store/AdsStore";
 import { pets, breeds, popularBreeds, statesWithCities } from "./data"; // adjust path if needed
 import { dogBreeds } from "@/utils/breeds";
@@ -446,7 +447,7 @@ export default function DogsPage() {
         {/* 🧭 Sidebar */}
         <div className="w-60 ">
           {/* Clear All Filters */}
-          <div className="px-5 py-3 shadow rounded-lg mb-3" style={{background: 'var(--color-primary)'}}>
+          <div className="px-3 py-2 shadow rounded-lg mb-3" style={{background: 'var(--color-primary)'}}>
             <button
               onClick={() => {
                 setSelectedBreed("");
@@ -457,7 +458,7 @@ export default function DogsPage() {
                 setSortBy("");
                 setBudget(500000);
               }}
-              className="w-full text-white font-semibold hover:bg-white hover:text-[var(--color-primary)] transition-all duration-200 py-2 rounded-md"
+              className="w-full text-white text-sm font-semibold hover:bg-white hover:text-[var(--color-primary)] transition-all duration-200 py-1.5 rounded-md"
             >
               Clear All Filters
             </button>
@@ -758,7 +759,7 @@ export default function DogsPage() {
 
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent mb-2" style={{color: "var(--color-primary)"}}>
+                <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent mb-2" style={{color: "var(--gradient-hero)"}}>
                   {selectedBreed
                     ? `${selectedBreed} For Sale`
                     : "Dogs For Sale"}
@@ -848,22 +849,25 @@ export default function DogsPage() {
                     </div>                    <div className="grid grid-cols-3 gap-2 mb-3">
                       <a
                         href={`tel:${pet.contactNumber}`}
-                        className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium text-center block"
+                        className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium text-center flex items-center justify-center gap-1"
                       >
+                        <FiPhone className="text-sm" />
                         Call
                       </a>
                         <a
                           href={`https://wa.me/${pet.contactNumber}?text=${encodeURIComponent('Hi, I saw your ad, I am interested')}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium text-center block"
+                          className="px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium text-center flex items-center justify-center gap-1"
                         >
+                          <SiWhatsapp className="text-sm" />
                           Chat
                         </a>
                       <a
                         href={`/dogs/pet/${pet._id || pet.id}`}
-                        className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium text-center block"
+                        className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium text-center flex items-center justify-center gap-1"
                       >
+                        <FiInfo className="text-sm" />
                         Info
                       </a>
                     </div>                    

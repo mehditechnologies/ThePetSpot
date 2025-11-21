@@ -122,7 +122,14 @@ export default function AdsGrid({ ads, onDeleteAd, onEditAd }: AdsGridProps) {
                             {ad.description.length > 50 && (
                               <button
                                 onClick={() => toggleDescription(ad._id)}
-                                className="ml-2 text-[#028d8f] hover:text-[#00595F] font-medium"
+                                className="ml-2 font-medium"
+                                style={{ background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                                onMouseEnter={(e) => e.currentTarget.style.color = '#e55e00'}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = 'var(--gradient-hero)';
+                                  (e.currentTarget.style as any).webkitBackgroundClip = 'text';
+                                  (e.currentTarget.style as any).webkitTextFillColor = 'transparent';
+                                }}
                               >
                                 {expandedDescription === ad._id ? 'Less' : 'More'}
                               </button>
@@ -177,7 +184,14 @@ export default function AdsGrid({ ads, onDeleteAd, onEditAd }: AdsGridProps) {
                     <div className="flex items-center justify-center space-x-3">
                       <button
                         onClick={(e) => onEditAd(ad, e)}
-                        className="text-[#028d8f] hover:text-[#00595F] font-medium text-sm transition-colors duration-200"
+                        className="font-medium text-sm transition-colors duration-200"
+                        style={{ background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = '#e55e00'}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'var(--gradient-hero)';
+                          (e.currentTarget.style as any).webkitBackgroundClip = 'text';
+                          (e.currentTarget.style as any).webkitTextFillColor = 'transparent';
+                        }}
                       >
                         Edit
                       </button>

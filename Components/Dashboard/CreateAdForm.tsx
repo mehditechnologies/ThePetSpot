@@ -238,17 +238,17 @@ export default function CreateAdForm({ onSubmit, isSubmitting }: CreateAdFormPro
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
                 step <= currentStep
-                  ? 'bg-[#028d8f] text-white'
+                  ? 'text-white'
                   : 'bg-gray-200 text-gray-600'
               }`}
+              style={step <= currentStep ? { background: 'var(--gradient-hero)' } : {}}
             >
               {step}
             </div>
             {step < totalSteps && (
               <div
-                className={`w-12 h-1 mx-2 transition-all duration-200 ${
-                  step < currentStep ? 'bg-[#028d8f]' : 'bg-gray-200'
-                }`}
+                className={`w-12 h-1 mx-2 transition-all duration-200`}
+                style={step < currentStep ? { background: 'var(--gradient-hero)' } : { backgroundColor: '#e5e7eb' }}
               />
             )}
           </div>
@@ -682,7 +682,18 @@ export default function CreateAdForm({ onSubmit, isSubmitting }: CreateAdFormPro
               type="button"
               onClick={handleNext}
               disabled={!validateStep(currentStep)}
-              className="px-6 py-3 bg-[#028d8f] hover:bg-[#00595F] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 flex items-center"
+              className="px-6 py-3 text-white font-semibold rounded-xl transition-all duration-200 flex items-center disabled:bg-gray-400 disabled:cursor-not-allowed"
+              style={!validateStep(currentStep) || isSubmitting ? {} : { background: 'var(--gradient-hero)' }}
+              onMouseEnter={(e) => {
+                if (validateStep(currentStep) && !isSubmitting) {
+                  e.currentTarget.style.backgroundColor = '#e55e00';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (validateStep(currentStep) && !isSubmitting) {
+                  e.currentTarget.style.background = 'var(--gradient-hero)';
+                }
+              }}
             >
               Next
               <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -693,7 +704,8 @@ export default function CreateAdForm({ onSubmit, isSubmitting }: CreateAdFormPro
             <button
               type="submit"
               disabled={isSubmitting || !validateStep(currentStep)}
-              className="px-6 py-3 bg-gradient-to-r from-[#028d8f] to-[#008080] hover:from-[#00595F] hover:to-[#004d4f] disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:scale-100 transition-all duration-200 flex items-center"
+              className="px-6 py-3 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:scale-100 transition-all duration-200 flex items-center disabled:from-gray-400 disabled:to-gray-500"
+              style={!validateStep(currentStep) || isSubmitting ? {} : { background: 'var(--gradient-hero)' }}
             >
               {isSubmitting ? (
                 <>

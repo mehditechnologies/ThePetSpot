@@ -173,7 +173,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[90px] w-full bg-gradient-to-br from-[#028d8f] to-[#008080] flex items-center justify-center flex-shrink-0">
+      <section className="relative h-[90px] w-full flex items-center justify-center flex-shrink-0" style={{background: "var(--gradient-hero)"}}>
         <div className="text-center text-white">
           {/* <h1 className="text-3xl md:text-4xl font-bold mb-2">Dashboard</h1> */}
           {/* <p className="text-lg opacity-90">Manage your pet advertisements</p> */}
@@ -192,10 +192,21 @@ export default function Dashboard() {
                 title="Back to Home"
               >
                 <svg
-                  className="w-4 h-4 text-gray-600 group-hover:text-[#028d8f] transition-colors duration-200"
+                  className="w-4 h-4 text-gray-600 transition-colors duration-200"
+                  style={
+                    (e => e.matches(':hover'))(document.querySelector(':hover'))
+                      ? { background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }
+                      : {}
+                  }
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--gradient-hero)';
+                    (e.currentTarget.style as any).webkitBackgroundClip = 'text';
+                    (e.currentTarget.style as any).webkitTextFillColor = 'transparent';
+                  }}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}
                 >
                   <path
                     strokeLinecap="round"
@@ -204,7 +215,15 @@ export default function Dashboard() {
                     d="M10 19l-7-7m0 0l7-7m-7 7h18"
                   />
                 </svg>
-                <span className="text-sm font-medium text-gray-600 group-hover:text-[#028d8f] transition-colors duration-200">
+                <span 
+                  className="text-sm font-medium text-gray-600 transition-colors duration-200"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--gradient-hero)';
+                    (e.currentTarget.style as any).webkitBackgroundClip = 'text';
+                    (e.currentTarget.style as any).webkitTextFillColor = 'transparent';
+                  }}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}
+                >
                   Back to home
                 </span>
               </button>
@@ -214,9 +233,10 @@ export default function Dashboard() {
                 onClick={() => setActiveMenu('overview')}
                 className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
                   activeMenu === 'overview'
-                    ? 'bg-[#028d8f] text-white shadow-md'
+                    ? 'text-white shadow-md'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                style={activeMenu === 'overview' ? { background: 'var(--gradient-hero)' } : {}}
               >
                 📊 Overview
               </button>
@@ -224,9 +244,10 @@ export default function Dashboard() {
                 onClick={() => setActiveMenu('create-ad')}
                 className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
                   activeMenu === 'create-ad'
-                    ? 'bg-[#028d8f] text-white shadow-md'
+                    ? 'text-white shadow-md'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                style={activeMenu === 'create-ad' ? { background: 'var(--gradient-hero)' } : {}}
               >
                 ➕ Create Ad
               </button>
@@ -234,9 +255,10 @@ export default function Dashboard() {
                 onClick={() => setActiveMenu('ads')}
                 className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
                   activeMenu === 'ads'
-                    ? 'bg-[#028d8f] text-white shadow-md'
+                    ? 'text-white shadow-md'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                style={activeMenu === 'ads' ? { background: 'var(--gradient-hero)' } : {}}
               >
                 🐾 My Ads
               </button>
@@ -244,9 +266,10 @@ export default function Dashboard() {
                 onClick={() => setActiveMenu('profile')}
                 className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
                   activeMenu === 'profile'
-                    ? 'bg-[#028d8f] text-white shadow-md'
+                    ? 'text-white shadow-md'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                style={activeMenu === 'profile' ? { background: 'var(--gradient-hero)' } : {}}
               >
                 👤 Profile
               </button>
@@ -254,9 +277,10 @@ export default function Dashboard() {
                 onClick={() => setActiveMenu('change-password')}
                 className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
                   activeMenu === 'change-password'
-                    ? 'bg-[#028d8f] text-white shadow-md'
+                    ? 'text-white shadow-md'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                style={activeMenu === 'change-password' ? { background: 'var(--gradient-hero)' } : {}}
               >
                 🔒 Change Password
               </button>
