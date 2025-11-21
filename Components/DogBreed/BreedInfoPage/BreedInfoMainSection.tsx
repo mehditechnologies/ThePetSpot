@@ -153,7 +153,7 @@ export default function BreedInfoMainSection() {
           </div>
         </div>
 
-        <div className="bg-[#018F98] block w-full text-white text-xl font-semibold px-6 py-2 rounded  my-5">
+        <div className="block w-full text-white text-xl font-semibold px-6 py-2 rounded  my-5" style={{background: "var(--gradient-hero)"}}>
           Get in touch with our Pet Experts
         </div>
         <BreedInfoNotFound />

@@ -14,7 +14,7 @@ export default function BreedDetails() {
   return (
     <section className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm overflow-hidden">
       {/* === Health Section === */}
-      <div className="bg-[#018F98] text-white p-5 rounded-t-xl  ">
+      <div className="text-white p-5 rounded-t-xl" style={{background: "var(--gradient-hero)"}}>
         <h4 className="text-lg font-bold">Health</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4  ">
           <div>

@@ -12,11 +12,12 @@ export default function BreedInfoPageHeroSection() {
 
   return (
     <section
-      className="relative h-[40vh] w-full bg-cover bg-center flex items-start justify-center text-white"
-      style={{ backgroundImage: "url('/HeroSectionBG/rottweiler.webp')" }}
+      className="relative h-[30vh] w-ful flex items-start justify-center text-white"
+      style={{background: "var(--gradient-hero)"}}
+      // style={{ backgroundImage: "url('/HeroSectionBG/rottweiler.webp')" }}
     >
       {/* Content */}
-      <div className="relative z-20 w-full flex flex-col top-55 px-6 max-w-6xl mx-auto">
+      <div className=" z-20 w-full flex flex-col top-55 px-6 max-w-6xl items-start justify-center mt-32">
         <p className="text-xs font-semibold flex items-start gap-2">
           <Link
             href="/"

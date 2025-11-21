@@ -85,7 +85,7 @@ export default function BreedListing() {
         <div className="w-80 bg-white rounded-lg shadow-sm p-6 h-fit sticky top-6">
           {/* Choose Pet Type */}
           <div className="mb-8">
-            <h3 className="text-cyan-500 font-semibold text-lg mb-4">
+            <h3 className="text-[var(--color-primary)] font-semibold text-lg mb-4">
               Choose Pet Type
             </h3>
             <div className="space-y-2">
@@ -105,7 +105,7 @@ export default function BreedListing() {
 
           {/* Choose Your Breed */}
           <div>
-            <h3 className="text-cyan-500 font-semibold text-lg mb-4">
+            <h3 className="text-[var(--color-primary)] font-semibold text-lg mb-4">
               Choose Your Breed
             </h3>
             <input

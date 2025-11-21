@@ -194,8 +194,8 @@ export default function CatDetailPage({ params }: { params: Promise<{ id: string
             <div className="grid grid-cols-2 gap-3">
               <a
                 href={`tel:${pet.contactNumber}`}
-                className="px-4 py-3 rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors text-sm font-medium text-center block"
-                style={{background: "var(--color-primary)"}}
+                className="px-4 py-3 rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors text-sm font-medium text-center block text-white"
+                style={{background: "var(--gradient-hero)"}}
               >
                 <FiPhone className="inline mr-2" />
                 Call
@@ -204,8 +204,8 @@ export default function CatDetailPage({ params }: { params: Promise<{ id: string
                 href={`https://wa.me/${pet.contactNumber}?text=${encodeURIComponent('Hi, I saw your ad, I am interested')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-3 rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors text-sm font-medium text-center block"
-                style={{background: "var(--color-primary)"}}
+                className="px-4 py-3 rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors text-sm font-medium text-center block text-white"
+                style={{background: "var(--gradient-hero)"}}
               >
                 Chat
               </a>

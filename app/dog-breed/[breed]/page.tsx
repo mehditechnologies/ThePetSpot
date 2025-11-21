@@ -7,11 +7,11 @@ import BreedWhyMMP from "@/Components/DogBreed/BreedInfoPage/BreedWhyMMP";
 export default function BreedPage() {
   return (
     <div>
-      <BreedNavbar />
+      {/* <BreedNavbar /> */}
       <BreedInfoPageHeroSection />
       <BreedInfoMainSection />
-      <BreederBanner />
-      <BreedWhyMMP />
+      {/* <BreederBanner /> */}
+      {/* <BreedWhyMMP /> */}
     </div>
   );
 }

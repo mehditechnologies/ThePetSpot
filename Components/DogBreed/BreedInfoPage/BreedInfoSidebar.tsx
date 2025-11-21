@@ -47,7 +47,7 @@ export default function BreedInfoSidebar() {
 
   return (
     <aside className="w-full px-4">
-      <h3 className="font-semibold mb-3 text-[#018F98]">Choose Your Breed</h3>
+      <h3 className="font-semibold mb-3 text-[var(--color-primary-hover)]">Choose Your Breed</h3>
 
       <select
         value={selectedBreed}
@@ -64,13 +64,14 @@ export default function BreedInfoSidebar() {
 
       <div
         onClick={handleViewClick}
-        className="bg-[#018F98] block w-full text-white text-center px-6 py-4 rounded my-5 font-medium cursor-pointer hover:bg-[#027B82] transition-colors"
+        className=" block w-full text-white text-center px-6 py-4 rounded my-5 font-medium cursor-pointer hover:bg-[#027B82] transition-colors"
+        style={{background: "var(--gradient-hero)"}}
       >
         View {breed ? `${breed} Puppies` : "All Dogs"}
       </div>
 
-      <h3 className="text-2xl font-semibold mb-3 text-[#018F98]">
-        Why Choose MMP?
+      <h3 className="text-2xl font-semibold mb-3 text-[var(--color-primary-hover)]">
+        Why Choose Pets Corner?
       </h3>
 
       {/* === Why Choose MMP Section === */}
