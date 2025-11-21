@@ -97,15 +97,12 @@ export default function Navbar() {
                 <a href="/cats/for-sale" className={dropdownLinkClasses}>
                   Cat
                 </a>
-                <a href="#" className={dropdownLinkClasses}>
-                  Small Pet
-                </a>
               </div>
             )}
           </div>
 
           {/* Pet Services Dropdown */}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={() => toggleMenu("services")}
               className="flex items-center gap-2 hover:opacity-90 cursor-pointer"
@@ -132,7 +129,7 @@ export default function Navbar() {
                 </a>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* Breeds Dropdown */}
           <div className="relative">
@@ -162,7 +159,7 @@ export default function Navbar() {
           </div>
 
           {/* Breeds Dropdown */}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={() => toggleMenu("food")}
               className="flex items-center gap-2 hover:opacity-90 cursor-pointer"
@@ -186,7 +183,7 @@ export default function Navbar() {
                 </a>
               </div>
             )}
-          </div>
+          </div> */}
           {/* Blog */}
           <div className="relative">
             <button
